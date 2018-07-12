@@ -103,10 +103,18 @@ func (op *Operator) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflow
 }
 
 func (op *Operator) createWorkplan(wf *api.Workflow) error {
-	tasks, err := dependency.ResolveDependency(wf)
+	cleanupStep := api.Step{
+		Name:     "cleanup-step",
+		Image:    "alpine",
+		Commands: []string{"sh"},
+		Args:     []string{"-c", "echo deleting files/folders; ls /kubeci; rm -rf /kubeci/*"},
+	}
+
+	tasks, err := dependency.ResolveDependency(wf.Spec.Steps, cleanupStep)
 	if err != nil {
 		return err
 	}
+
 	wp := &api.Workplan{
 		ObjectMeta: metav1.ObjectMeta{
 			GenerateName: wf.Name + "-",

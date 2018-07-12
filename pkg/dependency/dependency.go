@@ -7,9 +7,9 @@ import (
 	"github.com/philopon/go-toposort"
 )
 
-func ResolveDependency(wf *v1alpha1.Workflow) ([]v1alpha1.Task, error) {
+func ResolveDependency(workflowSteps []v1alpha1.Step, cleanupStep v1alpha1.Step) ([]v1alpha1.Task, error) {
 	stepsMap := make(map[string]v1alpha1.Step, 0)
-	for _, step := range wf.Spec.Steps {
+	for _, step := range workflowSteps {
 		stepsMap[step.Name] = step
 	}
 
@@ -17,6 +17,8 @@ func ResolveDependency(wf *v1alpha1.Workflow) ([]v1alpha1.Task, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	layers = append(layers, []v1alpha1.Step{cleanupStep})
 
 	return layersToTasks(layers), nil
 }

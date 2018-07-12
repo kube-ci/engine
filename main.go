@@ -42,8 +42,8 @@ func main() {
 	time.Sleep(3 * time.Second) // time for sync
 	log.Infof("Operator started")
 
-	log.Infof("Creating workflow %s", v1alpha1.Wf05.Name)
-	_, err = op.ApiClient.KubeciV1alpha1().Workflows("default").Create(v1alpha1.Wf05)
+	log.Infof("Creating workflow %s", v1alpha1.Wf01.Name)
+	_, err = op.ApiClient.KubeciV1alpha1().Workflows("default").Create(v1alpha1.Wf01)
 	if err != nil {
 		panic(err)
 	}

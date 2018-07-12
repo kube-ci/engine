@@ -1,0 +1,8 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: my-config
+  namespace: default
+data:
+  myconfig.property.1: hello
+  myconfig.property.2: world
