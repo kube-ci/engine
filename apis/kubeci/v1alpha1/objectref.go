@@ -4,7 +4,7 @@ import (
 	core "k8s.io/api/core/v1"
 )
 
-func (wf Workflow) ObjectReference() *core.ObjectReference {
+func (wf *Workflow) ObjectReference() *core.ObjectReference {
 	return &core.ObjectReference{
 		APIVersion:      SchemeGroupVersion.String(),
 		Kind:            ResourceKindWorkflow,
@@ -15,7 +15,7 @@ func (wf Workflow) ObjectReference() *core.ObjectReference {
 	}
 }
 
-func (wp Workplan) ObjectReference() *core.ObjectReference {
+func (wp *Workplan) ObjectReference() *core.ObjectReference {
 	return &core.ObjectReference{
 		APIVersion:      SchemeGroupVersion.String(),
 		Kind:            ResourceKindWorkplan,

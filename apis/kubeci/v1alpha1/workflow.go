@@ -5,12 +5,12 @@ import (
 )
 
 const (
-	ResourceKindWorkflow     = "Workflow"
-	ResourceSingularWorkflow = "workflow"
-	ResourcePluralWorkflow   = "workflows"
+	ResourceKindWorkflow = "Workflow"
+	ResourceWorkflows    = "workflows"
 )
 
 // +genclient
+// +k8s:openapi-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 type Workflow struct {

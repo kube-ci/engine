@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/TamalSaha/go-oneliners"
-	"github.com/kube-ci/experiments/apis/kubeci/v1alpha1"
+	"kube.ci/kubeci/apis/kubeci/v1alpha1"
 )
 
 var cleanupStep = v1alpha1.Step{

@@ -1,0 +1,33 @@
+# register as aggregated apiserver
+apiVersion: apiregistration.k8s.io/v1beta1
+kind: APIService
+metadata:
+  name: v1alpha1.admission.git.kube.ci
+  labels:
+    app: kubeci
+spec:
+  caBundle: ${SERVICE_SERVING_CERT_CA}
+  group: admission.git.kube.ci
+  groupPriorityMinimum: 1000
+  versionPriority: 15
+  service:
+    name: git-apiserver
+    namespace: ${GIT_APISERVER_NAMESPACE}
+  version: v1alpha1
+---
+# register as aggregated apiserver
+apiVersion: apiregistration.k8s.io/v1beta1
+kind: APIService
+metadata:
+  name: v1alpha1.repositories.git.kube.ci
+  labels:
+    app: kubeci
+spec:
+  caBundle: ${SERVICE_SERVING_CERT_CA}
+  group: repositories.git.kube.ci
+  groupPriorityMinimum: 1000
+  versionPriority: 15
+  service:
+    name: git-apiserver
+    namespace: ${GIT_APISERVER_NAMESPACE}
+  version: v1alpha1

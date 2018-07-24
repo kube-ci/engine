@@ -1,5 +1,5 @@
 /*
-Copyright The Kubernetes Authors.
+Copyright 2018 The KubeCI Authors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,11 +19,11 @@ limitations under the License.
 package fake
 
 import (
-	kubeciv1alpha1 "github.com/kube-ci/experiments/apis/kubeci/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	serializer "k8s.io/apimachinery/pkg/runtime/serializer"
+	kubeciv1alpha1 "kube.ci/kubeci/apis/kubeci/v1alpha1"
 )
 
 var scheme = runtime.NewScheme()

@@ -1,5 +1,5 @@
 /*
-Copyright The Kubernetes Authors.
+Copyright 2018 The KubeCI Authors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,10 +19,10 @@ limitations under the License.
 package v1alpha1
 
 import (
-	v1alpha1 "github.com/kube-ci/experiments/apis/kubeci/v1alpha1"
-	"github.com/kube-ci/experiments/client/clientset/versioned/scheme"
 	serializer "k8s.io/apimachinery/pkg/runtime/serializer"
 	rest "k8s.io/client-go/rest"
+	v1alpha1 "kube.ci/kubeci/apis/kubeci/v1alpha1"
+	"kube.ci/kubeci/client/clientset/versioned/scheme"
 )
 
 type KubeciV1alpha1Interface interface {
@@ -31,7 +31,7 @@ type KubeciV1alpha1Interface interface {
 	WorkplansGetter
 }
 
-// KubeciV1alpha1Client is used to interact with features provided by the kubeci.appscode.com group.
+// KubeciV1alpha1Client is used to interact with features provided by the kubeci.kube.ci group.
 type KubeciV1alpha1Client struct {
 	restClient rest.Interface
 }

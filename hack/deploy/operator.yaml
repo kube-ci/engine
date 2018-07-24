@@ -1,0 +1,102 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: git-apiserver
+  namespace: ${GIT_APISERVER_NAMESPACE}
+  labels:
+    app: kubeci
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubeci
+  template:
+    metadata:
+      labels:
+        app: kubeci
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: ''
+    spec:
+      serviceAccountName: ${GIT_APISERVER_SERVICE_ACCOUNT}
+      imagePullSecrets: [${GIT_APISERVER_IMAGE_PULL_SECRET}]
+      containers:
+      - name: operator
+        image: ${GIT_APISERVER_DOCKER_REGISTRY}/git-apiserver:${GIT_APISERVER_IMAGE_TAG}
+        imagePullPolicy: ${GIT_APISERVER_IMAGE_PULL_POLICY}
+        args:
+        - run
+        - --v=3
+        - --rbac=${GIT_APISERVER_ENABLE_RBAC}
+        - --docker-registry=${GIT_APISERVER_DOCKER_REGISTRY}
+        - --secure-port=8443
+        - --audit-log-path=-
+        - --tls-cert-file=/var/serving-cert/tls.crt
+        - --tls-private-key-file=/var/serving-cert/tls.key
+        - --enable-status-subresource=${GIT_APISERVER_ENABLE_STATUS_SUBRESOURCE}
+        - --enable-analytics=${GIT_APISERVER_ENABLE_ANALYTICS}
+        ports:
+        - containerPort: 8443
+        resources:
+          requests:
+            cpu: "100m"
+        volumeMounts:
+        - mountPath: /var/serving-cert
+          name: serving-cert
+      - name: pushgateway
+        args:
+        - --web.listen-address=:56789
+        - --persistence.file=/var/pv/pushgateway.dat
+        image: prom/pushgateway:v0.5.2
+        ports:
+        - containerPort: 56789
+          name: pushgateway
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /var/pv
+          name: data-volume
+        - mountPath: /tmp
+          name: kubeci-scratchdir
+      volumes:
+      - emptyDir: {}
+        name: data-volume
+      - emptyDir: {}
+        name: kubeci-scratchdir
+      - name: serving-cert
+        secret:
+          defaultMode: 420
+          secretName: kubeci-apiserver-cert
+      tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+---
+# kube lacks the service serving cert signer, so provide a manual secret for it
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kubeci-apiserver-cert
+  namespace: ${GIT_APISERVER_NAMESPACE}
+  labels:
+    app: kubeci
+type: kubernetes.io/tls
+data:
+  tls.crt: ${TLS_SERVING_CERT}
+  tls.key: ${TLS_SERVING_KEY}
+---
+# to be able to expose TSB inside the cluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: git-apiserver
+  namespace: ${GIT_APISERVER_NAMESPACE}
+  labels:
+    app: kubeci
+spec:
+  ports:
+  - name: admission
+    port: 443
+    targetPort: 8443
+  - name: pushgateway
+    port: 56789
+    targetPort: 56789
+  selector:
+    app: kubeci

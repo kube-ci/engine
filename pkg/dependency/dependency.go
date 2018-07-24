@@ -3,8 +3,8 @@ package dependency
 import (
 	"fmt"
 
-	"github.com/kube-ci/experiments/apis/kubeci/v1alpha1"
 	"github.com/philopon/go-toposort"
+	"kube.ci/kubeci/apis/kubeci/v1alpha1"
 )
 
 func ResolveDependency(workflowSteps []v1alpha1.Step, cleanupStep v1alpha1.Step) ([]v1alpha1.Task, error) {

@@ -3,7 +3,7 @@
 ## Workflow CRD
 
 ```yaml
-apiVersion: kubeci.appscode.com/v1alpha1
+apiVersion: kube.ci/v1alpha1
 kind: Workflow
 metadata:
   name: my-workflow
@@ -94,13 +94,13 @@ status:
 ## Workplan CRD
 
 ```yaml
-apiVersion: kubeci.appscode.com/v1alpha1
+apiVersion: kube.ci/v1alpha1
 kind: Workplan
 metadata:
   generateName: my-workflow-
   namespace: default
   ownerReferences: # workflow object reference
-  - apiVersion: kubeci.appscode.com/v1alpha1 
+  - apiVersion: kube.ci/v1alpha1 
     kind: Workflow
     name: my-workflow
 spec:

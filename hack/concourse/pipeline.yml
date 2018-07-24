@@ -1,0 +1,108 @@
+resource_types:
+- name: pull-request
+  type: docker-image
+  source:
+    repository: tahsin/git-pull-resource
+    tag: latest
+
+resources:
+- name: kubeci
+  type: git
+  source:
+    uri: https://kube.ci/git-apiserver
+    branch: master
+
+- name: pull-request
+  type: pull-request
+  source:
+    owner: appscode
+    repo: kubeci
+    label: ok-to-test
+    access_token: ((access_token))
+
+- name: creds
+  type: s3
+  source:
+    bucket: kubedbci
+    access_key_id: ((s3-access-key))
+    secret_access_key: ((s3-secret))
+    versioned_file: gcs.zip
+
+jobs:
+- name: test-kubeci
+  plan:
+  - get: kubeci
+    trigger: true
+  - get: creds
+    params:
+      unpack: true
+  - task: unit-test
+    file: kubeci/hack/concourse/task_unit_test.yml
+  - task: e2e-test
+    file: kubeci/hack/concourse/task_e2e.yml
+    privileged: true
+    params:
+      TOKEN: ((digitaloceanToken))
+      DOCKER_USER: ((docker_user))
+      DOCKER_PASS: ((docker_pass))
+      AWS_KEY_ID: ((aws_key_id))
+      AWS_SECRET: ((aws_secret))
+      GCE_PROJECT_ID: ((gce_project_id))
+      AZURE_ACCOUNT_NAME: ((azure_account_name))
+      AZURE_ACCOUNT_KEY: ((azure_account_key))
+      OS_AUTH_URL: ((os_auth_url))
+      OS_TENANT_ID: ((os_tenant_id))
+      OS_TENANT_NAME: ((os_tenaant_name))
+      OS_USERNAME: ((os_username))
+      OS_PASSWORD: ((os_password))
+      OS_REGION_NAME: ((os_region_name))
+      DO_ACCESS_KEY_ID: ((do_access_key_id))
+      DO_SECRET_ACCESS: ((do_secret_access))
+
+- name: test-kubeci-pr
+  plan:
+  - get: pull-request
+    version: every
+    trigger: true
+  - get: creds
+    params:
+      unpack: true
+  - put: pull-request
+    params:
+      path: pull-request
+      status: pending
+  - task: unit-test
+    file: pull-request/hack/concourse/task_unit_test.yml
+    input_mapping:
+      kubeci: pull-request
+    on_failure:
+      put: pull-request
+      params: {path: pull-request, status: failure}
+  - task: e2e-test
+    file: pull-request/hack/concourse/task_e2e.yml
+    privileged: true
+    input_mapping:
+      kubeci: pull-request
+    params:
+      TOKEN: ((digitaloceanToken))
+      DOCKER_USER: ((docker_user))
+      DOCKER_PASS: ((docker_pass))
+      AWS_KEY_ID: ((aws_key_id))
+      AWS_SECRET: ((aws_secret))
+      GCE_PROJECT_ID: ((gce_project_id))
+      AZURE_ACCOUNT_NAME: ((azure_account_name))
+      AZURE_ACCOUNT_KEY: ((azure_account_key))
+      OS_AUTH_URL: ((os_auth_url))
+      OS_TENANT_ID: ((os_tenant_id))
+      OS_TENANT_NAME: ((os_tenaant_name))
+      OS_USERNAME: ((os_username))
+      OS_PASSWORD: ((os_password))
+      OS_REGION_NAME: ((os_region_name))
+      DO_ACCESS_KEY_ID: ((do_access_key_id))
+      DO_SECRET_ACCESS: ((do_secret_access))
+    on_success:
+      put: pull-request
+      params: { path: pull-request, status: success}
+    on_failure:
+      put: pull-request
+      params: {path: pull-request, status: failure}

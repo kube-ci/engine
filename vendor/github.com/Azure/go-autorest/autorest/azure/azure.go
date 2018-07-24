@@ -279,29 +279,16 @@ func WithErrorUnlessStatusCode(codes ...int) autorest.RespondDecorator {
 				resp.Body = ioutil.NopCloser(&b)
 				if decodeErr != nil {
 					return fmt.Errorf("autorest/azure: error response cannot be parsed: %q error: %v", b.String(), decodeErr)
-				}
-				if e.ServiceError == nil {
+				} else if e.ServiceError == nil {
 					// Check if error is unwrapped ServiceError
-					if err := json.Unmarshal(b.Bytes(), &e.ServiceError); err != nil {
-						return err
+					if err := json.Unmarshal(b.Bytes(), &e.ServiceError); err != nil || e.ServiceError.Message == "" {
+						e.ServiceError = &ServiceError{
+							Code:    "Unknown",
+							Message: "Unknown service error",
+						}
 					}
 				}
-				if e.ServiceError.Message == "" {
-					// if we're here it means the returned error wasn't OData v4 compliant.
-					// try to unmarshal the body as raw JSON in hopes of getting something.
-					rawBody := map[string]interface{}{}
-					if err := json.Unmarshal(b.Bytes(), &rawBody); err != nil {
-						return err
-					}
-					e.ServiceError = &ServiceError{
-						Code:    "Unknown",
-						Message: "Unknown service error",
-					}
-					if len(rawBody) > 0 {
-						e.ServiceError.Details = []map[string]interface{}{rawBody}
-					}
-				}
-				e.Response = resp
+
 				e.RequestID = ExtractRequestID(resp)
 				if e.StatusCode == nil {
 					e.StatusCode = resp.StatusCode

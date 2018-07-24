@@ -1,5 +1,5 @@
 /*
-Copyright The Kubernetes Authors.
+Copyright 2018 The KubeCI Authors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,14 +21,14 @@ package v1alpha1
 import (
 	time "time"
 
-	kubeci_v1alpha1 "github.com/kube-ci/experiments/apis/kubeci/v1alpha1"
-	versioned "github.com/kube-ci/experiments/client/clientset/versioned"
-	internalinterfaces "github.com/kube-ci/experiments/client/informers/externalversions/internalinterfaces"
-	v1alpha1 "github.com/kube-ci/experiments/client/listers/kubeci/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	watch "k8s.io/apimachinery/pkg/watch"
 	cache "k8s.io/client-go/tools/cache"
+	kubeci_v1alpha1 "kube.ci/kubeci/apis/kubeci/v1alpha1"
+	versioned "kube.ci/kubeci/client/clientset/versioned"
+	internalinterfaces "kube.ci/kubeci/client/informers/externalversions/internalinterfaces"
+	v1alpha1 "kube.ci/kubeci/client/listers/kubeci/v1alpha1"
 )
 
 // WorkplanInformer provides access to a shared informer and lister for

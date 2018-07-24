@@ -1,5 +1,5 @@
 /*
-Copyright The Kubernetes Authors.
+Copyright 2018 The KubeCI Authors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,13 +19,13 @@ limitations under the License.
 package fake
 
 import (
-	v1alpha1 "github.com/kube-ci/experiments/apis/kubeci/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	testing "k8s.io/client-go/testing"
+	v1alpha1 "kube.ci/kubeci/apis/kubeci/v1alpha1"
 )
 
 // FakeWorkplans implements WorkplanInterface
@@ -34,9 +34,9 @@ type FakeWorkplans struct {
 	ns   string
 }
 
-var workplansResource = schema.GroupVersionResource{Group: "kubeci.appscode.com", Version: "v1alpha1", Resource: "workplans"}
+var workplansResource = schema.GroupVersionResource{Group: "kubeci.kube.ci", Version: "v1alpha1", Resource: "workplans"}
 
-var workplansKind = schema.GroupVersionKind{Group: "kubeci.appscode.com", Version: "v1alpha1", Kind: "Workplan"}
+var workplansKind = schema.GroupVersionKind{Group: "kubeci.kube.ci", Version: "v1alpha1", Kind: "Workplan"}
 
 // Get takes name of the workplan, and returns the corresponding workplan object, and an error if there is any.
 func (c *FakeWorkplans) Get(name string, options v1.GetOptions) (result *v1alpha1.Workplan, err error) {
@@ -62,7 +62,7 @@ func (c *FakeWorkplans) List(opts v1.ListOptions) (result *v1alpha1.WorkplanList
 	if label == nil {
 		label = labels.Everything()
 	}
-	list := &v1alpha1.WorkplanList{}
+	list := &v1alpha1.WorkplanList{ListMeta: obj.(*v1alpha1.WorkplanList).ListMeta}
 	for _, item := range obj.(*v1alpha1.WorkplanList).Items {
 		if label.Matches(labels.Set(item.Labels)) {
 			list.Items = append(list.Items, item)

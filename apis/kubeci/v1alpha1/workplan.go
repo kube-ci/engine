@@ -5,12 +5,12 @@ import (
 )
 
 const (
-	ResourceKindWorkplan     = "Workplan"
-	ResourceSingularWorkplan = "workplan"
-	ResourcePluralWorkplan   = "workplans"
+	ResourceKindWorkplan = "Workplan"
+	ResourceWorkplans    = "workplans"
 )
 
 // +genclient
+// +k8s:openapi-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 type Workplan struct {

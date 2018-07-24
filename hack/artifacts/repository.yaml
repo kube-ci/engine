@@ -1,0 +1,7 @@
+apiVersion: git.kube.ci/v1alpha1
+kind: Repository
+metadata:
+  name: my-repo
+  namespace: default
+spec:
+  url: https://github.com/diptadas/watch.git
