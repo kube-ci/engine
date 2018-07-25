@@ -1,64 +1,44 @@
 apiVersion: kubeci.kube.ci/v1alpha1
 kind: Workflow
 metadata:
-  name: workflow-git-branch
+  name: watch-git-branch
   namespace: default
 spec:
-  steps:
-  - args:
-    - -c
-    - touch /kubeci/file-1
-    commands:
-    - sh
-    image: alpine
-    name: step-1
-  - args:
-    - -c
-    - touch /kubeci/file-2
-    commands:
-    - sh
-    dependency:
-    - step-1
-    image: alpine
-    name: step-2
-  - args:
-    - -c
-    - touch /kubeci/file-3
-    commands:
-    - sh
-    dependency:
-    - step-1
-    image: alpine
-    name: step-3
-  - args:
-    - -c
-    - touch /kubeci/file-4
-    commands:
-    - sh
-    dependency:
-    - step-2
-    - step-3
-    image: alpine
-    name: step-4
-  - args:
-    - -c
-    - echo step-5; ls /kubeci
-    commands:
-    - sh
-    dependency:
-    - step-1
-    - step-4
-    image: alpine
-    name: step-5
   triggers:
   - apiVersion: git.kube.ci/v1alpha1
     kind: Branch
-    name: master
-    namespace: default
-    onAddOrUpdate: true
-    onDelete: false
     resource: branches
+    name: kubeci-gpig-master
+    namespace: default
     selector:
       matchLabels:
-        repository: watch
-
+        repository: kubeci-gpig
+    onAddOrUpdate: true
+    onDelete: false
+  steps:
+  - name: step-clone
+    image: alpine/git
+    commands:
+    - git
+    args:
+    - clone
+    - https://github.com/diptadas/kubeci-gpig.git
+    - /kubeci/kubeci-gpig
+  - name: step-list
+    image: alpine
+    commands:
+    - sh
+    args:
+    - -c
+    - echo listing files...; ls /kubeci/kubeci-gpig
+    dependency:
+    - step-clone
+  - name: step-test
+    image: golang:alpine
+    commands:
+    - sh
+    args:
+    - -c
+    - echo running test...; cd /kubeci/kubeci-gpig; go test -v || true
+    dependency:
+    - step-clone

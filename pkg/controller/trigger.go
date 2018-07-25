@@ -133,7 +133,7 @@ func (c *Controller) createWorkplan(wf *api.Workflow) error {
 			Tasks: tasks,
 		},
 	}
-	log.Infof("Creating workplan workflow %s", wf.Name)
+	log.Infof("Creating workplan for workflow %s", wf.Name)
 	if wp, err = c.kubeciClient.KubeciV1alpha1().Workplans(wp.Namespace).Create(wp); err != nil {
 		return fmt.Errorf("failed to create workplan for workflow %s", wf.Name)
 	}
