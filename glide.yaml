@@ -70,9 +70,7 @@ import:
 - package: k8s.io/kube-aggregator
   version: kubernetes-1.11.0
 - package: k8s.io/kube-openapi
-  repo: https://github.com/pharmer/kube-openapi.git
-  vcs: git
-  version: k-1.11
+  version: master
 - package: k8s.io/kubernetes
   version: v1.11.0
 - package: github.com/appscode/kutil
