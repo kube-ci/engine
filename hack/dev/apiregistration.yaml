@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: git-dev-apiserver
-  namespace: ${GIT_APISERVER_NAMESPACE}
+  name: kubeci-dev-apiserver
+  namespace: ${KUBECI_NAMESPACE}
   labels:
-    app: git-dev-apiserver
+    app: kubeci-dev-apiserver
 spec:
   ports:
   - name: api
@@ -19,10 +19,10 @@ spec:
 apiVersion: v1
 kind: Endpoints
 metadata:
-  name: git-dev-apiserver
-  namespace: ${GIT_APISERVER_NAMESPACE}
+  name: kubeci-dev-apiserver
+  namespace: ${KUBECI_NAMESPACE}
   labels:
-    app: git-dev-apiserver
+    app: kubeci-dev-apiserver
 subsets:
 - addresses:
   # list all external ips for this service
@@ -36,32 +36,15 @@ subsets:
 apiVersion: apiregistration.k8s.io/v1beta1
 kind: APIService
 metadata:
-  name: v1alpha1.admission.git.kube.ci
+  name: v1alpha1.admission.kubeci.kube.ci
   labels:
-    app: git-dev-apiserver
+    app: kubeci-dev-apiserver
 spec:
   insecureSkipTLSVerify: true
-  group: admission.git.kube.ci
+  group: admission.kubeci.kube.ci
   groupPriorityMinimum: 1000
   versionPriority: 15
   service:
-    name: git-dev-apiserver
-    namespace: ${GIT_APISERVER_NAMESPACE}
-  version: v1alpha1
----
-# register as aggregated apiserver
-apiVersion: apiregistration.k8s.io/v1beta1
-kind: APIService
-metadata:
-  name: v1alpha1.repositories.git.kube.ci
-  labels:
-    app: git-dev-apiserver
-spec:
-  insecureSkipTLSVerify: true
-  group: repositories.git.kube.ci
-  groupPriorityMinimum: 1000
-  versionPriority: 15
-  service:
-    name: git-dev-apiserver
-    namespace: ${GIT_APISERVER_NAMESPACE}
+    name: kubeci-dev-apiserver
+    namespace: ${KUBECI_NAMESPACE}
   version: v1alpha1

@@ -2,7 +2,7 @@
 set -xe
 
 GOPATH=$(go env GOPATH)
-REPO_ROOT="$GOPATH/src/kube.ci/git-apiserver"
+REPO_ROOT="$GOPATH/src/kube.ci/kubeci"
 
 pushd $REPO_ROOT
 
@@ -41,16 +41,16 @@ else
   esac
 fi
 
-export GIT_APISERVER_NAMESPACE=default
+export KUBECI_NAMESPACE=default
 export KUBE_CA=$($ONESSL get kube-ca | $ONESSL base64)
-export GIT_APISERVER_ENABLE_WEBHOOK=true
+export KUBECI_ENABLE_WEBHOOK=true
 
 while test $# -gt 0; do
   case "$1" in
     -n)
       shift
       if test $# -gt 0; then
-        export GIT_APISERVER_NAMESPACE=$1
+        export KUBECI_NAMESPACE=$1
       else
         echo "no namespace specified"
         exit 1
@@ -60,7 +60,7 @@ while test $# -gt 0; do
     --namespace*)
       shift
       if test $# -gt 0; then
-        export GIT_APISERVER_NAMESPACE=$1
+        export KUBECI_NAMESPACE=$1
       else
         echo "no namespace specified"
         exit 1
@@ -70,7 +70,7 @@ while test $# -gt 0; do
     --enable-webhook*)
       val=$(echo $1 | sed -e 's/^[^=]*=//g')
       if [ "$val" = "false" ]; then
-        export GIT_APISERVER_ENABLE_WEBHOOK=false
+        export KUBECI_ENABLE_WEBHOOK=false
       fi
       shift
       ;;
@@ -86,13 +86,13 @@ kubectl create clusterrolebinding serviceaccounts-cluster-admin --clusterrole=cl
 
 cat $REPO_ROOT/hack/dev/apiregistration.yaml | envsubst | kubectl apply -f -
 
-#if [ "$GIT_APISERVER_ENABLE_WEBHOOK" = true ]; then
+#if [ "$KUBECI_ENABLE_WEBHOOK" = true ]; then
 #  cat $REPO_ROOT/hack/deploy/validating-webhook.yaml | envsubst | kubectl apply -f -
 #fi
 
 $REPO_ROOT/hack/make.py
 
-git-apiserver run \
+kubeci run \
     --secure-port=8443 \
     --kubeconfig="$HOME/.kube/config" \
     --authorization-kubeconfig="$HOME/.kube/config" \

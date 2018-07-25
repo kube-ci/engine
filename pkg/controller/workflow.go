@@ -15,7 +15,7 @@ import (
 func (c *Controller) NewWorkflowWebhook() hooks.AdmissionHook {
 	return webhook.NewGenericWebhook(
 		schema.GroupVersionResource{
-			Group:    "admission.kube.ci",
+			Group:    "admission.kubeci.kube.ci",
 			Version:  "v1alpha1",
 			Resource: "workflows",
 		},

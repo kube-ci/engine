@@ -1,7 +1,0 @@
-apiVersion: git.kube.ci/v1alpha1
-kind: Binding
-metadata:
-  labels:
-    node: minikube
-  name: voyager
-  namespace: default
