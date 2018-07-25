@@ -1,8 +1,8 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: git-apiserver
-  namespace: ${GIT_APISERVER_NAMESPACE}
+  name: kubeci
+  namespace: ${KUBECI_NAMESPACE}
   labels:
     app: kubeci
 spec:
@@ -17,23 +17,23 @@ spec:
       annotations:
         scheduler.alpha.kubernetes.io/critical-pod: ''
     spec:
-      serviceAccountName: ${GIT_APISERVER_SERVICE_ACCOUNT}
-      imagePullSecrets: [${GIT_APISERVER_IMAGE_PULL_SECRET}]
+      serviceAccountName: ${KUBECI_SERVICE_ACCOUNT}
+      imagePullSecrets: [${KUBECI_IMAGE_PULL_SECRET}]
       containers:
       - name: operator
-        image: ${GIT_APISERVER_DOCKER_REGISTRY}/git-apiserver:${GIT_APISERVER_IMAGE_TAG}
-        imagePullPolicy: ${GIT_APISERVER_IMAGE_PULL_POLICY}
+        image: ${KUBECI_DOCKER_REGISTRY}/kubeci:${KUBECI_IMAGE_TAG}
+        imagePullPolicy: ${KUBECI_IMAGE_PULL_POLICY}
         args:
         - run
         - --v=3
-        - --rbac=${GIT_APISERVER_ENABLE_RBAC}
-        - --docker-registry=${GIT_APISERVER_DOCKER_REGISTRY}
+        - --rbac=${KUBECI_ENABLE_RBAC}
+        - --docker-registry=${KUBECI_DOCKER_REGISTRY}
         - --secure-port=8443
         - --audit-log-path=-
         - --tls-cert-file=/var/serving-cert/tls.crt
         - --tls-private-key-file=/var/serving-cert/tls.key
-        - --enable-status-subresource=${GIT_APISERVER_ENABLE_STATUS_SUBRESOURCE}
-        - --enable-analytics=${GIT_APISERVER_ENABLE_ANALYTICS}
+        - --enable-status-subresource=${KUBECI_ENABLE_STATUS_SUBRESOURCE}
+        - --enable-analytics=${KUBECI_ENABLE_ANALYTICS}
         ports:
         - containerPort: 8443
         resources:
@@ -74,7 +74,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: kubeci-apiserver-cert
-  namespace: ${GIT_APISERVER_NAMESPACE}
+  namespace: ${KUBECI_NAMESPACE}
   labels:
     app: kubeci
 type: kubernetes.io/tls
@@ -86,8 +86,8 @@ data:
 apiVersion: v1
 kind: Service
 metadata:
-  name: git-apiserver
-  namespace: ${GIT_APISERVER_NAMESPACE}
+  name: kubeci
+  namespace: ${KUBECI_NAMESPACE}
   labels:
     app: kubeci
 spec:

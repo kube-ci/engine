@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -xe
 
-REPO=${GOPATH}/src/kube.ci/git-apiserver
+REPO=${GOPATH}/src/kube.ci/kubeci
 pushd ${REPO}
 
 export APPSCODE_ENV=dev
@@ -15,11 +15,8 @@ export APPSCODE_ENV=dev
 # build docker
 ./hack/docker/setup.sh
 
-# delete old deploy
-kubectl delete deploy -n kube-system git-apiserver || true
-
 # load to minikube
-minducker kubeci/git-apiserver:initial
+minducker kubeci/kubeci:initial
 
 # deploy
 ./hack/deploy/install.sh

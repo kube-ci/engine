@@ -388,9 +388,6 @@ spec:
               type: integer
             lastObservedResourceGeneration:
               type: object
-          required:
-          - lastObservedGeneration
-          - lastObservedResourceGeneration
   version: v1alpha1
   versions:
   - name: v1alpha1

@@ -2055,10 +2055,6 @@
       }
     },
     "ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowStatus": {
-      "required": [
-        "lastObservedGeneration",
-        "lastObservedResourceGeneration"
-      ],
       "properties": {
         "lastObservedGeneration": {
           "type": "integer",

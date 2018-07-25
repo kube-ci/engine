@@ -1,25 +1,25 @@
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: ValidatingWebhookConfiguration
 metadata:
-  name: admission.git.kube.ci
+  name: admission.kubeci.kube.ci
   labels:
     app: kubeci
 webhooks:
-- name: repository.admission.git.kube.ci
+- name: workflow.admission.kubeci.kube.ci
   clientConfig:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/admission.git.kube.ci/v1alpha1/repositories
+      path: /apis/admission.kubeci.kube.ci/v1alpha1/repositories
     caBundle: ${KUBE_CA}
   rules:
   - operations:
     - CREATE
     - UPDATE
     apiGroups:
-    - git.kube.ci
+    - kubeci.kube.ci
     apiVersions:
     - "*"
     resources:
-    - repositories
+    - workflows
   failurePolicy: Fail

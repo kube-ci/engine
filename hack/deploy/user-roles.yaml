@@ -7,11 +7,10 @@ metadata:
     rbac.authorization.k8s.io/aggregate-to-edit: "true"
 rules:
 - apiGroups:
-  - git.kube.ci
+  - kubeci.kube.ci
   resources:
-  - restics
-  - recoveries
-  - repositories
+  - workflows
+  - workplans
   verbs:
   - create
   - delete
@@ -30,11 +29,10 @@ metadata:
     rbac.authorization.k8s.io/aggregate-to-view: "true"
 rules:
 - apiGroups:
-  - git.kube.ci
+  - kubeci.kube.ci
   resources:
-  - restics
-  - recoveries
-  - repositories
+  - workflows
+  - workplans
   verbs:
   - get
   - list
