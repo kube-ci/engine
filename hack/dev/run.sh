@@ -93,7 +93,7 @@ cat $REPO_ROOT/hack/dev/apiregistration.yaml | envsubst | kubectl apply -f -
 $REPO_ROOT/hack/make.py
 
 kubeci run \
-    --secure-port=8443 \
+    --secure-port=6443 \
     --kubeconfig="$HOME/.kube/config" \
     --authorization-kubeconfig="$HOME/.kube/config" \
     --authentication-kubeconfig="$HOME/.kube/config" \
