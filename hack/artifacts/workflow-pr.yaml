@@ -1,0 +1,45 @@
+apiVersion: kubeci.kube.ci/v1alpha1
+kind: Workflow
+metadata:
+  name: watch-github-pr
+  namespace: default
+spec:
+  triggers:
+  - apiVersion: git.kube.ci/v1alpha1
+    kind: PullRequest
+    resource: pullrequests
+    namespace: default
+    selector:
+      matchLabels:
+        repository: kubeci-gpig
+        state: open
+        ok-to-test:
+    onAddOrUpdate: true
+    onDelete: false
+  steps:
+  - name: step-clone
+    image: alpine/git
+    commands:
+    - git
+    args:
+    - clone
+    - https://github.com/diptadas/kubeci-gpig.git
+    - /kubeci/kubeci-gpig
+  - name: step-list
+    image: alpine
+    commands:
+    - sh
+    args:
+    - -c
+    - echo listing files...; ls /kubeci/kubeci-gpig
+    dependency:
+    - step-clone
+  - name: step-test
+    image: golang:alpine
+    commands:
+    - sh
+    args:
+    - -c
+    - echo running test...; cd /kubeci/kubeci-gpig; go test -v || true
+    dependency:
+    - step-clone

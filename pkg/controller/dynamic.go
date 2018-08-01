@@ -33,6 +33,11 @@ func (res ResourceIdentifier) String() string {
 
 func objToResourceIdentifier(obj interface{}) ResourceIdentifier {
 	o := obj.(*unstructured.Unstructured)
+	if json, err := o.MarshalJSON(); err != nil {
+		log.Errorln(err)
+	} else {
+		log.Infoln(string(json))
+	}
 	return ResourceIdentifier{
 		ApiVersion:        o.GetAPIVersion(),
 		Kind:              o.GetKind(),
