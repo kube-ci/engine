@@ -1,6 +1,7 @@
 package v1alpha1
 
 import (
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -28,6 +29,8 @@ type Task struct { // analogous to a single pod
 
 type WorkplanSpec struct {
 	Tasks []Task `json:"tasks,omitempty"`
+	// set container environment variables from configmaps and secrets
+	EnvFrom []corev1.EnvFromSource `json:"envFrom,omitempty"`
 }
 
 type WorkplanStatus struct {

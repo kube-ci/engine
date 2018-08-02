@@ -1955,6 +1955,13 @@
         "apiVersion": {
           "type": "string"
         },
+        "envFromPath": {
+          "description": "environment-variable to json-path map, set them in containers",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
         "kind": {
           "type": "string"
         },
@@ -1964,7 +1971,7 @@
         "namespace": {
           "type": "string"
         },
-        "onAddOrUpdate": {
+        "onCreateOrUpdate": {
           "type": "boolean"
         },
         "onDelete": {
@@ -2040,6 +2047,17 @@
     },
     "ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowSpec": {
       "properties": {
+        "envFrom": {
+          "description": "set container environment variables from configmaps and secrets",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/io.k8s.api.core.v1.EnvFromSource"
+          }
+        },
+        "serviceAccount": {
+          "description": "ServiceAccount with triggering-resource/configmaps/secrets watch/read permissions",
+          "type": "string"
+        },
         "steps": {
           "type": "array",
           "items": {
@@ -2131,6 +2149,13 @@
     },
     "ci.kube.kubeci.apis.kubeci.v1alpha1.WorkplanSpec": {
       "properties": {
+        "envFrom": {
+          "description": "set container environment variables from configmaps and secrets",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/io.k8s.api.core.v1.EnvFromSource"
+          }
+        },
         "tasks": {
           "type": "array",
           "items": {
@@ -2155,6 +2180,49 @@
         "taskIndex": {
           "type": "integer",
           "format": "int32"
+        }
+      }
+    },
+    "io.k8s.api.core.v1.ConfigMapEnvSource": {
+      "description": "ConfigMapEnvSource selects a ConfigMap to populate the environment variables with.\n\nThe contents of the target ConfigMap's Data field will represent the key-value pairs as environment variables.",
+      "properties": {
+        "name": {
+          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "optional": {
+          "description": "Specify whether the ConfigMap must be defined",
+          "type": "boolean"
+        }
+      }
+    },
+    "io.k8s.api.core.v1.EnvFromSource": {
+      "description": "EnvFromSource represents the source of a set of ConfigMaps",
+      "properties": {
+        "configMapRef": {
+          "description": "The ConfigMap to select from",
+          "$ref": "#/definitions/io.k8s.api.core.v1.ConfigMapEnvSource"
+        },
+        "prefix": {
+          "description": "An optional identifier to prepend to each key in the ConfigMap. Must be a C_IDENTIFIER.",
+          "type": "string"
+        },
+        "secretRef": {
+          "description": "The Secret to select from",
+          "$ref": "#/definitions/io.k8s.api.core.v1.SecretEnvSource"
+        }
+      }
+    },
+    "io.k8s.api.core.v1.SecretEnvSource": {
+      "description": "SecretEnvSource selects a Secret to populate the environment variables with.\n\nThe contents of the target Secret's Data field will represent the key-value pairs as environment variables.",
+      "properties": {
+        "name": {
+          "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+          "type": "string"
+        },
+        "optional": {
+          "description": "Specify whether the Secret must be defined",
+          "type": "boolean"
         }
       }
     },

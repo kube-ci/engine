@@ -14,7 +14,7 @@ spec:
         repository: kubeci-gpig
         state: open
         ok-to-test:
-    onAddOrUpdate: true
+    onCreateOrUpdate: true
     onDelete: false
   steps:
   - name: step-clone

@@ -21,6 +21,7 @@ limitations under the License.
 package v1alpha1
 
 import (
+	v1 "k8s.io/api/core/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 )
 
@@ -89,6 +90,13 @@ func (in *Task) DeepCopy() *Task {
 func (in *Trigger) DeepCopyInto(out *Trigger) {
 	*out = *in
 	in.Selector.DeepCopyInto(&out.Selector)
+	if in.EnvFromPath != nil {
+		in, out := &in.EnvFromPath, &out.EnvFromPath
+		*out = make(map[string]string, len(*in))
+		for key, val := range *in {
+			(*out)[key] = val
+		}
+	}
 	return
 }
 
@@ -176,6 +184,13 @@ func (in *WorkflowSpec) DeepCopyInto(out *WorkflowSpec) {
 	if in.Steps != nil {
 		in, out := &in.Steps, &out.Steps
 		*out = make([]Step, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
+	if in.EnvFrom != nil {
+		in, out := &in.EnvFrom, &out.EnvFrom
+		*out = make([]v1.EnvFromSource, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
@@ -292,6 +307,13 @@ func (in *WorkplanSpec) DeepCopyInto(out *WorkplanSpec) {
 	if in.Tasks != nil {
 		in, out := &in.Tasks, &out.Tasks
 		*out = make([]Task, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
+	if in.EnvFrom != nil {
+		in, out := &in.EnvFrom, &out.EnvFrom
+		*out = make([]v1.EnvFromSource, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}

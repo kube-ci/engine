@@ -13,7 +13,7 @@ spec:
     selector:
       matchLabels:
         repository: kubeci-gpig
-    onAddOrUpdate: true
+    onCreateOrUpdate: true
     onDelete: false
   steps:
   - name: step-clone

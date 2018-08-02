@@ -10854,10 +10854,24 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 								Format: "",
 							},
 						},
-						"onAddOrUpdate": {
+						"onCreateOrUpdate": {
 							SchemaProps: spec.SchemaProps{
 								Type:   []string{"boolean"},
 								Format: "",
+							},
+						},
+						"envFromPath": {
+							SchemaProps: spec.SchemaProps{
+								Description: "environment-variable to json-path map, set them in containers",
+								Type:        []string{"object"},
+								AdditionalProperties: &spec.SchemaOrBool{
+									Schema: &spec.Schema{
+										SchemaProps: spec.SchemaProps{
+											Type:   []string{"string"},
+											Format: "",
+										},
+									},
+								},
 							},
 						},
 					},
@@ -10975,11 +10989,31 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 								},
 							},
 						},
+						"envFrom": {
+							SchemaProps: spec.SchemaProps{
+								Description: "set container environment variables from configmaps and secrets",
+								Type:        []string{"array"},
+								Items: &spec.SchemaOrArray{
+									Schema: &spec.Schema{
+										SchemaProps: spec.SchemaProps{
+											Ref: ref("k8s.io/api/core/v1.EnvFromSource"),
+										},
+									},
+								},
+							},
+						},
+						"serviceAccount": {
+							SchemaProps: spec.SchemaProps{
+								Description: "ServiceAccount with triggering-resource/configmaps/secrets watch/read permissions",
+								Type:        []string{"string"},
+								Format:      "",
+							},
+						},
 					},
 				},
 			},
 			Dependencies: []string{
-				"kube.ci/kubeci/apis/kubeci/v1alpha1.Step", "kube.ci/kubeci/apis/kubeci/v1alpha1.Trigger"},
+				"k8s.io/api/core/v1.EnvFromSource", "kube.ci/kubeci/apis/kubeci/v1alpha1.Step", "kube.ci/kubeci/apis/kubeci/v1alpha1.Trigger"},
 		},
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.WorkflowStatus": {
 			Schema: spec.Schema{
@@ -11106,11 +11140,24 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 								},
 							},
 						},
+						"envFrom": {
+							SchemaProps: spec.SchemaProps{
+								Description: "set container environment variables from configmaps and secrets",
+								Type:        []string{"array"},
+								Items: &spec.SchemaOrArray{
+									Schema: &spec.Schema{
+										SchemaProps: spec.SchemaProps{
+											Ref: ref("k8s.io/api/core/v1.EnvFromSource"),
+										},
+									},
+								},
+							},
+						},
 					},
 				},
 			},
 			Dependencies: []string{
-				"kube.ci/kubeci/apis/kubeci/v1alpha1.Task"},
+				"k8s.io/api/core/v1.EnvFromSource", "kube.ci/kubeci/apis/kubeci/v1alpha1.Task"},
 		},
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.WorkplanStatus": {
 			Schema: spec.Schema{

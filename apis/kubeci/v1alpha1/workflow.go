@@ -1,6 +1,7 @@
 package v1alpha1
 
 import (
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -24,6 +25,11 @@ type Workflow struct {
 type WorkflowSpec struct {
 	Triggers []Trigger `json:"triggers,omitempty"`
 	Steps    []Step    `json:"steps,omitempty"`
+	// set container environment variables from configmaps and secrets
+	EnvFrom []corev1.EnvFromSource `json:"envFrom,omitempty"`
+	// ServiceAccount with triggering-resource/configmaps/secrets watch/read permissions
+	// TODO: also use this in pods ?
+	ServiceAccount string `json:"serviceAccount,omitempty"`
 }
 
 type Trigger struct {
@@ -34,7 +40,9 @@ type Trigger struct {
 	Namespace        string               `json:"namespace,omitempty"`
 	Selector         metav1.LabelSelector `json:"selector,omitempty"`
 	OnDelete         bool                 `json:"onDelete,omitempty"`
-	OnCreateOrUpdate bool                 `json:"onAddOrUpdate,omitempty"`
+	OnCreateOrUpdate bool                 `json:"onCreateOrUpdate,omitempty"`
+	// environment-variable to json-path map, set them in containers
+	EnvFromPath map[string]string `json:"envFromPath,omitempty"`
 }
 
 type Step struct {
