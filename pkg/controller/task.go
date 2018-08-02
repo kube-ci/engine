@@ -89,6 +89,7 @@ func podSpecForTasks(wp *api.Workplan, task api.Task, index int) *core.Pod {
 			Args:         step.Args,
 			Image:        step.Image,
 			VolumeMounts: []core.VolumeMount{kubeciVolumeMount},
+			EnvFrom:      wp.Spec.EnvFrom,
 		}
 		pod.Spec.InitContainers = append(pod.Spec.InitContainers, container)
 	}
@@ -100,6 +101,7 @@ func podSpecForTasks(wp *api.Workplan, task api.Task, index int) *core.Pod {
 			Args:         step.Args,
 			Image:        step.Image,
 			VolumeMounts: []core.VolumeMount{kubeciVolumeMount},
+			EnvFrom:      wp.Spec.EnvFrom,
 		}
 		pod.Spec.Containers = append(pod.Spec.Containers, container)
 	}

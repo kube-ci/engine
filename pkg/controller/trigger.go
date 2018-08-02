@@ -5,6 +5,7 @@ import (
 
 	"github.com/appscode/go/log"
 	"github.com/appscode/go/types"
+	authorizationapi "k8s.io/api/authorization/v1"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -97,9 +98,112 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 			continue
 		}
 
+		// === check RBAC permissions ===
+
+		// check resource watch permission
+		if ok := c.checkAccess(
+			authorizationapi.ResourceAttributes{
+				Group:     res.ApiVersion, // TODO: split into group/version
+				Version:   res.ApiVersion,
+				Resource:  res.Kind,
+				Name:      res.Name,
+				Namespace: wf.Namespace,
+				Verb:      "watch",
+			},
+			wf.Spec.ServiceAccount,
+		); !ok {
+			return false
+		}
+
+		if trigger.EnvFromPath != nil {
+			// check resource get permission
+			if ok := c.checkAccess(
+				authorizationapi.ResourceAttributes{
+					Group:     res.ApiVersion, // TODO: split into group/version
+					Version:   res.ApiVersion,
+					Resource:  res.Kind,
+					Name:      res.Name,
+					Namespace: wf.Namespace,
+					Verb:      "get",
+				},
+				wf.Spec.ServiceAccount,
+			); !ok {
+				return false
+			}
+			// check secret create permission // TODO: check secret get permission also ?
+			if ok := c.checkAccess(
+				authorizationapi.ResourceAttributes{ // TODO: check
+					Group:     "core",
+					Version:   "v1",
+					Resource:  "Secret",
+					Namespace: wf.Namespace,
+					Verb:      "create",
+				},
+				wf.Spec.ServiceAccount,
+			); !ok {
+				return false
+			}
+		}
+
+		for _, env := range wf.Spec.EnvFrom {
+			if env.ConfigMapRef != nil {
+				// check configmap get permission
+				if ok := c.checkAccess(
+					authorizationapi.ResourceAttributes{ // TODO: use constants
+						Group:     "core",
+						Version:   "v1",
+						Resource:  "Configmap",
+						Name:      env.ConfigMapRef.Name,
+						Namespace: wf.Namespace,
+						Verb:      "get",
+					},
+					wf.Spec.ServiceAccount,
+				); !ok {
+					return false
+				}
+			}
+			if env.SecretRef != nil {
+				// check secret get permission
+				if ok := c.checkAccess(
+					authorizationapi.ResourceAttributes{ // TODO: use constants
+						Group:     "core",
+						Version:   "v1",
+						Resource:  "Secret",
+						Name:      env.SecretRef.Name,
+						Namespace: wf.Namespace,
+						Verb:      "get",
+					},
+					wf.Spec.ServiceAccount,
+				); !ok {
+					return false
+				}
+			}
+		}
+
 		return true
 	}
 	return false
+}
+
+func (c *Controller) checkAccess(res authorizationapi.ResourceAttributes, serviceAccount string) bool {
+	result, err := c.kubeClient.AuthorizationV1().SubjectAccessReviews().Create(
+		&authorizationapi.SubjectAccessReview{
+			Spec: authorizationapi.SubjectAccessReviewSpec{
+				ResourceAttributes: &res,
+				User:               "",         // TODO: fix
+				Groups:             []string{}, // TODO: fix
+			},
+		},
+	)
+	if err != nil {
+		log.Errorln(err)
+		return false
+	}
+	if !result.Status.Allowed {
+		log.Errorf("No permission, service-account: %s resource: %v", serviceAccount, res)
+		return false
+	}
+	return true
 }
 
 func (c *Controller) createWorkplan(wf *api.Workflow) error {
