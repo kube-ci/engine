@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/appscode/go/log"
@@ -19,6 +20,8 @@ import (
 type ResourceIdentifier struct {
 	Name              string
 	ApiVersion        string
+	Group             string
+	Version           string
 	Kind              string
 	Namespace         string
 	UID               ktypes.UID
@@ -38,8 +41,14 @@ func objToResourceIdentifier(obj interface{}) ResourceIdentifier {
 	} else {
 		log.Infoln(string(json))
 	}
+
+	apiVersion := o.GetAPIVersion()
+	group, version := toGroupAndVersion(apiVersion)
+
 	return ResourceIdentifier{
-		ApiVersion:        o.GetAPIVersion(),
+		ApiVersion:        apiVersion,
+		Group:             group,
+		Version:           version,
 		Kind:              o.GetKind(),
 		Namespace:         o.GetNamespace(),
 		Name:              o.GetName(),
@@ -48,6 +57,14 @@ func objToResourceIdentifier(obj interface{}) ResourceIdentifier {
 		Labels:            o.GetLabels(),
 		DeletionTimestamp: o.GetDeletionTimestamp(),
 	}
+}
+
+func toGroupAndVersion(apiVersion string) (string, string) {
+	items := strings.Split(apiVersion, "/")
+	if len(items) == 1 {
+		return "", items[0]
+	}
+	return items[0], items[1]
 }
 
 func (c *Controller) initDynamicWatcher() {

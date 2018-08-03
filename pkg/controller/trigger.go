@@ -103,8 +103,8 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 		// check resource watch permission
 		if ok := c.checkAccess(
 			authorizationapi.ResourceAttributes{
-				Group:     res.ApiVersion, // TODO: split into group/version
-				Version:   res.ApiVersion,
+				Group:     res.Group,
+				Version:   res.Version,
 				Resource:  res.Kind,
 				Name:      res.Name,
 				Namespace: wf.Namespace,
@@ -119,8 +119,8 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 			// check resource get permission
 			if ok := c.checkAccess(
 				authorizationapi.ResourceAttributes{
-					Group:     res.ApiVersion, // TODO: split into group/version
-					Version:   res.ApiVersion,
+					Group:     res.Group,
+					Version:   res.Version,
 					Resource:  res.Kind,
 					Name:      res.Name,
 					Namespace: wf.Namespace,
@@ -132,8 +132,8 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 			}
 			// check secret create permission // TODO: check secret get permission also ?
 			if ok := c.checkAccess(
-				authorizationapi.ResourceAttributes{ // TODO: check
-					Group:     "core",
+				authorizationapi.ResourceAttributes{ // TODO: use constants
+					Group:     "",
 					Version:   "v1",
 					Resource:  "Secret",
 					Namespace: wf.Namespace,
@@ -150,7 +150,7 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 				// check configmap get permission
 				if ok := c.checkAccess(
 					authorizationapi.ResourceAttributes{ // TODO: use constants
-						Group:     "core",
+						Group:     "",
 						Version:   "v1",
 						Resource:  "Configmap",
 						Name:      env.ConfigMapRef.Name,
@@ -166,7 +166,7 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 				// check secret get permission
 				if ok := c.checkAccess(
 					authorizationapi.ResourceAttributes{ // TODO: use constants
-						Group:     "core",
+						Group:     "",
 						Version:   "v1",
 						Resource:  "Secret",
 						Name:      env.SecretRef.Name,
@@ -187,11 +187,11 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 
 func (c *Controller) checkAccess(res authorizationapi.ResourceAttributes, serviceAccount string) bool {
 	result, err := c.kubeClient.AuthorizationV1().SubjectAccessReviews().Create(
-		&authorizationapi.SubjectAccessReview{
+		&authorizationapi.SubjectAccessReview{ // TODO: use constants
 			Spec: authorizationapi.SubjectAccessReviewSpec{
 				ResourceAttributes: &res,
-				User:               "",         // TODO: fix
-				Groups:             []string{}, // TODO: fix
+				User:               fmt.Sprintf("system:serviceaccount:%s:%s", res.Namespace, serviceAccount),
+				Groups:             []string{"system:serviceaccounts", "system:serviceaccounts:default"},
 			},
 		},
 	)
