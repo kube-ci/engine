@@ -195,7 +195,7 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 			}
 		}
 
-		return true, trigger.EnvFromPath
+		return true, res.GetData(trigger.EnvFromPath)
 	}
 	return false, nil
 }

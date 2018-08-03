@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"bytes"
 	"fmt"
 	"strings"
 	"time"
@@ -14,10 +15,12 @@ import (
 	ktypes "k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/discovery"
 	"k8s.io/client-go/tools/cache"
+	"k8s.io/client-go/util/jsonpath"
 	api "kube.ci/kubeci/apis/kubeci/v1alpha1"
 )
 
 type ResourceIdentifier struct {
+	Object            map[string]interface{}
 	Name              string
 	ApiVersion        string
 	Group             string
@@ -34,18 +37,38 @@ func (res ResourceIdentifier) String() string {
 	return fmt.Sprintf("%s/%s:%s/%s", res.ApiVersion, res.Kind, res.Namespace, res.Name)
 }
 
+func (res ResourceIdentifier) GetData(paths map[string]string) map[string]string {
+	data := make(map[string]string, 0)
+	for env, path := range paths {
+		data[env] = jsonPathData(path, res.Object)
+	}
+	return data
+}
+
+func jsonPathData(path string, data interface{}) string {
+	j := jsonpath.New("kubeci")
+	j.AllowMissingKeys(true) // TODO: true or false ? ignore errors ?
+
+	if err := j.Parse(path); err != nil {
+		return ""
+	}
+
+	buf := new(bytes.Buffer)
+	if err := j.Execute(buf, data); err != nil {
+		return ""
+	}
+
+	return buf.String()
+}
+
 func objToResourceIdentifier(obj interface{}) ResourceIdentifier {
 	o := obj.(*unstructured.Unstructured)
-	if json, err := o.MarshalJSON(); err != nil {
-		log.Errorln(err)
-	} else {
-		log.Infoln(string(json))
-	}
 
 	apiVersion := o.GetAPIVersion()
 	group, version := toGroupAndVersion(apiVersion)
 
 	return ResourceIdentifier{
+		Object:            o.Object,
 		ApiVersion:        apiVersion,
 		Group:             group,
 		Version:           version,
