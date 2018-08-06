@@ -5,6 +5,7 @@ import (
 
 	"github.com/appscode/go/log"
 	"github.com/appscode/go/types"
+	"github.com/tamalsaha/go-oneliners"
 	authorizationapi "k8s.io/api/authorization/v1"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -120,7 +121,7 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 			authorizationapi.ResourceAttributes{
 				Group:     res.Group,
 				Version:   res.Version,
-				Resource:  res.Kind,
+				Resource:  "configmaps", // res.Kind // TODO: how to get resource from unstructured object
 				Name:      res.Name,
 				Namespace: wf.Namespace,
 				Verb:      "watch",
@@ -136,7 +137,7 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 				authorizationapi.ResourceAttributes{
 					Group:     res.Group,
 					Version:   res.Version,
-					Resource:  res.Kind,
+					Resource:  "configmaps", // res.Kind // TODO: how to get resource from unstructured object
 					Name:      res.Name,
 					Namespace: wf.Namespace,
 					Verb:      "get",
@@ -150,7 +151,7 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 				authorizationapi.ResourceAttributes{ // TODO: use constants
 					Group:     "",
 					Version:   "v1",
-					Resource:  "Secret",
+					Resource:  "secrets",
 					Namespace: wf.Namespace,
 					Verb:      "create",
 				},
@@ -167,7 +168,7 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 					authorizationapi.ResourceAttributes{ // TODO: use constants
 						Group:     "",
 						Version:   "v1",
-						Resource:  "Configmap",
+						Resource:  "configmaps",
 						Name:      env.ConfigMapRef.Name,
 						Namespace: wf.Namespace,
 						Verb:      "get",
@@ -183,7 +184,7 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 					authorizationapi.ResourceAttributes{ // TODO: use constants
 						Group:     "",
 						Version:   "v1",
-						Resource:  "Secret",
+						Resource:  "secrets",
 						Name:      env.SecretRef.Name,
 						Namespace: wf.Namespace,
 						Verb:      "get",
@@ -201,15 +202,20 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 }
 
 func (c *Controller) checkAccess(res authorizationapi.ResourceAttributes, serviceAccount string) bool {
-	result, err := c.kubeClient.AuthorizationV1().SubjectAccessReviews().Create(
-		&authorizationapi.SubjectAccessReview{ // TODO: use constants
-			Spec: authorizationapi.SubjectAccessReviewSpec{
-				ResourceAttributes: &res,
-				User:               fmt.Sprintf("system:serviceaccount:%s:%s", res.Namespace, serviceAccount),
-				Groups:             []string{"system:serviceaccounts", "system:serviceaccounts:default"},
+	review := authorizationapi.SubjectAccessReview{ // TODO: use constants
+		Spec: authorizationapi.SubjectAccessReviewSpec{
+			ResourceAttributes: &res,
+			User:               fmt.Sprintf("system:serviceaccount:%s:%s", res.Namespace, serviceAccount),
+			Groups: []string{
+				"system:serviceaccounts",
+				fmt.Sprintf("system:serviceaccounts:%s", res.Namespace),
 			},
 		},
-	)
+	}
+
+	result, err := c.kubeClient.AuthorizationV1().SubjectAccessReviews().Create(&review)
+	oneliners.PrettyJson(result, "Review Result")
+
 	if err != nil {
 		log.Errorln(err)
 		return false
