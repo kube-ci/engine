@@ -84,10 +84,24 @@ func objToResourceIdentifier(obj interface{}) ResourceIdentifier {
 	}
 }
 
-// TODO: how to get resource from unstructured object
+// TODO: how to get resource from unstructured object ?
 func selfLinkToResource(selfLink string) string {
 	items := strings.Split(selfLink, "/")
 	return items[len(items)-2]
+}
+
+// TODO: use this instead of selfLink ?
+func (c *Controller) groupVersionKindToResource(groupVersion, kind string) (string, error) {
+	resources, err := c.kubeClient.Discovery().ServerResourcesForGroupVersion(groupVersion)
+	if err != nil {
+		return "", err
+	}
+	for _, resource := range resources.APIResources {
+		if resource.Kind == kind {
+			return resource.Name, nil
+		}
+	}
+	return "", fmt.Errorf("could not find api resource with group-version: %s and kind: %s", groupVersion, kind)
 }
 
 func toGroupAndVersion(apiVersion string) (string, string) {
