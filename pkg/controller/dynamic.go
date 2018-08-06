@@ -26,6 +26,7 @@ type ResourceIdentifier struct {
 	Group             string
 	Version           string
 	Kind              string
+	Resource          string
 	Namespace         string
 	UID               ktypes.UID
 	Generation        int64
@@ -73,6 +74,7 @@ func objToResourceIdentifier(obj interface{}) ResourceIdentifier {
 		Group:             group,
 		Version:           version,
 		Kind:              o.GetKind(),
+		Resource:          selfLinkToResource(o.GetSelfLink()),
 		Namespace:         o.GetNamespace(),
 		Name:              o.GetName(),
 		UID:               o.GetUID(),
@@ -80,6 +82,12 @@ func objToResourceIdentifier(obj interface{}) ResourceIdentifier {
 		Labels:            o.GetLabels(),
 		DeletionTimestamp: o.GetDeletionTimestamp(),
 	}
+}
+
+// TODO: how to get resource from unstructured object
+func selfLinkToResource(selfLink string) string {
+	items := strings.Split(selfLink, "/")
+	return items[len(items)-2]
 }
 
 func toGroupAndVersion(apiVersion string) (string, string) {

@@ -63,6 +63,8 @@ func (c *Controller) handleTrigger(res ResourceIdentifier) {
 }
 
 func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflow) (bool, map[string]string) {
+	c.kubeClient.AppsV1().RESTClient()
+
 	for _, trigger := range wf.Spec.Triggers {
 		if trigger.ApiVersion != res.ApiVersion {
 			continue
@@ -121,7 +123,7 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 			authorizationapi.ResourceAttributes{
 				Group:     res.Group,
 				Version:   res.Version,
-				Resource:  "configmaps", // res.Kind // TODO: how to get resource from unstructured object
+				Resource:  res.Resource,
 				Name:      res.Name,
 				Namespace: wf.Namespace,
 				Verb:      "watch",
@@ -137,7 +139,7 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 				authorizationapi.ResourceAttributes{
 					Group:     res.Group,
 					Version:   res.Version,
-					Resource:  "configmaps", // res.Kind // TODO: how to get resource from unstructured object
+					Resource:  res.Resource,
 					Name:      res.Name,
 					Namespace: wf.Namespace,
 					Verb:      "get",
