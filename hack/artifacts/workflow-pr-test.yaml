@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: default
+  name: workflow-rbac-sa
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  namespace: default
+  name: workflow-rbac-role
+rules:
+- apiGroups: ["git.kube.ci"]
+  resources: ["pullrequests"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["secrets", "configmaps"]
+  verbs: ["get", "list", "watch", "create"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  namespace: default
+  name: workflow-rbac-binding
+subjects:
+- kind: ServiceAccount
+  namespace: default
+  name: workflow-rbac-sa
+roleRef:
+  kind: Role
+  name: workflow-rbac-role
+  apiGroup: rbac.authorization.k8s.io
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: my-env-config
+  namespace: default
+data:
+  REPO: diptadas/kubeci-gpig
+  URL: https://github.com/diptadas/kubeci-gpig.git
+  REPO_ROOT: /go/src/github.com/diptadas/kubeci-gpig
+  # HEAD_SHA:
+  # TOKEN:
+  # PR_ID:
+  CONTEXT: kubeci
+  TARGET_URL: https://kube.ci
+  DESCRIPTION_PENDING: kubeci-build-pending
+  DESCRIPTION_SUCCESS: kubeci-build-success
+  DESCRIPTION_FAILURE: kubeci-build-failure
+  TEST_SCRIPT: test.sh
+---
+apiVersion: kubeci.kube.ci/v1alpha1
+kind: Workflow
+metadata:
+  name: wf-pr-test
+  namespace: default
+spec:
+  triggers:
+  - apiVersion: git.kube.ci/v1alpha1
+    kind: PullRequest
+    resource: pullrequests
+    namespace: default
+    selector:
+      matchLabels:
+        repository: kubeci-gpig
+        state: open
+        ok-to-test:
+    onCreateOrUpdate: true
+    onDelete: false
+    envFromPath:
+      HEAD_SHA: '{$.spec.headSHA}'
+      PR_NUMBER: '{$.spec.number}'
+  serviceAccount: workflow-rbac-sa
+  envFrom:
+  - configMapRef:
+      name: my-env-config
+  - secretRef:
+      name: my-env-secret
+  steps:
+  - name: step-test
+    image: diptadas/github-pr-test
+
+# kubectl create secret generic my-env-secret --from-literal=TOKEN=...
