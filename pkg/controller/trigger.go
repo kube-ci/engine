@@ -87,25 +87,25 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 			continue
 		}
 
-		// check generation to prevent duplicate trigger
-		// also update/delete generation even if events not matched
+		// check version to prevent duplicate trigger
+		// also update/delete version even if events not matched
 
-		var gen int64
+		var version string
 		var ok bool // false if map is nil or key not found
-		if wf.Status.LastObservedResourceGeneration != nil {
-			gen, ok = wf.Status.LastObservedResourceGeneration[string(res.UID)]
+		if wf.Status.LastObservedResourceVersion != nil {
+			version, ok = wf.Status.LastObservedResourceVersion[string(res.UID)]
 		}
 
 		if res.DeletionTimestamp != nil {
-			if !ok {
+			if !ok { // already handled delete
 				continue
 			}
-			c.updateWorkflowLastObservedResourceGen(wf.Name, wf.Namespace, string(res.UID), nil)
+			c.updateWorkflowLastObservedResourceVersion(wf.Name, wf.Namespace, string(res.UID), "")
 		} else {
-			if ok && gen >= res.Generation {
+			if ok && version == res.Version {
 				continue
 			}
-			c.updateWorkflowLastObservedResourceGen(wf.Name, wf.Namespace, string(res.UID), &res.Generation)
+			c.updateWorkflowLastObservedResourceVersion(wf.Name, wf.Namespace, string(res.UID), res.ResourceVersion)
 		}
 
 		// match events

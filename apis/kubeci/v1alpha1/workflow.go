@@ -54,8 +54,8 @@ type Step struct {
 }
 
 type WorkflowStatus struct {
-	LastObservedGeneration         *int64           `json:"lastObservedGeneration,omitempty"`
-	LastObservedResourceGeneration map[string]int64 `json:"lastObservedResourceGeneration,omitempty"`
+	LastObservedGeneration      *int64            `json:"lastObservedGeneration,omitempty"`
+	LastObservedResourceVersion map[string]string `json:"lastObservedResourceVersion,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

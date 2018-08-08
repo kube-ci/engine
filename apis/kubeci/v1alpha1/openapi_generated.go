@@ -11025,14 +11025,14 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 								Format: "int64",
 							},
 						},
-						"lastObservedResourceGeneration": {
+						"lastObservedResourceVersion": {
 							SchemaProps: spec.SchemaProps{
 								Type: []string{"object"},
 								AdditionalProperties: &spec.SchemaOrBool{
 									Schema: &spec.Schema{
 										SchemaProps: spec.SchemaProps{
-											Type:   []string{"integer"},
-											Format: "int64",
+											Type:   []string{"string"},
+											Format: "",
 										},
 									},
 								},
