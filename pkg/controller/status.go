@@ -22,20 +22,20 @@ func (c *Controller) updateWorkflowLastObservedGen(name, namespace string, gener
 	return err
 }
 
-func (c *Controller) updateWorkflowLastObservedResourceVersion(name, namespace, uid string, version string) error {
+func (c *Controller) updateWorkflowLastObservedResourceGen(name, namespace, uid string, generation *int64) error {
 	wf, err := c.kubeciClient.KubeciV1alpha1().Workflows(namespace).Get(name, metav1.GetOptions{})
 	if err != nil {
 		return err
 	}
 
-	if wf.Status.LastObservedResourceVersion == nil {
-		wf.Status.LastObservedResourceVersion = make(map[string]string, 0)
+	if wf.Status.LastObservedResourceGeneration == nil {
+		wf.Status.LastObservedResourceGeneration = make(map[string]int64, 0)
 	}
 
-	if version == "" { // delete
-		delete(wf.Status.LastObservedResourceVersion, uid)
+	if generation == nil { // delete
+		delete(wf.Status.LastObservedResourceGeneration, uid)
 	} else { // add or update
-		wf.Status.LastObservedResourceVersion[uid] = version
+		wf.Status.LastObservedResourceGeneration[uid] = *generation
 	}
 
 	_, err = c.kubeciClient.KubeciV1alpha1().Workflows(wf.Namespace).UpdateStatus(wf)

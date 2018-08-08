@@ -29,7 +29,7 @@ type ResourceIdentifier struct {
 	Resource          string
 	Namespace         string
 	UID               ktypes.UID
-	ResourceVersion   string
+	Generation        int64
 	DeletionTimestamp *metav1.Time
 	Labels            map[string]string
 }
@@ -78,7 +78,7 @@ func objToResourceIdentifier(obj interface{}) ResourceIdentifier {
 		Namespace:         o.GetNamespace(),
 		Name:              o.GetName(),
 		UID:               o.GetUID(),
-		ResourceVersion:   o.GetResourceVersion(),
+		Generation:        o.GetGeneration(),
 		Labels:            o.GetLabels(),
 		DeletionTimestamp: o.GetDeletionTimestamp(),
 	}

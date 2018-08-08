@@ -220,9 +220,9 @@ func (in *WorkflowStatus) DeepCopyInto(out *WorkflowStatus) {
 			**out = **in
 		}
 	}
-	if in.LastObservedResourceVersion != nil {
-		in, out := &in.LastObservedResourceVersion, &out.LastObservedResourceVersion
-		*out = make(map[string]string, len(*in))
+	if in.LastObservedResourceGeneration != nil {
+		in, out := &in.LastObservedResourceGeneration, &out.LastObservedResourceGeneration
+		*out = make(map[string]int64, len(*in))
 		for key, val := range *in {
 			(*out)[key] = val
 		}

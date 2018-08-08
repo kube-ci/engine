@@ -429,7 +429,7 @@ spec:
             lastObservedGeneration:
               format: int64
               type: integer
-            lastObservedResourceVersion:
+            lastObservedResourceGeneration:
               type: object
   version: v1alpha1
   versions:
