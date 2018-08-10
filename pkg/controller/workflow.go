@@ -1,11 +1,11 @@
 package controller
 
 import (
+	"github.com/appscode/go/log"
 	"github.com/appscode/kubernetes-webhook-util/admission"
 	hooks "github.com/appscode/kubernetes-webhook-util/admission/v1beta1"
 	webhook "github.com/appscode/kubernetes-webhook-util/admission/v1beta1/generic"
 	"github.com/appscode/kutil/tools/queue"
-	"github.com/golang/glog"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"kube.ci/kubeci/apis/kubeci"
@@ -44,17 +44,17 @@ func (c *Controller) initWorkflowWatcher() {
 func (c *Controller) runWorkflowInjector(key string) error {
 	obj, exist, err := c.wfInformer.GetIndexer().GetByKey(key)
 	if err != nil {
-		glog.Errorf("Fetching object with key %s from store failed with %v", key, err)
+		log.Errorf("Fetching object with key %s from store failed with %v", key, err)
 		return err
 	}
 
 	if !exist {
-		glog.Warningf("Workflow %s does not exist anymore\n", key)
+		log.Warningf("Workflow %s does not exist anymore\n", key)
 	} else {
 		wf := obj.(*api.Workflow).DeepCopy()
 
 		if wf.Status.LastObservedGeneration == nil || wf.Generation > *wf.Status.LastObservedGeneration {
-			glog.Infof("Sync/Add/Update for Workflow %s\n", key)
+			log.Infof("Sync/Add/Update for Workflow %s\n", key)
 			// update LastObservedGeneration // TODO: errors ? // TODO: update status after reconcile ?
 			c.updateWorkflowLastObservedGen(wf.Name, wf.Namespace, wf.Generation)
 			if err := c.reconcileForWorkflow(wf); err != nil {

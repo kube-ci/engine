@@ -3,11 +3,11 @@ package controller
 import (
 	"fmt"
 
+	"github.com/appscode/go/log"
 	crdutils "github.com/appscode/kutil/apiextensions/v1beta1"
 	dynamicclientset "github.com/appscode/kutil/dynamic/clientset"
 	dynamicinformer "github.com/appscode/kutil/dynamic/informer"
 	"github.com/appscode/kutil/tools/queue"
-	"github.com/golang/glog"
 	crd_api "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	crd_cs "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/typed/apiextensions/v1beta1"
 	"k8s.io/apimachinery/pkg/util/runtime"
@@ -63,7 +63,7 @@ func (c *Controller) ensureCustomResourceDefinitions() error {
 func (c *Controller) RunInformers(stopCh <-chan struct{}) {
 	defer runtime.HandleCrash()
 
-	glog.Info("Starting kubeci controller")
+	log.Info("Starting kubeci controller")
 	c.kubeInformerFactory.Start(stopCh)
 	c.kubeciInformerFactory.Start(stopCh)
 

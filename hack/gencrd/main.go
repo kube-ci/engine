@@ -10,7 +10,6 @@ import (
 	crdutils "github.com/appscode/kutil/apiextensions/v1beta1"
 	"github.com/appscode/kutil/openapi"
 	"github.com/go-openapi/spec"
-	"github.com/golang/glog"
 	crd_api "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/serializer"
@@ -72,17 +71,17 @@ func generateSwaggerJson() {
 		},
 	})
 	if err != nil {
-		glog.Fatal(err)
+		log.Fatal(err)
 	}
 
 	filename := gort.GOPath() + "/src/kube.ci/kubeci/api/openapi-spec/swagger.json"
 	err = os.MkdirAll(filepath.Dir(filename), 0755)
 	if err != nil {
-		glog.Fatal(err)
+		log.Fatal(err)
 	}
 	err = ioutil.WriteFile(filename, []byte(apispec), 0644)
 	if err != nil {
-		glog.Fatal(err)
+		log.Fatal(err)
 	}
 }
 

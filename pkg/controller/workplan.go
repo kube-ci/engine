@@ -3,7 +3,6 @@ package controller
 import (
 	"github.com/appscode/go/log"
 	"github.com/appscode/kutil/tools/queue"
-	"github.com/golang/glog"
 	api "kube.ci/kubeci/apis/kubeci/v1alpha1"
 )
 
@@ -17,12 +16,12 @@ func (c *Controller) initWorkplanWatcher() {
 func (c *Controller) runWorkplanInjector(key string) error {
 	obj, exist, err := c.wpInformer.GetIndexer().GetByKey(key)
 	if err != nil {
-		glog.Errorf("Fetching object with key %s from store failed with %v", key, err)
+		log.Errorf("Fetching object with key %s from store failed with %v", key, err)
 		return err
 	}
 
 	if !exist {
-		glog.Warningf("Workplan %s does not exist anymore\n", key)
+		log.Warningf("Workplan %s does not exist anymore\n", key)
 	} else {
 		wp := obj.(*api.Workplan).DeepCopy()
 		if wp.Status.Phase == "" {
