@@ -1,5 +1,5 @@
 hash: 778fec74913da28e4d4328603ceeb440cb6efffde3bcc5644ac68d7de20220d8
-updated: 2018-08-10T15:07:49.333534991+06:00
+updated: 2018-08-28T11:35:36.259299746+06:00
 imports:
 - name: bitbucket.org/ww/goautoneg
   version: 75cd24fc2f2c2a2088577d12123ddee5f54e0675
@@ -31,7 +31,7 @@ imports:
   - registry/admissionreview/v1beta1
   - runtime/serializer/versioning
 - name: github.com/appscode/kutil
-  version: b50ebf9375ccfa41b08350da68618fee6bc6de4b
+  version: ab96b8d0056d39ca0c57dc6705864423b50515bc
   subpackages:
   - apiextensions/v1beta1
   - dynamic/clientset
@@ -179,6 +179,8 @@ imports:
   version: dcef7f55730566d41eae5db10e7d6981829720f6
 - name: github.com/evanphx/json-patch
   version: afac545df32f2287a079e2dfb7ba2745a643747e
+- name: github.com/fatih/structs
+  version: ebf56d35bba727c68ac77f56f2fcf90b181851aa
 - name: github.com/ghodss/yaml
   version: 73d445a93680fa1a78ae23a5839bad48f32ba1ee
 - name: github.com/go-openapi/jsonpointer
@@ -214,7 +216,7 @@ imports:
 - name: github.com/google/btree
   version: 7d79101e329e5a3adf994758c578dab82b90c017
 - name: github.com/google/go-cmp
-  version: 5411ab924f9ffa6566244a9e504bc347edacffd3
+  version: 2006917edc5a27cd174dbc4baba31a137d6cb9ff
   subpackages:
   - cmp
   - cmp/internal/diff
@@ -240,7 +242,7 @@ imports:
   - openstack/utils
   - pagination
 - name: github.com/graymeta/stow
-  version: 749bd5039731d827684b5d49a59b01d4c5316b65
+  version: afce6d90444a3ba63c6d6671498c6cdc79375369
   repo: https://github.com/appscode/stow.git
   vcs: git
 - name: github.com/gregjones/httpcache
@@ -274,7 +276,7 @@ imports:
 - name: github.com/modern-go/reflect2
   version: 05fbef0ca5da472bbf96c9322b84a53edc03c9fd
 - name: github.com/ncw/swift
-  version: bd8b704d15b2f5357186ac39c863bd74eb837291
+  version: a0320860b16212c2b59b4912bb6508cda1d7cee6
 - name: github.com/NYTimes/gziphandler
   version: 56545f4a5d46df9a6648819d1664c3a03a13ffdb
 - name: github.com/onsi/ginkgo
@@ -404,7 +406,7 @@ imports:
   subpackages:
   - rate
 - name: google.golang.org/api
-  version: d089d6ac97131b2ee652f2fe736865338659a668
+  version: 7954115fcf34e0dcda6981c9ed8a81a293f0489b
   subpackages:
   - storage/v1
 - name: google.golang.org/appengine
