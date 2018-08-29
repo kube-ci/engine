@@ -5,11 +5,13 @@ import (
 	"github.com/appscode/kubernetes-webhook-util/admission"
 	hooks "github.com/appscode/kubernetes-webhook-util/admission/v1beta1"
 	webhook "github.com/appscode/kubernetes-webhook-util/admission/v1beta1/generic"
+	"github.com/appscode/kutil/meta"
 	"github.com/appscode/kutil/tools/queue"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"kube.ci/kubeci/apis/kubeci"
 	api "kube.ci/kubeci/apis/kubeci/v1alpha1"
+	"kube.ci/kubeci/client/clientset/versioned/typed/kubeci/v1alpha1/util"
 )
 
 func (c *Controller) NewWorkflowWebhook() hooks.AdmissionHook {
@@ -37,7 +39,8 @@ func (c *Controller) NewWorkflowWebhook() hooks.AdmissionHook {
 func (c *Controller) initWorkflowWatcher() {
 	c.wfInformer = c.kubeciInformerFactory.Kubeci().V1alpha1().Workflows().Informer()
 	c.wfQueue = queue.New("Workflow", c.MaxNumRequeues, c.NumThreads, c.runWorkflowInjector)
-	c.wfInformer.AddEventHandler(queue.DefaultEventHandler(c.wfQueue.GetQueue()))
+	// TODO: use enableStatusSubresource variable
+	c.wfInformer.AddEventHandler(queue.NewObservableHandler(c.wfQueue.GetQueue(), true))
 	c.wfLister = c.kubeciInformerFactory.Kubeci().V1alpha1().Workflows().Lister()
 }
 
@@ -51,15 +54,25 @@ func (c *Controller) runWorkflowInjector(key string) error {
 	if !exist {
 		log.Warningf("Workflow %s does not exist anymore\n", key)
 	} else {
-		wf := obj.(*api.Workflow).DeepCopy()
+		log.Infof("Sync/Add/Update for Workflow %s\n", key)
 
-		if wf.Status.LastObservedGeneration == nil || wf.Generation > *wf.Status.LastObservedGeneration {
-			log.Infof("Sync/Add/Update for Workflow %s\n", key)
-			// update LastObservedGeneration // TODO: errors ? // TODO: update status after reconcile ?
-			c.updateWorkflowLastObservedGen(wf.Name, wf.Namespace, wf.Generation)
-			if err := c.reconcileForWorkflow(wf); err != nil {
-				return err
-			}
+		wf := obj.(*api.Workflow).DeepCopy()
+		if err := c.reconcileForWorkflow(wf); err != nil {
+			return err
+		}
+
+		// update ObservedGeneration and ObservedGenerationHash
+		_, err = util.UpdateWorkflowStatus(
+			c.kubeciClient.KubeciV1alpha1(),
+			wf.ObjectMeta,
+			func(r *api.WorkflowStatus) *api.WorkflowStatus {
+				r.ObservedGeneration = wf.Generation
+				r.ObservedGenerationHash = meta.GenerationHash(wf)
+				return r
+			},
+		)
+		if err != nil {
+			return err
 		}
 	}
 
