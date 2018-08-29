@@ -10712,6 +10712,27 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 			},
 			Dependencies: []string{},
 		},
+		"kube.ci/kubeci/apis/kubeci/v1alpha1.ResourceGeneration": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Properties: map[string]spec.Schema{
+						"generation": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"integer"},
+								Format: "int64",
+							},
+						},
+						"hash": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"string"},
+								Format: "",
+							},
+						},
+					},
+				},
+			},
+			Dependencies: []string{},
+		},
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.Step": {
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{
@@ -11031,14 +11052,13 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 								Format: "",
 							},
 						},
-						"lastObservedResourceGeneration": {
+						"observedResources": {
 							SchemaProps: spec.SchemaProps{
 								Type: []string{"object"},
 								AdditionalProperties: &spec.SchemaOrBool{
 									Schema: &spec.Schema{
 										SchemaProps: spec.SchemaProps{
-											Type:   []string{"integer"},
-											Format: "int64",
+											Ref: ref("kube.ci/kubeci/apis/kubeci/v1alpha1.ResourceGeneration"),
 										},
 									},
 								},
@@ -11047,7 +11067,8 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 					},
 				},
 			},
-			Dependencies: []string{},
+			Dependencies: []string{
+				"kube.ci/kubeci/apis/kubeci/v1alpha1.ResourceGeneration"},
 		},
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.Workplan": {
 			Schema: spec.Schema{

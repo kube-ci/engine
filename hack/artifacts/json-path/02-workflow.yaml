@@ -13,8 +13,8 @@ spec:
     onCreateOrUpdate: true
     onDelete: false
     envFromPath:
-      META_NAME: '{$.metadata.name}'
-  serviceAccount: default
+      META_NAME: '{$.data.example\.property\.1}'
+  serviceAccount: wf-sa
   steps:
   - name: step-echo
     image: alpine

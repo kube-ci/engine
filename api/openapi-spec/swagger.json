@@ -1900,6 +1900,17 @@
     }
   },
   "definitions": {
+    "ci.kube.kubeci.apis.kubeci.v1alpha1.ResourceGeneration": {
+      "properties": {
+        "generation": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "hash": {
+          "type": "string"
+        }
+      }
+    },
     "ci.kube.kubeci.apis.kubeci.v1alpha1.Step": {
       "properties": {
         "args": {
@@ -2074,19 +2085,18 @@
     },
     "ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowStatus": {
       "properties": {
-        "lastObservedResourceGeneration": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "integer",
-            "format": "int64"
-          }
-        },
         "observedGeneration": {
           "type": "integer",
           "format": "int64"
         },
         "observedGenerationHash": {
           "type": "string"
+        },
+        "observedResources": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.ResourceGeneration"
+          }
         }
       }
     },

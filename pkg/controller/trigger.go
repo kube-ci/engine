@@ -5,12 +5,12 @@ import (
 
 	"github.com/appscode/go/log"
 	"github.com/appscode/go/types"
-	"github.com/tamalsaha/go-oneliners"
 	authorizationapi "k8s.io/api/authorization/v1"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	api "kube.ci/kubeci/apis/kubeci/v1alpha1"
+	"kube.ci/kubeci/client/clientset/versioned/typed/kubeci/v1alpha1/util"
 	"kube.ci/kubeci/pkg/dependency"
 	"kube.ci/kubeci/pkg/eventer"
 )
@@ -22,12 +22,12 @@ func (c *Controller) handleTrigger(res ResourceIdentifier) {
 	}
 
 	for _, wf := range workflows {
-		if ok, data := c.shouldHandleTrigger(res, wf); ok {
+		if ok, trigger := c.shouldHandleTrigger(res, wf); ok {
 			log.Infof("Triggering workflow %s for resource %s", wf.Name, res)
 
+			// create secret with json-path data
 			var secretRef *core.SecretEnvSource
-
-			if data != nil { // create secret with json-path data
+			if data := res.GetData(trigger.EnvFromPath); data != nil {
 				if secretRef, err = c.createSecret(wf, data); err != nil {
 					log.Errorf("Trigger failed for resource %v, reason: %s", res, err.Error())
 					c.recorder.Eventf(
@@ -58,12 +58,35 @@ func (c *Controller) handleTrigger(res ResourceIdentifier) {
 				eventer.EventReasonWorkflowTriggered,
 				"Successfully triggered workflow %s for resource %s", wf.Name, res,
 			)
+
+			// update generation and hash
+			resourceKey := res.Namespace + "/" + res.Name
+			if _, err := util.UpdateWorkflowStatus(
+				c.kubeciClient.KubeciV1alpha1(),
+				wf.ObjectMeta,
+				func(r *api.WorkflowStatus) *api.WorkflowStatus {
+					if r.ObservedResources == nil {
+						r.ObservedResources = make(map[string]api.ResourceGeneration)
+					}
+					r.ObservedResources[resourceKey] = api.ResourceGeneration{
+						Generation: res.Generation,
+						Hash:       res.Hash,
+					}
+					return r
+				},
+			); err != nil {
+				log.Errorf("Failed to update status of workflow %s for resource %s, reason: %s", wf.Name, res, err.Error())
+				return
+			}
 		}
 	}
 }
 
-func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflow) (bool, map[string]string) {
-	c.kubeClient.AppsV1().RESTClient()
+func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflow) (bool, api.Trigger) {
+	// check generation and hash to prevent duplicate trigger
+	if resourceAlreadyObserved(wf.Status, res) {
+		return false, api.Trigger{}
+	}
 
 	for _, trigger := range wf.Spec.Triggers {
 		if trigger.ApiVersion != res.ApiVersion {
@@ -87,29 +110,8 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 			continue
 		}
 
-		// check generation to prevent duplicate trigger
-		// also update/delete generation even if events not matched
-
-		var gen int64
-		var ok bool // false if map is nil or key not found
-		if wf.Status.LastObservedResourceGeneration != nil {
-			gen, ok = wf.Status.LastObservedResourceGeneration[string(res.UID)]
-		}
-
-		if res.DeletionTimestamp != nil {
-			if !ok {
-				continue
-			}
-			c.updateWorkflowLastObservedResourceGen(wf.Name, wf.Namespace, string(res.UID), nil)
-		} else {
-			if ok && gen >= res.Generation {
-				continue
-			}
-			c.updateWorkflowLastObservedResourceGen(wf.Name, wf.Namespace, string(res.UID), &res.Generation)
-		}
-
 		// match events
-		if res.DeletionTimestamp != nil && !trigger.OnDelete {
+		if res.DeletionTimestamp != nil && !trigger.OnDelete { // TODO: how to handle delete?
 			continue
 		}
 		if res.DeletionTimestamp == nil && !trigger.OnCreateOrUpdate {
@@ -130,7 +132,7 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 			},
 			wf.Spec.ServiceAccount,
 		); !ok {
-			return false, nil
+			return false, api.Trigger{}
 		}
 
 		if trigger.EnvFromPath != nil {
@@ -146,7 +148,7 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 				},
 				wf.Spec.ServiceAccount,
 			); !ok {
-				return false, nil
+				return false, api.Trigger{}
 			}
 			// check secret create permission // TODO: check secret get permission also ?
 			if ok := c.checkAccess(
@@ -159,7 +161,7 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 				},
 				wf.Spec.ServiceAccount,
 			); !ok {
-				return false, nil
+				return false, api.Trigger{}
 			}
 		}
 
@@ -177,7 +179,7 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 					},
 					wf.Spec.ServiceAccount,
 				); !ok {
-					return false, nil
+					return false, api.Trigger{}
 				}
 			}
 			if env.SecretRef != nil {
@@ -193,14 +195,29 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 					},
 					wf.Spec.ServiceAccount,
 				); !ok {
-					return false, nil
+					return false, api.Trigger{}
 				}
 			}
 		}
 
-		return true, res.GetData(trigger.EnvFromPath)
+		return true, trigger
 	}
-	return false, nil
+	return false, api.Trigger{}
+}
+
+// TODO: how to handle generation for configmaps, secrets?
+func resourceAlreadyObserved(wfStatus api.WorkflowStatus, res ResourceIdentifier) bool {
+	if wfStatus.ObservedResources == nil {
+		return false
+	}
+
+	resourceKey := res.Namespace + "/" + res.Name
+	gen, ok := wfStatus.ObservedResources[resourceKey]
+	if !ok || gen.Generation < res.Generation || gen.Hash != res.Hash {
+		return false
+	}
+
+	return true
 }
 
 func (c *Controller) checkAccess(res authorizationapi.ResourceAttributes, serviceAccount string) bool {
@@ -216,8 +233,7 @@ func (c *Controller) checkAccess(res authorizationapi.ResourceAttributes, servic
 	}
 
 	result, err := c.kubeClient.AuthorizationV1().SubjectAccessReviews().Create(&review)
-	oneliners.PrettyJson(result, "Review Result")
-
+	// oneliners.PrettyJson(result, "SubjectAccessReview Result")
 	if err != nil {
 		log.Errorln(err)
 		return false

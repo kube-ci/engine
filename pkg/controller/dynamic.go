@@ -10,6 +10,7 @@ import (
 	dynamicclientset "github.com/appscode/kutil/dynamic/clientset"
 	dynamicdiscovery "github.com/appscode/kutil/dynamic/discovery"
 	dynamicinformer "github.com/appscode/kutil/dynamic/informer"
+	"github.com/appscode/kutil/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	ktypes "k8s.io/apimachinery/pkg/types"
@@ -30,6 +31,7 @@ type ResourceIdentifier struct {
 	Namespace         string
 	UID               ktypes.UID
 	Generation        int64
+	Hash              string
 	DeletionTimestamp *metav1.Time
 	Labels            map[string]string
 }
@@ -39,6 +41,9 @@ func (res ResourceIdentifier) String() string {
 }
 
 func (res ResourceIdentifier) GetData(paths map[string]string) map[string]string {
+	if paths == nil {
+		return nil
+	}
 	data := make(map[string]string, 0)
 	for env, path := range paths {
 		data[env] = jsonPathData(path, res.Object)
@@ -79,6 +84,7 @@ func objToResourceIdentifier(obj interface{}) ResourceIdentifier {
 		Name:              o.GetName(),
 		UID:               o.GetUID(),
 		Generation:        o.GetGeneration(),
+		Hash:              meta.GenerationHash(o),
 		Labels:            o.GetLabels(),
 		DeletionTimestamp: o.GetDeletionTimestamp(),
 	}
