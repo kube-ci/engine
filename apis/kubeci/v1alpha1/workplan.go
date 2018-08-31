@@ -28,7 +28,8 @@ type Task struct { // analogous to a single pod
 }
 
 type WorkplanSpec struct {
-	Tasks []Task `json:"tasks,omitempty"`
+	Tasks        []Task       `json:"tasks,omitempty"`
+	TriggeredFor TriggeredFor `json:"triggeredFor"`
 	// set container environment variables from configmaps and secrets
 	EnvFrom []corev1.EnvFromSource `json:"envFrom,omitempty"`
 }
@@ -37,6 +38,23 @@ type WorkplanStatus struct {
 	Phase     string `json:"phase"`
 	Reason    string `json:"reason"`
 	TaskIndex int    `json:"taskIndex"`
+}
+
+type TriggeredFor struct {
+	ObjectReference    ObjectReference    `json:"objectReference,omitempty"`
+	ResourceGeneration ResourceGeneration `json:"resourceGeneration,omitempty"`
+}
+
+type ObjectReference struct {
+	Kind       string `json:"kind,omitempty"`
+	APIVersion string `json:"apiVersion,omitempty"`
+	Namespace  string `json:"namespace,omitempty"`
+	Name       string `json:"name,omitempty"`
+}
+
+type ResourceGeneration struct {
+	Generation int64  `json:"generation,omitempty"`
+	Hash       string `json:"hash,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
