@@ -11,9 +11,7 @@ import (
 	dynamicdiscovery "github.com/appscode/kutil/dynamic/discovery"
 	dynamicinformer "github.com/appscode/kutil/dynamic/informer"
 	"github.com/appscode/kutil/meta"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
-	ktypes "k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/discovery"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/util/jsonpath"
@@ -21,23 +19,21 @@ import (
 )
 
 type ResourceIdentifier struct {
-	Object            map[string]interface{}
-	Name              string
-	ApiVersion        string
-	Group             string
-	Version           string
-	Kind              string
-	Resource          string
-	Namespace         string
-	UID               ktypes.UID
-	Generation        int64
-	Hash              string
-	DeletionTimestamp *metav1.Time
-	Labels            map[string]string
+	Object             map[string]interface{} // required for json path data
+	ObjectReference    api.ObjectReference
+	ResourceGeneration api.ResourceGeneration
+
+	// TODO: remove extra fields
+	Group    string
+	Resource string
+	Version  string
+	Labels   map[string]string
 }
 
 func (res ResourceIdentifier) String() string {
-	return fmt.Sprintf("%s/%s:%s/%s", res.ApiVersion, res.Kind, res.Namespace, res.Name)
+	return fmt.Sprintf("%s/%s:%s/%s",
+		res.ObjectReference.APIVersion, res.ObjectReference.Kind,
+		res.ObjectReference.Namespace, res.ObjectReference.Name)
 }
 
 func (res ResourceIdentifier) GetData(paths map[string]string) map[string]string {
@@ -74,19 +70,21 @@ func objToResourceIdentifier(obj interface{}) ResourceIdentifier {
 	group, version := toGroupAndVersion(apiVersion)
 
 	return ResourceIdentifier{
-		Object:            o.Object,
-		ApiVersion:        apiVersion,
-		Group:             group,
-		Version:           version,
-		Kind:              o.GetKind(),
-		Resource:          selfLinkToResource(o.GetSelfLink()),
-		Namespace:         o.GetNamespace(),
-		Name:              o.GetName(),
-		UID:               o.GetUID(),
-		Generation:        o.GetGeneration(),
-		Hash:              meta.GenerationHash(o),
-		Labels:            o.GetLabels(),
-		DeletionTimestamp: o.GetDeletionTimestamp(),
+		Object:   o.Object,
+		Group:    group,
+		Resource: selfLinkToResource(o.GetSelfLink()),
+		Version:  version,
+		Labels:   o.GetLabels(),
+		ObjectReference: api.ObjectReference{
+			APIVersion: apiVersion,
+			Kind:       o.GetKind(),
+			Namespace:  o.GetNamespace(),
+			Name:       o.GetName(),
+		},
+		ResourceGeneration: api.ResourceGeneration{
+			Generation: o.GetGeneration(),
+			Hash:       meta.GenerationHash(o),
+		},
 	}
 }
 
@@ -142,12 +140,12 @@ func (c *Controller) initDynamicWatcher() {
 
 func (c *Controller) createInformer(wf *api.Workflow) error {
 	for _, trigger := range wf.Spec.Triggers {
-		informer, err := c.dynInformersFactory.Resource(trigger.ApiVersion, trigger.Resource)
+		informer, err := c.dynInformersFactory.Resource(trigger.APIVersion, trigger.Resource)
 		if err != nil {
 			return err
 		}
 		informer.Informer().AddEventHandler(c.handlerForDynamicInformer())
-		log.Infof("Created informer for resource %s/%s", trigger.ApiVersion, trigger.Resource)
+		log.Infof("Created informer for resource %s/%s", trigger.APIVersion, trigger.Resource)
 	}
 	return nil
 }
@@ -158,17 +156,17 @@ func (c *Controller) handlerForDynamicInformer() cache.ResourceEventHandlerFuncs
 		AddFunc: func(obj interface{}) {
 			res := objToResourceIdentifier(obj)
 			log.Debugln("Added resource", res)
-			c.handleTrigger(res)
+			c.handleTrigger(res, false)
 		},
 		UpdateFunc: func(oldObj, newObj interface{}) {
 			res := objToResourceIdentifier(newObj)
 			log.Debugln("Updated resource", res)
-			c.handleTrigger(res)
+			c.handleTrigger(res, false)
 		},
 		DeleteFunc: func(obj interface{}) {
 			res := objToResourceIdentifier(obj)
 			log.Debugln("Deleted resource", res)
-			c.handleTrigger(res)
+			c.handleTrigger(res, true)
 		},
 	}
 }

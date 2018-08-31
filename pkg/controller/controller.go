@@ -47,6 +47,12 @@ type Controller struct {
 	dynClient           *dynamicclientset.Clientset
 	dynInformersFactory *dynamicinformer.SharedInformerFactory
 
+	// store observed resources for workflows
+	// store triggered-for in workplans
+	// initially sync from available workplans
+	// key: workflow namespace/name
+	observedResources map[string]map[api.ObjectReference]api.ResourceGeneration
+
 	// TODO: close unused informers
 	// only one informer is created for a specific resource (among all workflows)
 	// we should close a informer when no workflow need that informer (when workflows deleted or updated)
@@ -80,6 +86,9 @@ func (c *Controller) RunInformers(stopCh <-chan struct{}) {
 			return
 		}
 	}
+
+	// sync workplans into observedResources // TODO
+	c.observedResources = make(map[string]map[api.ObjectReference]api.ResourceGeneration)
 
 	c.wfQueue.Run(stopCh)
 	c.wpQueue.Run(stopCh)
