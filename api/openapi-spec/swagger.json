@@ -1900,6 +1900,22 @@
     }
   },
   "definitions": {
+    "ci.kube.kubeci.apis.kubeci.v1alpha1.ObjectReference": {
+      "properties": {
+        "apiVersion": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        }
+      }
+    },
     "ci.kube.kubeci.apis.kubeci.v1alpha1.ResourceGeneration": {
       "properties": {
         "generation": {
@@ -1993,6 +2009,16 @@
         },
         "selector": {
           "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.LabelSelector"
+        }
+      }
+    },
+    "ci.kube.kubeci.apis.kubeci.v1alpha1.TriggeredFor": {
+      "properties": {
+        "objectReference": {
+          "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.ObjectReference"
+        },
+        "resourceGeneration": {
+          "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.ResourceGeneration"
         }
       }
     },
@@ -2091,12 +2117,6 @@
         },
         "observedGenerationHash": {
           "type": "string"
-        },
-        "observedResources": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.ResourceGeneration"
-          }
         }
       }
     },
@@ -2161,6 +2181,9 @@
       ]
     },
     "ci.kube.kubeci.apis.kubeci.v1alpha1.WorkplanSpec": {
+      "required": [
+        "triggeredFor"
+      ],
       "properties": {
         "envFrom": {
           "description": "set container environment variables from configmaps and secrets",
@@ -2174,6 +2197,9 @@
           "items": {
             "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Task"
           }
+        },
+        "triggeredFor": {
+          "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.TriggeredFor"
         }
       }
     },

@@ -10712,6 +10712,39 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 			},
 			Dependencies: []string{},
 		},
+		"kube.ci/kubeci/apis/kubeci/v1alpha1.ObjectReference": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Properties: map[string]spec.Schema{
+						"kind": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"string"},
+								Format: "",
+							},
+						},
+						"apiVersion": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"string"},
+								Format: "",
+							},
+						},
+						"namespace": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"string"},
+								Format: "",
+							},
+						},
+						"name": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"string"},
+								Format: "",
+							},
+						},
+					},
+				},
+			},
+			Dependencies: []string{},
+		},
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.ResourceGeneration": {
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{
@@ -10901,6 +10934,26 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 			Dependencies: []string{
 				"k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"},
 		},
+		"kube.ci/kubeci/apis/kubeci/v1alpha1.TriggeredFor": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Properties: map[string]spec.Schema{
+						"objectReference": {
+							SchemaProps: spec.SchemaProps{
+								Ref: ref("kube.ci/kubeci/apis/kubeci/v1alpha1.ObjectReference"),
+							},
+						},
+						"resourceGeneration": {
+							SchemaProps: spec.SchemaProps{
+								Ref: ref("kube.ci/kubeci/apis/kubeci/v1alpha1.ResourceGeneration"),
+							},
+						},
+					},
+				},
+			},
+			Dependencies: []string{
+				"kube.ci/kubeci/apis/kubeci/v1alpha1.ObjectReference", "kube.ci/kubeci/apis/kubeci/v1alpha1.ResourceGeneration"},
+		},
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.Workflow": {
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{
@@ -11052,23 +11105,10 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 								Format: "",
 							},
 						},
-						"observedResources": {
-							SchemaProps: spec.SchemaProps{
-								Type: []string{"object"},
-								AdditionalProperties: &spec.SchemaOrBool{
-									Schema: &spec.Schema{
-										SchemaProps: spec.SchemaProps{
-											Ref: ref("kube.ci/kubeci/apis/kubeci/v1alpha1.ResourceGeneration"),
-										},
-									},
-								},
-							},
-						},
 					},
 				},
 			},
-			Dependencies: []string{
-				"kube.ci/kubeci/apis/kubeci/v1alpha1.ResourceGeneration"},
+			Dependencies: []string{},
 		},
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.Workplan": {
 			Schema: spec.Schema{
@@ -11167,6 +11207,11 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 								},
 							},
 						},
+						"triggeredFor": {
+							SchemaProps: spec.SchemaProps{
+								Ref: ref("kube.ci/kubeci/apis/kubeci/v1alpha1.TriggeredFor"),
+							},
+						},
 						"envFrom": {
 							SchemaProps: spec.SchemaProps{
 								Description: "set container environment variables from configmaps and secrets",
@@ -11181,10 +11226,11 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 							},
 						},
 					},
+					Required: []string{"triggeredFor"},
 				},
 			},
 			Dependencies: []string{
-				"k8s.io/api/core/v1.EnvFromSource", "kube.ci/kubeci/apis/kubeci/v1alpha1.Task"},
+				"k8s.io/api/core/v1.EnvFromSource", "kube.ci/kubeci/apis/kubeci/v1alpha1.Task", "kube.ci/kubeci/apis/kubeci/v1alpha1.TriggeredFor"},
 		},
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.WorkplanStatus": {
 			Schema: spec.Schema{
