@@ -33,10 +33,11 @@ type WorkflowSpec struct {
 }
 
 type Trigger struct {
-	Name             string               `json:"name,omitempty"`
-	ApiVersion       string               `json:"apiVersion,omitempty"`
-	Kind             string               `json:"kind,omitempty"`
-	Resource         string               `json:"resource,omitempty"`
+	Name       string `json:"name,omitempty"`
+	APIVersion string `json:"apiVersion,omitempty"`
+	Kind       string `json:"kind,omitempty"`
+	Resource   string `json:"resource,omitempty"`
+	// TODO: trigger for resources with different namespaces? or remove it?
 	Namespace        string               `json:"namespace,omitempty"`
 	Selector         metav1.LabelSelector `json:"selector,omitempty"`
 	OnDelete         bool                 `json:"onDelete,omitempty"`
@@ -54,14 +55,8 @@ type Step struct {
 }
 
 type WorkflowStatus struct {
-	ObservedGeneration     int64                         `json:"observedGeneration,omitempty"`
-	ObservedGenerationHash string                        `json:"observedGenerationHash,omitempty"`
-	ObservedResources      map[string]ResourceGeneration `json:"observedResources,omitempty"`
-}
-
-type ResourceGeneration struct {
-	Generation int64  `json:"generation,omitempty"`
-	Hash       string `json:"hash,omitempty"`
+	ObservedGeneration     int64  `json:"observedGeneration,omitempty"`
+	ObservedGenerationHash string `json:"observedGenerationHash,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -71,4 +66,8 @@ type WorkflowList struct {
 	metav1.ListMeta `json:"metadata"`
 
 	Items []Workflow `json:"items"`
+}
+
+func (wf *Workflow) Key() string {
+	return wf.Namespace + "/" + wf.Name
 }
