@@ -426,11 +426,13 @@ spec:
               type: array
         status:
           properties:
-            lastObservedGeneration:
-              format: int64
-              type: integer
             lastObservedResourceGeneration:
               type: object
+            observedGeneration:
+              format: int64
+              type: integer
+            observedGenerationHash:
+              type: string
   version: v1alpha1
   versions:
   - name: v1alpha1

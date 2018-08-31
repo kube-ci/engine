@@ -54,7 +54,8 @@ type Step struct {
 }
 
 type WorkflowStatus struct {
-	LastObservedGeneration         *int64           `json:"lastObservedGeneration,omitempty"`
+	ObservedGeneration             int64            `json:"observedGeneration,omitempty"`
+	ObservedGenerationHash         string           `json:"observedGenerationHash,omitempty"`
 	LastObservedResourceGeneration map[string]int64 `json:"lastObservedResourceGeneration,omitempty"`
 }
 

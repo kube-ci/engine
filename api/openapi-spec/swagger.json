@@ -2074,16 +2074,19 @@
     },
     "ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowStatus": {
       "properties": {
-        "lastObservedGeneration": {
-          "type": "integer",
-          "format": "int64"
-        },
         "lastObservedResourceGeneration": {
           "type": "object",
           "additionalProperties": {
             "type": "integer",
             "format": "int64"
           }
+        },
+        "observedGeneration": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "observedGenerationHash": {
+          "type": "string"
         }
       }
     },
