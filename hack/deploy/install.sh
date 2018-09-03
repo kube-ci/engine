@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eou pipefail
 
-crds=(repositories)
+crds=(workflows workplans)
 
 echo "checking kubeconfig context"
 kubectl config current-context || {
