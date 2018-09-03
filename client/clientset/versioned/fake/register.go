@@ -24,6 +24,7 @@ import (
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	serializer "k8s.io/apimachinery/pkg/runtime/serializer"
 	kubeciv1alpha1 "kube.ci/kubeci/apis/kubeci/v1alpha1"
+	triggerv1alpha1 "kube.ci/kubeci/apis/trigger/v1alpha1"
 )
 
 var scheme = runtime.NewScheme()
@@ -51,4 +52,5 @@ func init() {
 // correctly.
 func AddToScheme(scheme *runtime.Scheme) {
 	kubeciv1alpha1.AddToScheme(scheme)
+	triggerv1alpha1.AddToScheme(scheme)
 }

@@ -26,6 +26,8 @@ type TriggerREST struct {
 
 var _ rest.Creater = &TriggerREST{}
 var _ rest.Scoper = &TriggerREST{}
+var _ rest.GroupVersionKindProvider = &TriggerREST{}
+var _ rest.CategoriesProvider = &TriggerREST{}
 
 func NewTriggerREST(controller *Controller) *TriggerREST {
 	return &TriggerREST{
@@ -43,6 +45,10 @@ func (r *TriggerREST) NamespaceScoped() bool {
 
 func (r *TriggerREST) GroupVersionKind(containingGV schema.GroupVersion) schema.GroupVersionKind {
 	return v1alpha1.SchemeGroupVersion.WithKind(v1alpha1.ResourceKindTrigger)
+}
+
+func (r *TriggerREST) Categories() []string {
+	return []string{"ci", "appscode", "all"}
 }
 
 func (r *TriggerREST) Create(ctx context.Context, obj runtime.Object, createValidation rest.ValidateObjectFunc, includeUninitialized bool) (runtime.Object, error) {
