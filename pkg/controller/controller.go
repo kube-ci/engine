@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/appscode/go/log"
 	crdutils "github.com/appscode/kutil/apiextensions/v1beta1"
@@ -10,6 +11,8 @@ import (
 	"github.com/appscode/kutil/tools/queue"
 	crd_api "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	crd_cs "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/typed/apiextensions/v1beta1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes"
@@ -87,8 +90,31 @@ func (c *Controller) RunInformers(stopCh <-chan struct{}) {
 		}
 	}
 
-	// sync workplans into observedResources // TODO
+	// sync workplans into observedResources
 	c.observedResources = make(map[string]map[api.ObjectReference]api.ResourceGeneration)
+	workplans, err := c.wpLister.Workplans(metav1.NamespaceAll).List(labels.Everything())
+	if err != nil {
+		runtime.HandleError(fmt.Errorf("failed to sync workplans, reason %s", err))
+		return
+	}
+
+	// sort workplans by creation-timestamp
+	// we need to store the latest generation of the triggeredFor resource
+	sort.Slice(workplans, func(i, j int) bool {
+		return workplans[i].CreationTimestamp.After(workplans[j].CreationTimestamp.Time)
+	})
+
+	for _, wp := range workplans {
+		key := wp.Namespace + "/" + wp.Spec.Workflow
+		if _, ok := c.observedResources[key]; !ok {
+			c.observedResources[key] = make(map[api.ObjectReference]api.ResourceGeneration)
+		}
+		// if key exists, we already stored the latest version since workplans are sorted
+		if _, ok := c.observedResources[key][wp.Spec.TriggeredFor.ObjectReference]; !ok {
+			c.observedResources[key][wp.Spec.TriggeredFor.ObjectReference] = wp.Spec.TriggeredFor.ResourceGeneration
+		}
+
+	}
 
 	c.wfQueue.Run(stopCh)
 	c.wpQueue.Run(stopCh)
