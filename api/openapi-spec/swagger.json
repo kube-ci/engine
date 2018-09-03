@@ -1916,17 +1916,6 @@
         }
       }
     },
-    "ci.kube.kubeci.apis.kubeci.v1alpha1.ResourceGeneration": {
-      "properties": {
-        "generation": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "hash": {
-          "type": "string"
-        }
-      }
-    },
     "ci.kube.kubeci.apis.kubeci.v1alpha1.Step": {
       "properties": {
         "args": {
@@ -2018,7 +2007,7 @@
           "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.ObjectReference"
         },
         "resourceGeneration": {
-          "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.ResourceGeneration"
+          "$ref": "#/definitions/com.github.appscode.go.encoding.json.types.IntHash"
         }
       }
     },
@@ -2112,11 +2101,7 @@
     "ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowStatus": {
       "properties": {
         "observedGeneration": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "observedGenerationHash": {
-          "type": "string"
+          "$ref": "#/definitions/com.github.appscode.go.encoding.json.types.IntHash"
         }
       }
     },
@@ -2224,6 +2209,9 @@
           "format": "int32"
         }
       }
+    },
+    "com.github.appscode.go.encoding.json.types.IntHash": {
+      "type": "string"
     },
     "io.k8s.api.core.v1.ConfigMapEnvSource": {
       "description": "ConfigMapEnvSource selects a ConfigMap to populate the environment variables with.\n\nThe contents of the target ConfigMap's Data field will represent the key-value pairs as environment variables.",

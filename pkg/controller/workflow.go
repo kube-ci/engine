@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/appscode/go/encoding/json/types"
 	"github.com/appscode/go/log"
 	"github.com/appscode/kubernetes-webhook-util/admission"
 	hooks "github.com/appscode/kubernetes-webhook-util/admission/v1beta1"
@@ -66,8 +67,7 @@ func (c *Controller) runWorkflowInjector(key string) error {
 			c.kubeciClient.KubeciV1alpha1(),
 			wf.ObjectMeta,
 			func(r *api.WorkflowStatus) *api.WorkflowStatus {
-				r.ObservedGeneration = wf.Generation
-				r.ObservedGenerationHash = meta.GenerationHash(wf)
+				r.ObservedGeneration = types.NewIntHash(wf.Generation, meta.GenerationHash(wf))
 				return r
 			},
 		)

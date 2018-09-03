@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
+	meta_util "github.com/appscode/kutil/meta"
 	"k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"kube.ci/kubeci/apis/kubeci/v1alpha1"
@@ -52,12 +53,12 @@ func TestObjectHashWorkflow(t *testing.T) {
 		},
 	}
 
-	hash := objectHash(obj)
+	hash := meta_util.ObjectHash(obj)
 
 	// generation changed, hash should change
 	objNew := obj.DeepCopy()
 	objNew.Generation = 2
-	hashNew := objectHash(objNew)
+	hashNew := meta_util.ObjectHash(objNew)
 	if hash == hashNew {
 		t.Errorf("generation changed, hash should change")
 	}
@@ -65,7 +66,7 @@ func TestObjectHashWorkflow(t *testing.T) {
 	// annotation changed, hash should change
 	objNew = obj.DeepCopy()
 	objNew.Annotations["hello"] = "hell"
-	hashNew = objectHash(objNew)
+	hashNew = meta_util.ObjectHash(objNew)
 	if hash == hashNew {
 		t.Errorf("annotation changed, hash should change")
 	}
@@ -73,7 +74,7 @@ func TestObjectHashWorkflow(t *testing.T) {
 	// labels changed, hash should change
 	objNew = obj.DeepCopy()
 	objNew.Labels["you"] = "not-me"
-	hashNew = objectHash(objNew)
+	hashNew = meta_util.ObjectHash(objNew)
 	if hash == hashNew {
 		t.Errorf("labels changed, hash should change")
 	}
@@ -81,7 +82,7 @@ func TestObjectHashWorkflow(t *testing.T) {
 	// spec changed, hash should change
 	objNew = obj.DeepCopy()
 	objNew.Spec.ServiceAccount = "sa-02"
-	hashNew = objectHash(objNew)
+	hashNew = meta_util.ObjectHash(objNew)
 	if hash == hashNew {
 		t.Errorf("spec changed, hash should change")
 	}
@@ -89,7 +90,7 @@ func TestObjectHashWorkflow(t *testing.T) {
 	// status changed, hash should not change
 	objNew = obj.DeepCopy()
 	objNew.Status.ObservedGeneration = 3
-	hashNew = objectHash(objNew)
+	hashNew = meta_util.ObjectHash(objNew)
 	if hash != hashNew {
 		t.Errorf("status changed, hash should not changee")
 	}
@@ -117,12 +118,12 @@ func TestObjectHashConfigmap(t *testing.T) {
 		},
 	}
 
-	hash := objectHash(obj)
+	hash := meta_util.ObjectHash(obj)
 
 	// data changed, hash should change
 	objNew := obj.DeepCopy()
 	objNew.Data["performance"] = "excellent"
-	hashNew := objectHash(objNew)
+	hashNew := meta_util.ObjectHash(objNew)
 	if hash == hashNew {
 		t.Errorf("data changed, hash should change")
 	}

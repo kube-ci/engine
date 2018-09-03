@@ -1,6 +1,7 @@
 package v1alpha1
 
 import (
+	"github.com/appscode/go/encoding/json/types"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -42,8 +43,8 @@ type WorkplanStatus struct {
 }
 
 type TriggeredFor struct {
-	ObjectReference    ObjectReference    `json:"objectReference,omitempty"`
-	ResourceGeneration ResourceGeneration `json:"resourceGeneration,omitempty"`
+	ObjectReference    ObjectReference `json:"objectReference,omitempty"`
+	ResourceGeneration *types.IntHash  `json:"resourceGeneration,omitempty"`
 }
 
 type ObjectReference struct {
@@ -51,11 +52,6 @@ type ObjectReference struct {
 	APIVersion string `json:"apiVersion,omitempty"`
 	Namespace  string `json:"namespace,omitempty"`
 	Name       string `json:"name,omitempty"`
-}
-
-type ResourceGeneration struct {
-	Generation int64  `json:"generation,omitempty"`
-	Hash       string `json:"hash,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

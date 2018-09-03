@@ -3,6 +3,7 @@ package controller
 import (
 	"fmt"
 
+	. "github.com/appscode/go/encoding/json/types"
 	"github.com/appscode/go/log"
 	"github.com/appscode/go/types"
 	authorizationapi "k8s.io/api/authorization/v1"
@@ -65,7 +66,7 @@ func (c *Controller) handleTrigger(res ResourceIdentifier, isDeleteEvent bool) {
 
 			// update generation and hash
 			if c.observedResources[wf.Key()] == nil {
-				c.observedResources[wf.Key()] = make(map[api.ObjectReference]api.ResourceGeneration)
+				c.observedResources[wf.Key()] = make(map[api.ObjectReference]*IntHash)
 			}
 			c.observedResources[wf.Key()][res.ObjectReference] = res.ResourceGeneration
 		}
@@ -203,11 +204,7 @@ func (c *Controller) resourceAlreadyObserved(wfKey string, res ResourceIdentifie
 	}
 
 	observed, ok := c.observedResources[wfKey][res.ObjectReference]
-	if !ok || observed.Generation < res.ResourceGeneration.Generation || observed.Hash != res.ResourceGeneration.Hash {
-		return false
-	}
-
-	return true
+	return ok && observed.Equal(res.ResourceGeneration)
 }
 
 func (c *Controller) checkAccess(res authorizationapi.ResourceAttributes, serviceAccount string) bool {

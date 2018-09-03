@@ -427,9 +427,6 @@ spec:
         status:
           properties:
             observedGeneration:
-              format: int64
-              type: integer
-            observedGenerationHash:
               type: string
   version: v1alpha1
   versions:
@@ -835,12 +832,7 @@ spec:
                     namespace:
                       type: string
                 resourceGeneration:
-                  properties:
-                    generation:
-                      format: int64
-                      type: integer
-                    hash:
-                      type: string
+                  type: string
             workflow:
               type: string
           required:

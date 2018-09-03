@@ -23,6 +23,7 @@ limitations under the License.
 package v1alpha1
 
 import (
+	types "github.com/appscode/go/encoding/json/types"
 	spec "github.com/go-openapi/spec"
 	resource "k8s.io/apimachinery/pkg/api/resource"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -31,6 +32,14 @@ import (
 
 func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenAPIDefinition {
 	return map[string]common.OpenAPIDefinition{
+		"github.com/appscode/go/encoding/json/types.IntHash": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Type:   types.IntHash{}.OpenAPISchemaType(),
+					Format: types.IntHash{}.OpenAPISchemaFormat(),
+				},
+			},
+		},
 		"k8s.io/api/core/v1.AWSElasticBlockStoreVolumeSource": {
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{
@@ -10745,27 +10754,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 			},
 			Dependencies: []string{},
 		},
-		"kube.ci/kubeci/apis/kubeci/v1alpha1.ResourceGeneration": {
-			Schema: spec.Schema{
-				SchemaProps: spec.SchemaProps{
-					Properties: map[string]spec.Schema{
-						"generation": {
-							SchemaProps: spec.SchemaProps{
-								Type:   []string{"integer"},
-								Format: "int64",
-							},
-						},
-						"hash": {
-							SchemaProps: spec.SchemaProps{
-								Type:   []string{"string"},
-								Format: "",
-							},
-						},
-					},
-				},
-			},
-			Dependencies: []string{},
-		},
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.Step": {
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{
@@ -10945,14 +10933,14 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 						},
 						"resourceGeneration": {
 							SchemaProps: spec.SchemaProps{
-								Ref: ref("kube.ci/kubeci/apis/kubeci/v1alpha1.ResourceGeneration"),
+								Ref: ref("github.com/appscode/go/encoding/json/types.IntHash"),
 							},
 						},
 					},
 				},
 			},
 			Dependencies: []string{
-				"kube.ci/kubeci/apis/kubeci/v1alpha1.ObjectReference", "kube.ci/kubeci/apis/kubeci/v1alpha1.ResourceGeneration"},
+				"github.com/appscode/go/encoding/json/types.IntHash", "kube.ci/kubeci/apis/kubeci/v1alpha1.ObjectReference"},
 		},
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.Workflow": {
 			Schema: spec.Schema{
@@ -11095,20 +11083,14 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 					Properties: map[string]spec.Schema{
 						"observedGeneration": {
 							SchemaProps: spec.SchemaProps{
-								Type:   []string{"integer"},
-								Format: "int64",
-							},
-						},
-						"observedGenerationHash": {
-							SchemaProps: spec.SchemaProps{
-								Type:   []string{"string"},
-								Format: "",
+								Ref: ref("github.com/appscode/go/encoding/json/types.IntHash"),
 							},
 						},
 					},
 				},
 			},
-			Dependencies: []string{},
+			Dependencies: []string{
+				"github.com/appscode/go/encoding/json/types.IntHash"},
 		},
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.Workplan": {
 			Schema: spec.Schema{

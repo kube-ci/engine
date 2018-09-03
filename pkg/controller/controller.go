@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sort"
 
+	"github.com/appscode/go/encoding/json/types"
 	"github.com/appscode/go/log"
 	crdutils "github.com/appscode/kutil/apiextensions/v1beta1"
 	dynamicclientset "github.com/appscode/kutil/dynamic/clientset"
@@ -54,7 +55,7 @@ type Controller struct {
 	// store triggered-for in workplans
 	// initially sync from available workplans
 	// key: workflow namespace/name
-	observedResources map[string]map[api.ObjectReference]api.ResourceGeneration
+	observedResources map[string]map[api.ObjectReference]*types.IntHash
 
 	// TODO: close unused informers
 	// only one informer is created for a specific resource (among all workflows)
@@ -91,7 +92,7 @@ func (c *Controller) RunInformers(stopCh <-chan struct{}) {
 	}
 
 	// sync workplans into observedResources
-	c.observedResources = make(map[string]map[api.ObjectReference]api.ResourceGeneration)
+	c.observedResources = make(map[string]map[api.ObjectReference]*types.IntHash)
 	workplans, err := c.wpLister.Workplans(metav1.NamespaceAll).List(labels.Everything())
 	if err != nil {
 		runtime.HandleError(fmt.Errorf("failed to sync workplans, reason %s", err))
@@ -107,7 +108,7 @@ func (c *Controller) RunInformers(stopCh <-chan struct{}) {
 	for _, wp := range workplans {
 		key := wp.Namespace + "/" + wp.Spec.Workflow
 		if _, ok := c.observedResources[key]; !ok {
-			c.observedResources[key] = make(map[api.ObjectReference]api.ResourceGeneration)
+			c.observedResources[key] = make(map[api.ObjectReference]*types.IntHash)
 		}
 		// if key exists, we have already stored the latest version since workplans are sorted
 		if _, ok := c.observedResources[key][wp.Spec.TriggeredFor.ObjectReference]; !ok {
