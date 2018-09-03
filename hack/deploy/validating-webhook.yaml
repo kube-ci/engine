@@ -10,7 +10,7 @@ webhooks:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/admission.kubeci.kube.ci/v1alpha1/repositories
+      path: /apis/admission.kubeci.kube.ci/v1alpha1/workflows
     caBundle: ${KUBE_CA}
   rules:
   - operations:
