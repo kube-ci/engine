@@ -3,6 +3,8 @@ package controller
 import (
 	"bytes"
 	"fmt"
+	"hash/fnv"
+	"strconv"
 	"strings"
 	"time"
 
@@ -11,6 +13,8 @@ import (
 	dynamicdiscovery "github.com/appscode/kutil/dynamic/discovery"
 	dynamicinformer "github.com/appscode/kutil/dynamic/informer"
 	"github.com/appscode/kutil/meta"
+	"github.com/fatih/structs"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/client-go/discovery"
 	"k8s.io/client-go/tools/cache"
@@ -83,7 +87,7 @@ func objToResourceIdentifier(obj interface{}) ResourceIdentifier {
 		},
 		ResourceGeneration: api.ResourceGeneration{
 			Generation: o.GetGeneration(),
-			Hash:       meta.GenerationHash(o),
+			Hash:       objectHash(o),
 		},
 	}
 }
@@ -169,4 +173,41 @@ func (c *Controller) handlerForDynamicInformer() cache.ResourceEventHandlerFuncs
 			c.handleTrigger(res, true)
 		},
 	}
+}
+
+// TODO: move to kutil?
+// hash includes all top label fields (like data, spec) except TypeMeta, ObjectMeta and Status
+// also includes Generation, Annotation and Labels form ObjectMeta
+func objectHash(in metav1.Object) string {
+	obj := make(map[string]interface{})
+
+	obj["generation"] = in.GetGeneration()
+	if len(in.GetLabels()) > 0 {
+		obj["labels"] = in.GetLabels()
+	}
+
+	if len(in.GetAnnotations()) > 0 {
+		data := make(map[string]string, len(in.GetAnnotations()))
+		lastAppliedConfiguration := "kubectl.kubernetes.io/last-applied-configuration"
+		for k, v := range in.GetAnnotations() {
+			if k != lastAppliedConfiguration {
+				data[k] = v
+			}
+		}
+		obj["annotations"] = data
+	}
+
+	st := structs.New(in)
+	for _, field := range st.Fields() {
+		fieldName := field.Name()
+		if fieldName != "ObjectMeta" && fieldName != "TypeMeta" && fieldName != "Status" {
+			obj[strings.ToLower(fieldName)] = st.Field(fieldName).Value()
+		}
+	}
+
+	// oneliners.PrettyJson(obj)
+
+	h := fnv.New64a()
+	meta.DeepHashObject(h, obj)
+	return strconv.FormatUint(h.Sum64(), 10)
 }
