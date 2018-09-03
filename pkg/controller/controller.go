@@ -109,7 +109,7 @@ func (c *Controller) RunInformers(stopCh <-chan struct{}) {
 		if _, ok := c.observedResources[key]; !ok {
 			c.observedResources[key] = make(map[api.ObjectReference]api.ResourceGeneration)
 		}
-		// if key exists, we already stored the latest version since workplans are sorted
+		// if key exists, we have already stored the latest version since workplans are sorted
 		if _, ok := c.observedResources[key][wp.Spec.TriggeredFor.ObjectReference]; !ok {
 			c.observedResources[key][wp.Spec.TriggeredFor.ObjectReference] = wp.Spec.TriggeredFor.ResourceGeneration
 		}
