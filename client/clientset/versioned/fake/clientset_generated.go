@@ -27,6 +27,8 @@ import (
 	clientset "kube.ci/kubeci/client/clientset/versioned"
 	kubeciv1alpha1 "kube.ci/kubeci/client/clientset/versioned/typed/kubeci/v1alpha1"
 	fakekubeciv1alpha1 "kube.ci/kubeci/client/clientset/versioned/typed/kubeci/v1alpha1/fake"
+	triggerv1alpha1 "kube.ci/kubeci/client/clientset/versioned/typed/trigger/v1alpha1"
+	faketriggerv1alpha1 "kube.ci/kubeci/client/clientset/versioned/typed/trigger/v1alpha1/fake"
 )
 
 // NewSimpleClientset returns a clientset that will respond with the provided objects.
@@ -79,4 +81,14 @@ func (c *Clientset) KubeciV1alpha1() kubeciv1alpha1.KubeciV1alpha1Interface {
 // Kubeci retrieves the KubeciV1alpha1Client
 func (c *Clientset) Kubeci() kubeciv1alpha1.KubeciV1alpha1Interface {
 	return &fakekubeciv1alpha1.FakeKubeciV1alpha1{Fake: &c.Fake}
+}
+
+// TriggerV1alpha1 retrieves the TriggerV1alpha1Client
+func (c *Clientset) TriggerV1alpha1() triggerv1alpha1.TriggerV1alpha1Interface {
+	return &faketriggerv1alpha1.FakeTriggerV1alpha1{Fake: &c.Fake}
+}
+
+// Trigger retrieves the TriggerV1alpha1Client
+func (c *Clientset) Trigger() triggerv1alpha1.TriggerV1alpha1Interface {
+	return &faketriggerv1alpha1.FakeTriggerV1alpha1{Fake: &c.Fake}
 }

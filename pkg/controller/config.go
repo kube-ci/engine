@@ -10,7 +10,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	cs "kube.ci/kubeci/client/clientset/versioned"
-	git_apiserver_informers "kube.ci/kubeci/client/informers/externalversions"
+	kubeci_informers "kube.ci/kubeci/client/informers/externalversions"
 	"kube.ci/kubeci/pkg/eventer"
 )
 
@@ -49,7 +49,7 @@ func (c *Config) New() (*Controller, error) {
 		kubeciClient:          c.KubeciClient,
 		crdClient:             c.CRDClient,
 		kubeInformerFactory:   informers.NewFilteredSharedInformerFactory(c.KubeClient, c.ResyncPeriod, core.NamespaceAll, tweakListOptions),
-		kubeciInformerFactory: git_apiserver_informers.NewSharedInformerFactory(c.KubeciClient, c.ResyncPeriod),
+		kubeciInformerFactory: kubeci_informers.NewSharedInformerFactory(c.KubeciClient, c.ResyncPeriod),
 		recorder:              eventer.NewEventRecorder(c.KubeClient, "kubeci-controller"),
 	}
 

@@ -23,6 +23,7 @@ import (
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"
 	kubeciv1alpha1 "kube.ci/kubeci/client/clientset/versioned/typed/kubeci/v1alpha1"
+	triggerv1alpha1 "kube.ci/kubeci/client/clientset/versioned/typed/trigger/v1alpha1"
 )
 
 type Interface interface {
@@ -30,13 +31,17 @@ type Interface interface {
 	KubeciV1alpha1() kubeciv1alpha1.KubeciV1alpha1Interface
 	// Deprecated: please explicitly pick a version if possible.
 	Kubeci() kubeciv1alpha1.KubeciV1alpha1Interface
+	TriggerV1alpha1() triggerv1alpha1.TriggerV1alpha1Interface
+	// Deprecated: please explicitly pick a version if possible.
+	Trigger() triggerv1alpha1.TriggerV1alpha1Interface
 }
 
 // Clientset contains the clients for groups. Each group has exactly one
 // version included in a Clientset.
 type Clientset struct {
 	*discovery.DiscoveryClient
-	kubeciV1alpha1 *kubeciv1alpha1.KubeciV1alpha1Client
+	kubeciV1alpha1  *kubeciv1alpha1.KubeciV1alpha1Client
+	triggerV1alpha1 *triggerv1alpha1.TriggerV1alpha1Client
 }
 
 // KubeciV1alpha1 retrieves the KubeciV1alpha1Client
@@ -48,6 +53,17 @@ func (c *Clientset) KubeciV1alpha1() kubeciv1alpha1.KubeciV1alpha1Interface {
 // Please explicitly pick a version.
 func (c *Clientset) Kubeci() kubeciv1alpha1.KubeciV1alpha1Interface {
 	return c.kubeciV1alpha1
+}
+
+// TriggerV1alpha1 retrieves the TriggerV1alpha1Client
+func (c *Clientset) TriggerV1alpha1() triggerv1alpha1.TriggerV1alpha1Interface {
+	return c.triggerV1alpha1
+}
+
+// Deprecated: Trigger retrieves the default version of TriggerClient.
+// Please explicitly pick a version.
+func (c *Clientset) Trigger() triggerv1alpha1.TriggerV1alpha1Interface {
+	return c.triggerV1alpha1
 }
 
 // Discovery retrieves the DiscoveryClient
@@ -70,6 +86,10 @@ func NewForConfig(c *rest.Config) (*Clientset, error) {
 	if err != nil {
 		return nil, err
 	}
+	cs.triggerV1alpha1, err = triggerv1alpha1.NewForConfig(&configShallowCopy)
+	if err != nil {
+		return nil, err
+	}
 
 	cs.DiscoveryClient, err = discovery.NewDiscoveryClientForConfig(&configShallowCopy)
 	if err != nil {
@@ -83,6 +103,7 @@ func NewForConfig(c *rest.Config) (*Clientset, error) {
 func NewForConfigOrDie(c *rest.Config) *Clientset {
 	var cs Clientset
 	cs.kubeciV1alpha1 = kubeciv1alpha1.NewForConfigOrDie(c)
+	cs.triggerV1alpha1 = triggerv1alpha1.NewForConfigOrDie(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClientForConfigOrDie(c)
 	return &cs
@@ -92,6 +113,7 @@ func NewForConfigOrDie(c *rest.Config) *Clientset {
 func New(c rest.Interface) *Clientset {
 	var cs Clientset
 	cs.kubeciV1alpha1 = kubeciv1alpha1.New(c)
+	cs.triggerV1alpha1 = triggerv1alpha1.New(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClient(c)
 	return &cs
