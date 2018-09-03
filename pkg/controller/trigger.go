@@ -197,7 +197,6 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 	return false, api.Trigger{}
 }
 
-// TODO: how to handle generation for configmaps, secrets?
 func (c *Controller) resourceAlreadyObserved(wfKey string, res ResourceIdentifier) bool {
 	if c.observedResources == nil || c.observedResources[wfKey] == nil {
 		return false
@@ -264,6 +263,7 @@ func (c *Controller) createWorkplan(wf *api.Workflow, secretRef *core.SecretEnvS
 			},
 		},
 		Spec: api.WorkplanSpec{
+			Workflow:     wf.Name,
 			Tasks:        tasks,
 			EnvFrom:      wf.Spec.EnvFrom,
 			TriggeredFor: triggeredFor,

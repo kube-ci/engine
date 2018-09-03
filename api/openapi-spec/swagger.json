@@ -2200,6 +2200,9 @@
         },
         "triggeredFor": {
           "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.TriggeredFor"
+        },
+        "workflow": {
+          "type": "string"
         }
       }
     },

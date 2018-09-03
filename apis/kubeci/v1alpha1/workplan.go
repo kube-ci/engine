@@ -28,6 +28,7 @@ type Task struct { // analogous to a single pod
 }
 
 type WorkplanSpec struct {
+	Workflow     string       `json:"workflow,omitempty"`
 	Tasks        []Task       `json:"tasks,omitempty"`
 	TriggeredFor TriggeredFor `json:"triggeredFor"`
 	// set container environment variables from configmaps and secrets
