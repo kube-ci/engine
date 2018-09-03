@@ -1,6 +1,7 @@
 package v1alpha1
 
 import (
+	"github.com/appscode/go/encoding/json/types"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -28,7 +29,9 @@ type Task struct { // analogous to a single pod
 }
 
 type WorkplanSpec struct {
-	Tasks []Task `json:"tasks,omitempty"`
+	Workflow     string       `json:"workflow,omitempty"`
+	Tasks        []Task       `json:"tasks,omitempty"`
+	TriggeredFor TriggeredFor `json:"triggeredFor"`
 	// set container environment variables from configmaps and secrets
 	EnvFrom []corev1.EnvFromSource `json:"envFrom,omitempty"`
 }
@@ -37,6 +40,18 @@ type WorkplanStatus struct {
 	Phase     string `json:"phase"`
 	Reason    string `json:"reason"`
 	TaskIndex int    `json:"taskIndex"`
+}
+
+type TriggeredFor struct {
+	ObjectReference    ObjectReference `json:"objectReference,omitempty"`
+	ResourceGeneration *types.IntHash  `json:"resourceGeneration,omitempty"`
+}
+
+type ObjectReference struct {
+	Kind       string `json:"kind,omitempty"`
+	APIVersion string `json:"apiVersion,omitempty"`
+	Namespace  string `json:"namespace,omitempty"`
+	Name       string `json:"name,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

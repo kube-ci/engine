@@ -4,11 +4,13 @@ import (
 	"github.com/appscode/go/log"
 	"github.com/appscode/kutil/tools/queue"
 	api "kube.ci/kubeci/apis/kubeci/v1alpha1"
+	"kube.ci/kubeci/client/clientset/versioned/typed/kubeci/v1alpha1/util"
 )
 
 func (c *Controller) initWorkplanWatcher() {
 	c.wpInformer = c.kubeciInformerFactory.Kubeci().V1alpha1().Workplans().Informer()
 	c.wpQueue = queue.New("Workplan", c.MaxNumRequeues, c.NumThreads, c.runWorkplanInjector)
+	// TODO: use enableStatusSubresource variable
 	c.wpInformer.AddEventHandler(queue.DefaultEventHandler(c.wpQueue.GetQueue()))
 	c.wpLister = c.kubeciInformerFactory.Kubeci().V1alpha1().Workplans().Lister()
 }
@@ -43,26 +45,48 @@ func (c *Controller) reconcileForWorkplan(wp *api.Workplan) error {
 
 func (c *Controller) executeWorkplan(wp *api.Workplan) {
 	log.Infof("Executing workplan %s", wp.Name)
-	c.updateWorkplanStatus(wp.Name, wp.Namespace, api.WorkplanStatus{
-		Phase:     "Pending",
-		TaskIndex: -1,
-		Reason:    "Initializing tasks",
-	})
+	if _, err := util.UpdateWorkplanStatus(
+		c.kubeciClient.KubeciV1alpha1(),
+		wp.ObjectMeta,
+		func(r *api.WorkplanStatus) *api.WorkplanStatus {
+			r.Phase = "Pending"
+			r.TaskIndex = -1
+			r.Reason = "Initializing tasks"
+			return r
+		},
+	); err != nil {
+		log.Errorf("Failed to update status of workplan %s, reason: %s", wp.Name, err.Error())
+		return
+	}
 
 	if err := c.runTasks(wp); err != nil {
 		log.Errorf("Failed to execute workplan: %s, reason: %s", wp.Name, err.Error())
-		c.updateWorkplanStatus(wp.Name, wp.Namespace, api.WorkplanStatus{
-			Phase:     "Failed",
-			TaskIndex: -1,
-			Reason:    err.Error(),
-		})
+		if _, err := util.UpdateWorkplanStatus(
+			c.kubeciClient.KubeciV1alpha1(),
+			wp.ObjectMeta,
+			func(r *api.WorkplanStatus) *api.WorkplanStatus {
+				r.Phase = "Failed"
+				r.TaskIndex = -1
+				r.Reason = err.Error()
+				return r
+			},
+		); err != nil {
+			log.Errorf("Failed to update status of workplan %s, reason: %s", wp.Name, err.Error())
+		}
 		return
 	}
 
 	log.Infof("Workplan %s completed successfully", wp.Name)
-	c.updateWorkplanStatus(wp.Name, wp.Namespace, api.WorkplanStatus{
-		Phase:     "Completed",
-		TaskIndex: -1,
-		Reason:    "All tasks completed successfully",
-	})
+	if _, err := util.UpdateWorkplanStatus(
+		c.kubeciClient.KubeciV1alpha1(),
+		wp.ObjectMeta,
+		func(r *api.WorkplanStatus) *api.WorkplanStatus {
+			r.Phase = "Completed"
+			r.TaskIndex = -1
+			r.Reason = "All tasks completed successfully"
+			return r
+		},
+	); err != nil {
+		log.Errorf("Failed to update status of workplan %s, reason: %s", wp.Name, err.Error())
+	}
 }

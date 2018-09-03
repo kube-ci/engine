@@ -9,16 +9,25 @@ import (
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	api "kube.ci/kubeci/apis/kubeci/v1alpha1"
+	"kube.ci/kubeci/client/clientset/versioned/typed/kubeci/v1alpha1/util"
 )
 
 func (c *Controller) runTasks(wp *api.Workplan) error {
 	for index, task := range wp.Spec.Tasks {
 		log.Infof("Running task[%d] for workplan %s", index, wp.Name)
-		c.updateWorkplanStatus(wp.Name, wp.Namespace, api.WorkplanStatus{
-			Phase:     "Running",
-			TaskIndex: index,
-			Reason:    fmt.Sprintf("Running task[%d]", index),
-		})
+		if _, err := util.UpdateWorkplanStatus(
+			c.kubeciClient.KubeciV1alpha1(),
+			wp.ObjectMeta,
+			func(r *api.WorkplanStatus) *api.WorkplanStatus {
+				r.Phase = "Running"
+				r.TaskIndex = index
+				r.Reason = fmt.Sprintf("Running task[%d]", index)
+				return r
+			},
+		); err != nil {
+			log.Errorf("Failed to update status of workplan %s, reason: %s", wp.Name, err.Error())
+			return err
+		}
 
 		pod := podSpecForTasks(wp, task, index)
 		pod, err := c.kubeClient.CoreV1().Pods(pod.Namespace).Create(pod)

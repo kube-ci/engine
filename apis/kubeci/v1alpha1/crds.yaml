@@ -426,12 +426,7 @@ spec:
               type: array
         status:
           properties:
-            lastObservedResourceGeneration:
-              type: object
             observedGeneration:
-              format: int64
-              type: integer
-            observedGenerationHash:
               type: string
   version: v1alpha1
   versions:
@@ -824,6 +819,24 @@ spec:
                 - SerialSteps
                 - ParallelSteps
               type: array
+            triggeredFor:
+              properties:
+                objectReference:
+                  properties:
+                    apiVersion:
+                      type: string
+                    kind:
+                      type: string
+                    name:
+                      type: string
+                    namespace:
+                      type: string
+                resourceGeneration:
+                  type: string
+            workflow:
+              type: string
+          required:
+          - triggeredFor
         status:
           properties:
             phase:

@@ -23,6 +23,7 @@ limitations under the License.
 package v1alpha1
 
 import (
+	types "github.com/appscode/go/encoding/json/types"
 	spec "github.com/go-openapi/spec"
 	resource "k8s.io/apimachinery/pkg/api/resource"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -31,6 +32,14 @@ import (
 
 func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenAPIDefinition {
 	return map[string]common.OpenAPIDefinition{
+		"github.com/appscode/go/encoding/json/types.IntHash": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Type:   types.IntHash{}.OpenAPISchemaType(),
+					Format: types.IntHash{}.OpenAPISchemaFormat(),
+				},
+			},
+		},
 		"k8s.io/api/core/v1.AWSElasticBlockStoreVolumeSource": {
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{
@@ -10712,6 +10721,39 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 			},
 			Dependencies: []string{},
 		},
+		"kube.ci/kubeci/apis/kubeci/v1alpha1.ObjectReference": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Properties: map[string]spec.Schema{
+						"kind": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"string"},
+								Format: "",
+							},
+						},
+						"apiVersion": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"string"},
+								Format: "",
+							},
+						},
+						"namespace": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"string"},
+								Format: "",
+							},
+						},
+						"name": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"string"},
+								Format: "",
+							},
+						},
+					},
+				},
+			},
+			Dependencies: []string{},
+		},
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.Step": {
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{
@@ -10880,6 +10922,26 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 			Dependencies: []string{
 				"k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector"},
 		},
+		"kube.ci/kubeci/apis/kubeci/v1alpha1.TriggeredFor": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Properties: map[string]spec.Schema{
+						"objectReference": {
+							SchemaProps: spec.SchemaProps{
+								Ref: ref("kube.ci/kubeci/apis/kubeci/v1alpha1.ObjectReference"),
+							},
+						},
+						"resourceGeneration": {
+							SchemaProps: spec.SchemaProps{
+								Ref: ref("github.com/appscode/go/encoding/json/types.IntHash"),
+							},
+						},
+					},
+				},
+			},
+			Dependencies: []string{
+				"github.com/appscode/go/encoding/json/types.IntHash", "kube.ci/kubeci/apis/kubeci/v1alpha1.ObjectReference"},
+		},
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.Workflow": {
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{
@@ -11021,33 +11083,14 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 					Properties: map[string]spec.Schema{
 						"observedGeneration": {
 							SchemaProps: spec.SchemaProps{
-								Type:   []string{"integer"},
-								Format: "int64",
-							},
-						},
-						"observedGenerationHash": {
-							SchemaProps: spec.SchemaProps{
-								Type:   []string{"string"},
-								Format: "",
-							},
-						},
-						"lastObservedResourceGeneration": {
-							SchemaProps: spec.SchemaProps{
-								Type: []string{"object"},
-								AdditionalProperties: &spec.SchemaOrBool{
-									Schema: &spec.Schema{
-										SchemaProps: spec.SchemaProps{
-											Type:   []string{"integer"},
-											Format: "int64",
-										},
-									},
-								},
+								Ref: ref("github.com/appscode/go/encoding/json/types.IntHash"),
 							},
 						},
 					},
 				},
 			},
-			Dependencies: []string{},
+			Dependencies: []string{
+				"github.com/appscode/go/encoding/json/types.IntHash"},
 		},
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.Workplan": {
 			Schema: spec.Schema{
@@ -11134,6 +11177,12 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{
 					Properties: map[string]spec.Schema{
+						"workflow": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"string"},
+								Format: "",
+							},
+						},
 						"tasks": {
 							SchemaProps: spec.SchemaProps{
 								Type: []string{"array"},
@@ -11144,6 +11193,11 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 										},
 									},
 								},
+							},
+						},
+						"triggeredFor": {
+							SchemaProps: spec.SchemaProps{
+								Ref: ref("kube.ci/kubeci/apis/kubeci/v1alpha1.TriggeredFor"),
 							},
 						},
 						"envFrom": {
@@ -11160,10 +11214,11 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 							},
 						},
 					},
+					Required: []string{"triggeredFor"},
 				},
 			},
 			Dependencies: []string{
-				"k8s.io/api/core/v1.EnvFromSource", "kube.ci/kubeci/apis/kubeci/v1alpha1.Task"},
+				"k8s.io/api/core/v1.EnvFromSource", "kube.ci/kubeci/apis/kubeci/v1alpha1.Task", "kube.ci/kubeci/apis/kubeci/v1alpha1.TriggeredFor"},
 		},
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.WorkplanStatus": {
 			Schema: spec.Schema{
