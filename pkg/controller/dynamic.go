@@ -116,8 +116,8 @@ func toGroupAndVersion(apiVersion string) (string, string) {
 
 func (c *Controller) initDynamicWatcher() {
 	// resync periods
-	discoveryInterval := 5 * time.Second
-	informerRelist := 5 * time.Minute
+	discoveryInterval := c.ResyncPeriod
+	informerRelist := c.ResyncPeriod
 
 	// Periodically refresh discovery to pick up newly-installed resources.
 	dc := discovery.NewDiscoveryClientForConfigOrDie(c.clientConfig)
@@ -154,17 +154,17 @@ func (c *Controller) handlerForDynamicInformer() cache.ResourceEventHandlerFuncs
 		AddFunc: func(obj interface{}) {
 			res := objToResourceIdentifier(obj)
 			log.Debugln("Added resource", res)
-			c.handleTrigger(res, false)
+			c.handleTrigger(res, []string{}, false, false)
 		},
 		UpdateFunc: func(oldObj, newObj interface{}) {
 			res := objToResourceIdentifier(newObj)
 			log.Debugln("Updated resource", res)
-			c.handleTrigger(res, false)
+			c.handleTrigger(res, []string{}, false, false)
 		},
 		DeleteFunc: func(obj interface{}) {
 			res := objToResourceIdentifier(obj)
 			log.Debugln("Deleted resource", res)
-			c.handleTrigger(res, true)
+			c.handleTrigger(res, []string{}, true, false)
 		},
 	}
 }

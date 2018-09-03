@@ -300,6 +300,8 @@ spec:
               type: string
         spec:
           properties:
+            allowForceTrigger:
+              type: boolean
             envFrom:
               description: set container environment variables from configmaps and
                 secrets

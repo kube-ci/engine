@@ -11027,6 +11027,12 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{
 					Properties: map[string]spec.Schema{
+						"allowForceTrigger": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"boolean"},
+								Format: "",
+							},
+						},
 						"triggers": {
 							SchemaProps: spec.SchemaProps{
 								Type: []string{"array"},

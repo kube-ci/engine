@@ -14,6 +14,9 @@ import (
 	"k8s.io/apimachinery/pkg/version"
 	"k8s.io/apiserver/pkg/registry/rest"
 	genericapiserver "k8s.io/apiserver/pkg/server"
+	"kube.ci/kubeci/apis/trigger"
+	"kube.ci/kubeci/apis/trigger/install"
+	"kube.ci/kubeci/apis/trigger/v1alpha1"
 	"kube.ci/kubeci/pkg/controller"
 )
 
@@ -23,6 +26,7 @@ var (
 )
 
 func init() {
+	install.Install(Scheme)
 	admission.AddToScheme(Scheme)
 
 	// we need to add the options to empty v1
@@ -148,6 +152,16 @@ func (c completedConfig) New() (*KubeciServer, error) {
 				return admissionHook.Initialize(c.ExtraConfig.ClientConfig, context.StopCh)
 			},
 		)
+	}
+
+	{
+		apiGroupInfo := genericapiserver.NewDefaultAPIGroupInfo(trigger.GroupName, Scheme, metav1.ParameterCodec, Codecs)
+		v1alpha1storage := map[string]rest.Storage{}
+		v1alpha1storage[v1alpha1.ResourceTriggers] = controller.NewTriggerREST(ctrl)
+		apiGroupInfo.VersionedResourcesStorageMap["v1alpha1"] = v1alpha1storage
+		if err := s.GenericAPIServer.InstallAPIGroup(&apiGroupInfo); err != nil {
+			return nil, err
+		}
 	}
 
 	return s, nil

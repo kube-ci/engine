@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"context"
 	"fmt"
 
 	. "github.com/appscode/go/encoding/json/types"
@@ -10,67 +11,137 @@ import (
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/runtime/schema"
+	"k8s.io/apiserver/pkg/registry/rest"
 	api "kube.ci/kubeci/apis/kubeci/v1alpha1"
+	"kube.ci/kubeci/apis/trigger/v1alpha1"
 	"kube.ci/kubeci/pkg/dependency"
 	"kube.ci/kubeci/pkg/eventer"
 )
 
-func (c *Controller) handleTrigger(res ResourceIdentifier, isDeleteEvent bool) {
+type TriggerREST struct {
+	controller *Controller
+}
+
+var _ rest.Creater = &TriggerREST{}
+var _ rest.Scoper = &TriggerREST{}
+
+func NewTriggerREST(controller *Controller) *TriggerREST {
+	return &TriggerREST{
+		controller: controller,
+	}
+}
+
+func (r *TriggerREST) New() runtime.Object {
+	return &v1alpha1.Trigger{}
+}
+
+func (r *TriggerREST) NamespaceScoped() bool {
+	return true
+}
+
+func (r *TriggerREST) GroupVersionKind(containingGV schema.GroupVersion) schema.GroupVersionKind {
+	return v1alpha1.SchemeGroupVersion.WithKind(v1alpha1.ResourceKindTrigger)
+}
+
+func (r *TriggerREST) Create(ctx context.Context, obj runtime.Object, createValidation rest.ValidateObjectFunc, includeUninitialized bool) (runtime.Object, error) {
+	log.Info("Received force trigger event")
+	trigger := obj.(*v1alpha1.Trigger)
+	res := objToResourceIdentifier(trigger.Request)
+	r.controller.handleTrigger(res, trigger.Workflows, false, true)
+	return trigger, nil
+}
+
+func (c *Controller) handleTrigger(res ResourceIdentifier, wfNames []string, isDeleteEvent bool, force bool) {
 	workflows, err := c.wfLister.Workflows(metav1.NamespaceAll).List(labels.Everything())
 	if err != nil {
-		panic(err)
+		log.Errorf("Failed to list workflows, reason: %s", err.Error())
+		return
 	}
 
-	for _, wf := range workflows {
-		if ok, trigger := c.shouldHandleTrigger(res, wf, isDeleteEvent); ok {
-			log.Infof("Triggering workflow %s for resource %s", wf.Name, res)
-
-			// create secret with json-path data
-			var secretRef *core.SecretEnvSource
-			if data := res.GetData(trigger.EnvFromPath); data != nil {
-				if secretRef, err = c.createSecret(wf, data); err != nil {
-					log.Errorf("Trigger failed for resource %v, reason: %s", res, err.Error())
-					c.recorder.Eventf(
-						wf.ObjectReference(),
-						core.EventTypeWarning,
-						eventer.EventReasonWorkflowTriggerFailed,
-						"Trigger failed for resource %v, reason: %s", res, err.Error(),
-					)
-					return
+	// if list is not empty then only trigger for listed workflows
+	var filteredWorkflows []*api.Workflow
+	if len(wfNames) != 0 {
+		for _, name := range wfNames {
+			found := false
+			for _, wf := range workflows {
+				if wf.Name == name {
+					filteredWorkflows = append(filteredWorkflows, wf)
+					found = true
+					break
 				}
 			}
-
-			_, err := c.createWorkplan(wf, secretRef, api.TriggeredFor{
-				ObjectReference:    res.ObjectReference,
-				ResourceGeneration: res.ResourceGeneration,
-			},
-			)
-			if err != nil {
-				log.Errorf("Trigger failed for resource %v, reason: %s", res, err.Error())
-				c.recorder.Eventf(
-					wf.ObjectReference(),
-					core.EventTypeWarning,
-					eventer.EventReasonWorkflowTriggerFailed,
-					"Trigger failed for resource %v, reason: %s", res, err.Error(),
-				)
-				return
+			if !found {
+				log.Errorf("Can't find workflow %s for resource %s", name, res)
 			}
-
-			log.Infof("Successfully triggered workflow %s for resource %s", wf.Name, res)
-			c.recorder.Eventf(
-				wf.ObjectReference(),
-				core.EventTypeNormal,
-				eventer.EventReasonWorkflowTriggered,
-				"Successfully triggered workflow %s for resource %s", wf.Name, res,
-			)
-
-			// update generation and hash
-			if c.observedResources[wf.Key()] == nil {
-				c.observedResources[wf.Key()] = make(map[api.ObjectReference]*IntHash)
-			}
-			c.observedResources[wf.Key()][res.ObjectReference] = res.ResourceGeneration
+		}
+	} else { // just copy
+		for _, wf := range workflows {
+			filteredWorkflows = append(filteredWorkflows, wf)
 		}
 	}
+
+	for _, wf := range filteredWorkflows {
+		if !force || wf.Spec.AllowForceTrigger {
+			c.triggerWorkflow(wf, res, isDeleteEvent)
+		}
+	}
+}
+
+func (c *Controller) triggerWorkflow(wf *api.Workflow, res ResourceIdentifier, isDeleteEvent bool) {
+	ok, trigger := c.shouldHandleTrigger(res, wf, isDeleteEvent)
+	if !ok {
+		log.Infof("should not handle trigger, resource: %s, workflow: %s/%s", res, wf.Namespace, wf.Name)
+		return
+	}
+	data := res.GetData(trigger.EnvFromPath) // json-path-data
+	triggeredFor := api.TriggeredFor{
+		ObjectReference:    res.ObjectReference,
+		ResourceGeneration: res.ResourceGeneration,
+	}
+
+	log.Infof("Triggering workflow %s for resource %s", wf.Name, triggeredFor)
+
+	if err := c.performTrigger(wf, triggeredFor, data); err != nil {
+		log.Errorf("Trigger failed for resource %v, reason: %s", res, err.Error())
+		c.recorder.Eventf(
+			wf.ObjectReference(),
+			core.EventTypeWarning,
+			eventer.EventReasonWorkflowTriggerFailed,
+			"Trigger failed for resource %v, reason: %s", res, err.Error(),
+		)
+		return
+	}
+
+	// update generation and hash
+	if c.observedResources[wf.Key()] == nil {
+		c.observedResources[wf.Key()] = make(map[api.ObjectReference]*IntHash)
+	}
+	c.observedResources[wf.Key()][res.ObjectReference] = res.ResourceGeneration
+
+	log.Infof("Successfully triggered workflow %s for resource %s", wf.Name, res)
+	c.recorder.Eventf(
+		wf.ObjectReference(),
+		core.EventTypeNormal,
+		eventer.EventReasonWorkflowTriggered,
+		"Successfully triggered workflow %s for resource %s", wf.Name, res,
+	)
+}
+
+// create json-path-secret and workplan
+func (c *Controller) performTrigger(wf *api.Workflow, triggeredFor api.TriggeredFor, data map[string]string) error {
+	var err error
+	var secretRef *core.SecretEnvSource
+	if data != nil && len(data) != 0 {
+		if secretRef, err = c.createSecret(wf, data); err != nil {
+			return err
+		}
+	}
+	if _, err := c.createWorkplan(wf, secretRef, triggeredFor); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflow, isDeleteEvent bool) (bool, api.Trigger) {

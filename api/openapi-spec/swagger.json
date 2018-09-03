@@ -2073,6 +2073,9 @@
     },
     "ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowSpec": {
       "properties": {
+        "allowForceTrigger": {
+          "type": "boolean"
+        },
         "envFrom": {
           "description": "set container environment variables from configmaps and secrets",
           "type": "array",
