@@ -7,6 +7,7 @@ import (
 	"github.com/appscode/go/log"
 	"github.com/appscode/kutil"
 	"github.com/evanphx/json-patch"
+	"github.com/pkg/errors"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -83,25 +84,53 @@ func TryUpdateWorkflow(c cs.KubeciV1alpha1Interface, meta metav1.ObjectMeta, tra
 
 func UpdateWorkflowStatus(
 	c cs.KubeciV1alpha1Interface,
-	meta metav1.ObjectMeta,
+	in *api.Workflow,
 	transform func(status *api.WorkflowStatus) *api.WorkflowStatus,
+	useSubresource ...bool,
 ) (result *api.Workflow, err error) {
-	attempt := 0
-	err = wait.PollImmediate(kutil.RetryInterval, kutil.RetryTimeout, func() (bool, error) {
-		attempt++
-		cur, e2 := c.Workflows(meta.Namespace).Get(meta.Name, metav1.GetOptions{})
-		if kerr.IsNotFound(e2) {
-			return false, e2
-		} else if e2 == nil {
-			transform(&cur.Status)
-			result, e2 = c.Workflows(cur.Namespace).UpdateStatus(cur)
-			return e2 == nil, nil
-		}
-		log.Errorf("Attempt %d failed to update status of Workflow %s/%s due to %v.", attempt, cur.Namespace, cur.Name, e2)
-		return false, nil
-	})
-	if err != nil {
-		err = fmt.Errorf("failed to update status of Workflow %s/%s after %d attempts due to %v", meta.Namespace, meta.Name, attempt, err)
+	if len(useSubresource) > 1 {
+		return nil, errors.Errorf("invalid value passed for useSubresource: %v", useSubresource)
 	}
+	apply := func(x *api.Workflow) *api.Workflow {
+		out := &api.Workflow{
+			TypeMeta:   x.TypeMeta,
+			ObjectMeta: x.ObjectMeta,
+			Spec:       x.Spec,
+			Status:     *transform(in.Status.DeepCopy()),
+		}
+		return out
+	}
+
+	if len(useSubresource) == 1 && useSubresource[0] {
+		attempt := 0
+		cur := in.DeepCopy()
+		err = wait.PollImmediate(kutil.RetryInterval, kutil.RetryTimeout, func() (bool, error) {
+			attempt++
+			var e2 error
+			result, e2 = c.Workflows(in.Namespace).UpdateStatus(apply(cur))
+			if kerr.IsConflict(e2) {
+				latest, e3 := c.Workflows(in.Namespace).Get(in.Name, metav1.GetOptions{})
+				switch {
+				case e3 == nil:
+					cur = latest
+					return false, nil
+				case kutil.IsRequestRetryable(e3):
+					return false, nil
+				default:
+					return false, e3
+				}
+			} else if err != nil && !kutil.IsRequestRetryable(e2) {
+				return false, e2
+			}
+			return e2 == nil, nil
+		})
+
+		if err != nil {
+			err = fmt.Errorf("failed to update status of Workflow %s/%s after %d attempts due to %v", in.Namespace, in.Name, attempt, err)
+		}
+		return
+	}
+
+	result, _, err = PatchWorkflowObject(c, in, apply(in))
 	return
 }
