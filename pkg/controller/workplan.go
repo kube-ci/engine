@@ -45,17 +45,19 @@ func (c *Controller) reconcileForWorkplan(wp *api.Workplan) error {
 
 func (c *Controller) executeWorkplan(wp *api.Workplan) {
 	log.Infof("Executing workplan %s", wp.Name)
+
 	if _, err := util.UpdateWorkplanStatus(
 		c.kubeciClient.KubeciV1alpha1(),
-		wp.ObjectMeta,
+		wp,
 		func(r *api.WorkplanStatus) *api.WorkplanStatus {
 			r.Phase = "Pending"
 			r.TaskIndex = -1
 			r.Reason = "Initializing tasks"
 			return r
 		},
+		api.EnableStatusSubresource,
 	); err != nil {
-		log.Errorf("Failed to update status of workplan %s, reason: %s", wp.Name, err.Error())
+		log.Errorf(err.Error())
 		return
 	}
 
@@ -63,15 +65,16 @@ func (c *Controller) executeWorkplan(wp *api.Workplan) {
 		log.Errorf("Failed to execute workplan: %s, reason: %s", wp.Name, err.Error())
 		if _, err := util.UpdateWorkplanStatus(
 			c.kubeciClient.KubeciV1alpha1(),
-			wp.ObjectMeta,
+			wp,
 			func(r *api.WorkplanStatus) *api.WorkplanStatus {
 				r.Phase = "Failed"
 				r.TaskIndex = -1
 				r.Reason = err.Error()
 				return r
 			},
+			api.EnableStatusSubresource,
 		); err != nil {
-			log.Errorf("Failed to update status of workplan %s, reason: %s", wp.Name, err.Error())
+			log.Errorf(err.Error())
 		}
 		return
 	}
@@ -79,14 +82,15 @@ func (c *Controller) executeWorkplan(wp *api.Workplan) {
 	log.Infof("Workplan %s completed successfully", wp.Name)
 	if _, err := util.UpdateWorkplanStatus(
 		c.kubeciClient.KubeciV1alpha1(),
-		wp.ObjectMeta,
+		wp,
 		func(r *api.WorkplanStatus) *api.WorkplanStatus {
 			r.Phase = "Completed"
 			r.TaskIndex = -1
 			r.Reason = "All tasks completed successfully"
 			return r
 		},
+		api.EnableStatusSubresource,
 	); err != nil {
-		log.Errorf("Failed to update status of workplan %s, reason: %s", wp.Name, err.Error())
+		log.Errorf(err.Error())
 	}
 }

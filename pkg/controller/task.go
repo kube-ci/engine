@@ -15,17 +15,18 @@ import (
 func (c *Controller) runTasks(wp *api.Workplan) error {
 	for index, task := range wp.Spec.Tasks {
 		log.Infof("Running task[%d] for workplan %s", index, wp.Name)
+
 		if _, err := util.UpdateWorkplanStatus(
 			c.kubeciClient.KubeciV1alpha1(),
-			wp.ObjectMeta,
+			wp,
 			func(r *api.WorkplanStatus) *api.WorkplanStatus {
 				r.Phase = "Running"
 				r.TaskIndex = index
 				r.Reason = fmt.Sprintf("Running task[%d]", index)
 				return r
 			},
+			api.EnableStatusSubresource,
 		); err != nil {
-			log.Errorf("Failed to update status of workplan %s, reason: %s", wp.Name, err.Error())
 			return err
 		}
 

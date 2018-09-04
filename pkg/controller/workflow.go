@@ -63,15 +63,15 @@ func (c *Controller) runWorkflowInjector(key string) error {
 		}
 
 		// update ObservedGeneration and ObservedGenerationHash
-		_, err = util.UpdateWorkflowStatus(
+		if _, err := util.UpdateWorkflowStatus(
 			c.kubeciClient.KubeciV1alpha1(),
-			wf.ObjectMeta,
+			wf,
 			func(r *api.WorkflowStatus) *api.WorkflowStatus {
 				r.ObservedGeneration = types.NewIntHash(wf.Generation, meta.GenerationHash(wf))
 				return r
 			},
-		)
-		if err != nil {
+			api.EnableStatusSubresource,
+		); err != nil {
 			return err
 		}
 	}
