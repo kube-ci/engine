@@ -15,29 +15,33 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/serializer"
 	"k8s.io/kube-openapi/pkg/common"
 	api_install "kube.ci/kubeci/apis/kubeci/install"
-	api_v1alpha1 "kube.ci/kubeci/apis/kubeci/v1alpha1"
+	v1alpha1 "kube.ci/kubeci/apis/kubeci/v1alpha1"
 )
 
 func generateCRDDefinitions() {
 	filename := gort.GOPath() + "/src/kube.ci/kubeci/apis/kubeci/v1alpha1/crds.yaml"
+	os.Remove(filename)
 
-	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
+	err := os.MkdirAll(filepath.Join(gort.GOPath(), "/src/kube.ci/kubeci/api/crds"), 0755)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer f.Close()
 
 	crds := []*crd_api.CustomResourceDefinition{
-		api_v1alpha1.Workflow{}.CustomResourceDefinition(),
-		api_v1alpha1.Workplan{}.CustomResourceDefinition(),
+		v1alpha1.Workflow{}.CustomResourceDefinition(),
+		v1alpha1.Workplan{}.CustomResourceDefinition(),
 	}
 	for _, crd := range crds {
-		err = crdutils.MarshallCrd(f, crd, "yaml")
+		filename := filepath.Join(gort.GOPath(), "/src/kube.ci/kubeci/api/crds", crd.Spec.Names.Singular+".yaml")
+		f, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 		if err != nil {
 			log.Fatal(err)
 		}
+		crdutils.MarshallCrd(f, crd, "yaml")
+		f.Close()
 	}
 }
+
 func generateSwaggerJson() {
 	var (
 		Scheme = runtime.NewScheme()
@@ -63,11 +67,11 @@ func generateSwaggerJson() {
 			},
 		},
 		OpenAPIDefinitions: []common.GetOpenAPIDefinitions{
-			api_v1alpha1.GetOpenAPIDefinitions,
+			v1alpha1.GetOpenAPIDefinitions,
 		},
 		Resources: []openapi.TypeInfo{
-			{api_v1alpha1.SchemeGroupVersion, api_v1alpha1.ResourceWorkflows, api_v1alpha1.ResourceKindWorkflow, true},
-			{api_v1alpha1.SchemeGroupVersion, api_v1alpha1.ResourceWorkplans, api_v1alpha1.ResourceKindWorkplan, true},
+			{v1alpha1.SchemeGroupVersion, v1alpha1.ResourceWorkflows, v1alpha1.ResourceKindWorkflow, true},
+			{v1alpha1.SchemeGroupVersion, v1alpha1.ResourceWorkplans, v1alpha1.ResourceKindWorkplan, true},
 		},
 	})
 	if err != nil {
