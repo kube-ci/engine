@@ -117,6 +117,17 @@ func (c *Controller) RunInformers(stopCh <-chan struct{}) {
 
 	}
 
+	// initially add all workflows to queue even if alreadyObserved set in status
+	// it will create the dynamic-informers when operator restarted
+	workflows, err := c.wfLister.Workflows(metav1.NamespaceAll).List(labels.Everything())
+	if err != nil {
+		runtime.HandleError(fmt.Errorf("failed to sync workflows, reason %s", err))
+		return
+	}
+	for _, wf := range workflows {
+		queue.Enqueue(c.wfQueue.GetQueue(), wf)
+	}
+
 	c.wfQueue.Run(stopCh)
 	c.wpQueue.Run(stopCh)
 }
