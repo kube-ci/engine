@@ -51,6 +51,8 @@ type Controller struct {
 	dynClient           *dynamicclientset.Clientset
 	dynInformersFactory *dynamicinformer.SharedInformerFactory
 
+	observedWorkflows map[string]*types.IntHash
+
 	// store observed resources for workflows
 	// store triggered-for in workplans
 	// initially sync from available workplans

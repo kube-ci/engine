@@ -7,7 +7,6 @@ import (
 	"github.com/appscode/go/log"
 	"github.com/appscode/kutil"
 	"github.com/evanphx/json-patch"
-	"github.com/pkg/errors"
 	kerr "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -82,7 +81,7 @@ func TryUpdateWorkflow(c cs.KubeciV1alpha1Interface, meta metav1.ObjectMeta, tra
 	return
 }
 
-func UpdateWorkflowStatus(
+/*func UpdateWorkflowStatus(
 	c cs.KubeciV1alpha1Interface,
 	in *api.Workflow,
 	transform func(status *api.WorkflowStatus) *api.WorkflowStatus,
@@ -133,4 +132,4 @@ func UpdateWorkflowStatus(
 
 	result, _, err = PatchWorkflowObject(c, in, apply(in))
 	return
-}
+}*/

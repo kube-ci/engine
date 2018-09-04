@@ -10970,16 +10970,11 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 								Ref: ref("kube.ci/kubeci/apis/kubeci/v1alpha1.WorkflowSpec"),
 							},
 						},
-						"status": {
-							SchemaProps: spec.SchemaProps{
-								Ref: ref("kube.ci/kubeci/apis/kubeci/v1alpha1.WorkflowStatus"),
-							},
-						},
 					},
 				},
 			},
 			Dependencies: []string{
-				"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kube.ci/kubeci/apis/kubeci/v1alpha1.WorkflowSpec", "kube.ci/kubeci/apis/kubeci/v1alpha1.WorkflowStatus"},
+				"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kube.ci/kubeci/apis/kubeci/v1alpha1.WorkflowSpec"},
 		},
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.WorkflowList": {
 			Schema: spec.Schema{
@@ -11082,21 +11077,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 			},
 			Dependencies: []string{
 				"k8s.io/api/core/v1.EnvFromSource", "kube.ci/kubeci/apis/kubeci/v1alpha1.Step", "kube.ci/kubeci/apis/kubeci/v1alpha1.Trigger"},
-		},
-		"kube.ci/kubeci/apis/kubeci/v1alpha1.WorkflowStatus": {
-			Schema: spec.Schema{
-				SchemaProps: spec.SchemaProps{
-					Properties: map[string]spec.Schema{
-						"observedGeneration": {
-							SchemaProps: spec.SchemaProps{
-								Ref: ref("github.com/appscode/go/encoding/json/types.IntHash"),
-							},
-						},
-					},
-				},
-			},
-			Dependencies: []string{
-				"github.com/appscode/go/encoding/json/types.IntHash"},
 		},
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.Workplan": {
 			Schema: spec.Schema{

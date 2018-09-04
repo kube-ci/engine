@@ -432,13 +432,6 @@ spec:
                           "value". The requirements are ANDed.
                         type: object
               type: array
-        status:
-          properties:
-            observedGeneration:
-              oneOf:
-              - type: string
-              - format: int64
-                type: integer
   version: v1alpha1
   versions:
   - name: v1alpha1

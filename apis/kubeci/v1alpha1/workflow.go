@@ -1,7 +1,6 @@
 package v1alpha1
 
 import (
-	"github.com/appscode/go/encoding/json/types"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -19,8 +18,7 @@ type Workflow struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   WorkflowSpec   `json:"spec,omitempty"`
-	Status WorkflowStatus `json:"status,omitempty"`
+	Spec WorkflowSpec `json:"spec,omitempty"`
 }
 
 type WorkflowSpec struct {
@@ -54,10 +52,6 @@ type Step struct {
 	Commands   []string `json:"commands,omitempty"`
 	Args       []string `json:"args,omitempty"`
 	Dependency []string `json:"dependency,omitempty"`
-}
-
-type WorkflowStatus struct {
-	ObservedGeneration *types.IntHash `json:"observedGeneration,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
