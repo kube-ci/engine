@@ -43,8 +43,9 @@ func (c *Controller) initWorkflowWatcher() {
 	c.wfLister = c.kubeciInformerFactory.Kubeci().V1alpha1().Workflows().Lister()
 }
 
-// initially add all workflows to queue even if alreadyObserved set in status
-// it will create the dynamic-informers when operator restarted
+// always reconcile for add events, it will create required dynamic-informers
+// for update events, reconcile if observed-generation is changed
+// workflow observed-generation stored in operator memory instead of status
 func (c *Controller) runWorkflowInjector(key string) error {
 	obj, exist, err := c.wfInformer.GetIndexer().GetByKey(key)
 	if err != nil {

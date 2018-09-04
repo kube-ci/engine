@@ -108,7 +108,7 @@ func (c *Controller) RunInformers(stopCh <-chan struct{}) {
 	})
 
 	for _, wp := range workplans {
-		key := wp.Namespace + "/" + wp.Spec.Workflow
+		key := wp.Namespace + "/" + wp.Spec.Workflow // workplan and workflow are in same namespace
 		if _, ok := c.observedResources[key]; !ok {
 			c.observedResources[key] = make(map[api.ObjectReference]*types.IntHash)
 		}
