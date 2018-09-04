@@ -7,7 +7,9 @@ import (
 	hooks "github.com/appscode/kubernetes-webhook-util/admission/v1beta1"
 	webhook "github.com/appscode/kubernetes-webhook-util/admission/v1beta1/generic"
 	"github.com/appscode/kutil/meta"
+	meta_util "github.com/appscode/kutil/meta"
 	"github.com/appscode/kutil/tools/queue"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"kube.ci/kubeci/apis/kubeci"
@@ -40,8 +42,12 @@ func (c *Controller) NewWorkflowWebhook() hooks.AdmissionHook {
 func (c *Controller) initWorkflowWatcher() {
 	c.wfInformer = c.kubeciInformerFactory.Kubeci().V1alpha1().Workflows().Informer()
 	c.wfQueue = queue.New("Workflow", c.MaxNumRequeues, c.NumThreads, c.runWorkflowInjector)
-	// TODO: use enableStatusSubresource variable
-	c.wfInformer.AddEventHandler(queue.NewObservableHandler(c.wfQueue.GetQueue(), true))
+	// initially add all workflows to queue even if alreadyObserved set in status
+	// it will create the dynamic-informers when operator restarted
+	c.wfInformer.AddEventHandler(queue.NewEventHandler(c.wfQueue.GetQueue(), func(old, nu interface{}) bool {
+		return (nu.(metav1.Object)).GetDeletionTimestamp() != nil ||
+			!meta_util.AlreadyObserved2(old, nu, api.EnableStatusSubresource)
+	}))
 	c.wfLister = c.kubeciInformerFactory.Kubeci().V1alpha1().Workflows().Lister()
 }
 
