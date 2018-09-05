@@ -10,6 +10,7 @@ import (
 func (c *Controller) initWorkplanWatcher() {
 	c.wpInformer = c.kubeciInformerFactory.Kubeci().V1alpha1().Workplans().Informer()
 	c.wpQueue = queue.New("Workplan", c.MaxNumRequeues, c.NumThreads, c.runWorkplanInjector)
+	// TODO: use enableStatusSubresource variable
 	c.wpInformer.AddEventHandler(queue.DefaultEventHandler(c.wpQueue.GetQueue()))
 	c.wpLister = c.kubeciInformerFactory.Kubeci().V1alpha1().Workplans().Lister()
 }

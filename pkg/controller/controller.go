@@ -3,6 +3,7 @@ package controller
 import (
 	"fmt"
 	"sort"
+	"sync"
 
 	"github.com/appscode/go/encoding/json/types"
 	"github.com/appscode/go/log"
@@ -51,7 +52,8 @@ type Controller struct {
 	dynClient           *dynamicclientset.Clientset
 	dynInformersFactory *dynamicinformer.SharedInformerFactory
 
-	observedWorkflows map[string]*types.IntHash
+	// store generation hash of workflows in thread safe map
+	observedWorkflows observedWorkflows
 
 	// store observed resources for workflows
 	// store triggered-for in workplans
@@ -62,6 +64,11 @@ type Controller struct {
 	// TODO: close unused informers
 	// only one informer is created for a specific resource (among all workflows)
 	// we should close a informer when no workflow need that informer (when workflows deleted or updated)
+}
+
+type observedWorkflows struct {
+	lock  sync.RWMutex
+	items map[string]*types.IntHash
 }
 
 func (c *Controller) ensureCustomResourceDefinitions() error {
@@ -108,7 +115,7 @@ func (c *Controller) RunInformers(stopCh <-chan struct{}) {
 	})
 
 	for _, wp := range workplans {
-		key := wp.Namespace + "/" + wp.Spec.Workflow // workplan and workflow are in same namespace
+		key := wp.Namespace + "/" + wp.Spec.Workflow
 		if _, ok := c.observedResources[key]; !ok {
 			c.observedResources[key] = make(map[api.ObjectReference]*types.IntHash)
 		}
