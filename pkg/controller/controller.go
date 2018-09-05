@@ -51,6 +51,9 @@ type Controller struct {
 	dynClient           *dynamicclientset.Clientset
 	dynInformersFactory *dynamicinformer.SharedInformerFactory
 
+	// store generation hash of workflows in thread safe map
+	observedWorkflows observedWorkflows
+
 	// store observed resources for workflows
 	// store triggered-for in workplans
 	// initially sync from available workplans

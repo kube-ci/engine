@@ -1,18 +1,15 @@
 package controller
 
 import (
-	"github.com/appscode/go/encoding/json/types"
 	"github.com/appscode/go/log"
 	"github.com/appscode/kubernetes-webhook-util/admission"
 	hooks "github.com/appscode/kubernetes-webhook-util/admission/v1beta1"
 	webhook "github.com/appscode/kubernetes-webhook-util/admission/v1beta1/generic"
-	"github.com/appscode/kutil/meta"
 	"github.com/appscode/kutil/tools/queue"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"kube.ci/kubeci/apis/kubeci"
 	api "kube.ci/kubeci/apis/kubeci/v1alpha1"
-	"kube.ci/kubeci/client/clientset/versioned/typed/kubeci/v1alpha1/util"
 )
 
 func (c *Controller) NewWorkflowWebhook() hooks.AdmissionHook {
@@ -40,11 +37,15 @@ func (c *Controller) NewWorkflowWebhook() hooks.AdmissionHook {
 func (c *Controller) initWorkflowWatcher() {
 	c.wfInformer = c.kubeciInformerFactory.Kubeci().V1alpha1().Workflows().Informer()
 	c.wfQueue = queue.New("Workflow", c.MaxNumRequeues, c.NumThreads, c.runWorkflowInjector)
-	// TODO: use enableStatusSubresource variable
-	c.wfInformer.AddEventHandler(queue.NewObservableHandler(c.wfQueue.GetQueue(), true))
+	c.wfInformer.AddEventHandler(queue.NewEventHandler(c.wfQueue.GetQueue(), func(oldObj, newObj interface{}) bool {
+		return !c.observedWorkflows.alreadyObserved(newObj.(*api.Workflow))
+	}))
 	c.wfLister = c.kubeciInformerFactory.Kubeci().V1alpha1().Workflows().Lister()
 }
 
+// always reconcile for add events, it will create required dynamic-informers
+// for update events, reconcile if observed-generation is changed
+// workflow observed-generation stored in operator memory instead of status
 func (c *Controller) runWorkflowInjector(key string) error {
 	obj, exist, err := c.wfInformer.GetIndexer().GetByKey(key)
 	if err != nil {
@@ -54,26 +55,14 @@ func (c *Controller) runWorkflowInjector(key string) error {
 
 	if !exist {
 		log.Warningf("Workflow %s does not exist anymore\n", key)
+		c.observedWorkflows.delete(key)
 	} else {
 		log.Infof("Sync/Add/Update for Workflow %s\n", key)
-
 		wf := obj.(*api.Workflow).DeepCopy()
 		if err := c.reconcileForWorkflow(wf); err != nil {
 			return err
 		}
-
-		// update ObservedGeneration and ObservedGenerationHash
-		if _, err := util.UpdateWorkflowStatus(
-			c.kubeciClient.KubeciV1alpha1(),
-			wf,
-			func(r *api.WorkflowStatus) *api.WorkflowStatus {
-				r.ObservedGeneration = types.NewIntHash(wf.Generation, meta.GenerationHash(wf))
-				return r
-			},
-			api.EnableStatusSubresource,
-		); err != nil {
-			return err
-		}
+		c.observedWorkflows.set(wf)
 	}
 
 	return nil

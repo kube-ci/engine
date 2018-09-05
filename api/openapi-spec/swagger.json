@@ -2026,9 +2026,6 @@
         },
         "spec": {
           "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowSpec"
-        },
-        "status": {
-          "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowStatus"
         }
       },
       "x-kubernetes-group-version-kind": [
@@ -2098,13 +2095,6 @@
           "items": {
             "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Trigger"
           }
-        }
-      }
-    },
-    "ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowStatus": {
-      "properties": {
-        "observedGeneration": {
-          "$ref": "#/definitions/com.github.appscode.go.encoding.json.types.IntHash"
         }
       }
     },
