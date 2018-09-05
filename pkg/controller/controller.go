@@ -3,7 +3,6 @@ package controller
 import (
 	"fmt"
 	"sort"
-	"sync"
 
 	"github.com/appscode/go/encoding/json/types"
 	"github.com/appscode/go/log"
@@ -64,11 +63,6 @@ type Controller struct {
 	// TODO: close unused informers
 	// only one informer is created for a specific resource (among all workflows)
 	// we should close a informer when no workflow need that informer (when workflows deleted or updated)
-}
-
-type observedWorkflows struct {
-	lock  sync.RWMutex
-	items map[string]*types.IntHash
 }
 
 func (c *Controller) ensureCustomResourceDefinitions() error {
