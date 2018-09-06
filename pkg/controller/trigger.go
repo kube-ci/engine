@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	. "github.com/appscode/go/encoding/json/types"
 	"github.com/appscode/go/log"
 	"github.com/appscode/go/types"
 	authorizationapi "k8s.io/api/authorization/v1"
@@ -120,11 +119,8 @@ func (c *Controller) triggerWorkflow(wf *api.Workflow, res ResourceIdentifier, i
 		return
 	}
 
-	// update generation and hash
-	if c.observedResources[wf.Key()] == nil {
-		c.observedResources[wf.Key()] = make(map[api.ObjectReference]*IntHash)
-	}
-	c.observedResources[wf.Key()][res.ObjectReference] = res.ResourceGeneration
+	// update generation and hash for observed resource
+	c.observedWorkflows.setObservedResource(wf.Key(), triggeredFor)
 
 	log.Infof("Successfully triggered workflow %s for resource %s", wf.Name, res)
 	c.recorder.Eventf(
@@ -152,7 +148,8 @@ func (c *Controller) performTrigger(wf *api.Workflow, triggeredFor api.Triggered
 
 func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflow, isDeleteEvent bool) (bool, api.Trigger) {
 	// check generation and hash to prevent duplicate trigger
-	if c.resourceAlreadyObserved(wf.Key(), res) {
+	if c.observedWorkflows.resourceAlreadyObserved(wf.Key(), api.TriggeredFor{
+		ObjectReference: res.ObjectReference, ResourceGeneration: res.ResourceGeneration}) {
 		return false, api.Trigger{}
 	}
 
@@ -273,15 +270,6 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 		return true, trigger
 	}
 	return false, api.Trigger{}
-}
-
-func (c *Controller) resourceAlreadyObserved(wfKey string, res ResourceIdentifier) bool {
-	if c.observedResources == nil || c.observedResources[wfKey] == nil {
-		return false
-	}
-
-	observed, ok := c.observedResources[wfKey][res.ObjectReference]
-	return ok && observed.Equal(res.ResourceGeneration)
 }
 
 func (c *Controller) checkAccess(res authorizationapi.ResourceAttributes, serviceAccount string) bool {

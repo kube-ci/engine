@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/appscode/go/encoding/json/types"
 	"github.com/appscode/go/log"
 	crdutils "github.com/appscode/kutil/apiextensions/v1beta1"
 	dynamicclientset "github.com/appscode/kutil/dynamic/clientset"
@@ -51,14 +50,9 @@ type Controller struct {
 	dynClient           *dynamicclientset.Clientset
 	dynInformersFactory *dynamicinformer.SharedInformerFactory
 
-	// store generation hash of workflows in thread safe map
+	// store generation-hash and observed-resources for workflows in thread safe map
+	// store triggered-for in workplans and initially sync from available workplans
 	observedWorkflows observedWorkflows
-
-	// store observed resources for workflows
-	// store triggered-for in workplans
-	// initially sync from available workplans
-	// key: workflow namespace/name
-	observedResources map[string]map[api.ObjectReference]*types.IntHash
 
 	// TODO: close unused informers
 	// only one informer is created for a specific resource (among all workflows)
@@ -95,7 +89,6 @@ func (c *Controller) RunInformers(stopCh <-chan struct{}) {
 	}
 
 	// sync workplans into observedResources
-	c.observedResources = make(map[string]map[api.ObjectReference]*types.IntHash)
 	workplans, err := c.wpLister.Workplans(metav1.NamespaceAll).List(labels.Everything())
 	if err != nil {
 		runtime.HandleError(fmt.Errorf("failed to sync workplans, reason %s", err))
@@ -108,16 +101,14 @@ func (c *Controller) RunInformers(stopCh <-chan struct{}) {
 		return workplans[i].CreationTimestamp.After(workplans[j].CreationTimestamp.Time)
 	})
 
+	workflowKeys := make(map[string]struct{})
 	for _, wp := range workplans {
-		key := wp.Namespace + "/" + wp.Spec.Workflow
-		if _, ok := c.observedResources[key]; !ok {
-			c.observedResources[key] = make(map[api.ObjectReference]*types.IntHash)
-		}
+		// workplan and workflow are in same namespace
 		// if key exists, we have already stored the latest version since workplans are sorted
-		if _, ok := c.observedResources[key][wp.Spec.TriggeredFor.ObjectReference]; !ok {
-			c.observedResources[key][wp.Spec.TriggeredFor.ObjectReference] = wp.Spec.TriggeredFor.ResourceGeneration
+		key := wp.Namespace + "/" + wp.Spec.Workflow
+		if _, ok := workflowKeys[key]; !ok {
+			c.observedWorkflows.setObservedResource(key, wp.Spec.TriggeredFor)
 		}
-
 	}
 
 	c.wfQueue.Run(stopCh)
