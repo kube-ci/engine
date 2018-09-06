@@ -14,6 +14,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/util/runtime"
+	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -101,12 +102,13 @@ func (c *Controller) RunInformers(stopCh <-chan struct{}) {
 		return workplans[i].CreationTimestamp.After(workplans[j].CreationTimestamp.Time)
 	})
 
-	workflowKeys := make(map[string]struct{})
+	workflowKeys := sets.NewString()
 	for _, wp := range workplans {
 		// workplan and workflow are in same namespace
 		// if key exists, we have already stored the latest version since workplans are sorted
 		key := wp.Namespace + "/" + wp.Spec.Workflow
-		if _, ok := workflowKeys[key]; !ok {
+		if !workflowKeys.Has(key) {
+			workflowKeys.Insert(key)
 			c.observedWorkflows.setObservedResource(key, wp.Spec.TriggeredFor)
 		}
 	}
