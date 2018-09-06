@@ -3,7 +3,6 @@ package controller
 import (
 	"time"
 
-	"github.com/appscode/go/encoding/json/types"
 	core "k8s.io/api/core/v1"
 	crd_cs "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/typed/apiextensions/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -52,7 +51,7 @@ func (c *Config) New() (*Controller, error) {
 		kubeInformerFactory:   informers.NewFilteredSharedInformerFactory(c.KubeClient, c.ResyncPeriod, core.NamespaceAll, tweakListOptions),
 		kubeciInformerFactory: kubeci_informers.NewSharedInformerFactory(c.KubeciClient, c.ResyncPeriod),
 		recorder:              eventer.NewEventRecorder(c.KubeClient, "kubeci-controller"),
-		observedWorkflows:     observedWorkflows{items: make(map[string]*types.IntHash)},
+		observedWorkflows:     observedWorkflows{items: make(map[string]workflowState)},
 	}
 
 	if err := ctrl.ensureCustomResourceDefinitions(); err != nil {
