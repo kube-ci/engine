@@ -57,6 +57,21 @@ func (c *observedWorkflows) setObservedResource(workflowKey string, resource api
 	c.items[workflowKey] = state
 }
 
+// set ObservedResource if not exists, required for initial sync
+func (c *observedWorkflows) upsertObservedResource(workflowKey string, resource api.TriggeredFor) {
+	c.lock.Lock()
+	defer c.lock.Unlock()
+
+	state := c.items[workflowKey]
+	if state.observedResources == nil {
+		state.observedResources = make(map[api.ObjectReference]*types.IntHash)
+	}
+	if _, ok := state.observedResources[resource.ObjectReference]; !ok {
+		state.observedResources[resource.ObjectReference] = resource.ResourceGeneration
+		c.items[workflowKey] = state
+	}
+}
+
 func (c *observedWorkflows) delete(key string) {
 	c.lock.Lock()
 	defer c.lock.Unlock()
