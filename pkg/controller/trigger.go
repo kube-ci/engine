@@ -51,14 +51,20 @@ func (r *TriggerREST) Categories() []string {
 }
 
 func (r *TriggerREST) Create(ctx context.Context, obj runtime.Object, createValidation rest.ValidateObjectFunc, includeUninitialized bool) (runtime.Object, error) {
-	log.Info("Received force trigger event")
 	trigger := obj.(*v1alpha1.Trigger)
-	res := objToResourceIdentifier(trigger.Request)
-	r.controller.handleTrigger(res, trigger.Workflows, false, true)
+	r.controller.handleTrigger(trigger.Request, trigger.Workflows, false, true)
 	return trigger, nil
 }
 
-func (c *Controller) handleTrigger(res ResourceIdentifier, wfNames []string, isDeleteEvent bool, force bool) {
+func (c *Controller) handleTrigger(obj interface{}, wfNames []string, isDeleteEvent bool, force bool) {
+	// convert object to ResourceIdentifier
+	res, err := c.objToResourceIdentifier(obj)
+	if err != nil {
+		log.Errorf("Failed to parse object, reason: %s", err.Error())
+		return
+	}
+	// log.Infof("Received trigger, resource: %v, isDeleteEvent: %v, force: %v", res, isDeleteEvent, force)
+
 	workflows, err := c.wfLister.Workflows(metav1.NamespaceAll).List(labels.Everything())
 	if err != nil {
 		log.Errorf("Failed to list workflows, reason: %s", err.Error())
@@ -97,7 +103,7 @@ func (c *Controller) handleTrigger(res ResourceIdentifier, wfNames []string, isD
 func (c *Controller) triggerWorkflow(wf *api.Workflow, res ResourceIdentifier, isDeleteEvent bool) {
 	ok, trigger := c.shouldHandleTrigger(res, wf, isDeleteEvent)
 	if !ok {
-		log.Infof("should not handle trigger, resource: %s, workflow: %s/%s", res, wf.Namespace, wf.Name)
+		// log.Infof("should not handle trigger, resource: %s, workflow: %s/%s", res, wf.Namespace, wf.Name)
 		return
 	}
 	data := res.GetData(trigger.EnvFromPath) // json-path-data

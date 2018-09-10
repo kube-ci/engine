@@ -3,16 +3,17 @@ package controller
 import (
 	"bytes"
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/appscode/go/encoding/json/types"
 	"github.com/appscode/go/log"
+	discovery_util "github.com/appscode/kutil/discovery"
 	dynamicclientset "github.com/appscode/kutil/dynamic/clientset"
 	dynamicdiscovery "github.com/appscode/kutil/dynamic/discovery"
 	dynamicinformer "github.com/appscode/kutil/dynamic/informer"
 	meta_util "github.com/appscode/kutil/meta"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/client-go/discovery"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/util/jsonpath"
@@ -64,54 +65,34 @@ func jsonPathData(path string, data interface{}) string {
 	return buf.String()
 }
 
-func objToResourceIdentifier(obj interface{}) ResourceIdentifier {
+func (c *Controller) objToResourceIdentifier(obj interface{}) (ResourceIdentifier, error) {
 	o := obj.(*unstructured.Unstructured)
 
 	apiVersion := o.GetAPIVersion()
-	group, version := toGroupAndVersion(apiVersion)
+	kind := o.GetKind()
+	gv, err := schema.ParseGroupVersion(apiVersion)
+	if err != nil {
+		return ResourceIdentifier{}, err
+	}
+	gvr, err := discovery_util.ResourceForGVK(c.kubeClient.Discovery(), gv.WithKind(kind))
+	if err != nil {
+		return ResourceIdentifier{}, err
+	}
 
 	return ResourceIdentifier{
 		Object:   o.Object,
-		Group:    group,
-		Resource: selfLinkToResource(o.GetSelfLink()),
-		Version:  version,
+		Group:    gv.Group,
+		Version:  gv.Version,
+		Resource: gvr.Resource,
 		Labels:   o.GetLabels(),
 		ObjectReference: api.ObjectReference{
 			APIVersion: apiVersion,
-			Kind:       o.GetKind(),
+			Kind:       kind,
 			Namespace:  o.GetNamespace(),
 			Name:       o.GetName(),
 		},
 		ResourceGeneration: types.NewIntHash(o.GetGeneration(), meta_util.ObjectHash(o)),
-	}
-}
-
-// TODO: how to get resource from unstructured object ?
-func selfLinkToResource(selfLink string) string {
-	items := strings.Split(selfLink, "/")
-	return items[len(items)-2]
-}
-
-// TODO: use this instead of selfLink ?
-func (c *Controller) groupVersionKindToResource(groupVersion, kind string) (string, error) {
-	resources, err := c.kubeClient.Discovery().ServerResourcesForGroupVersion(groupVersion)
-	if err != nil {
-		return "", err
-	}
-	for _, resource := range resources.APIResources {
-		if resource.Kind == kind {
-			return resource.Name, nil
-		}
-	}
-	return "", fmt.Errorf("could not find api resource with group-version: %s and kind: %s", groupVersion, kind)
-}
-
-func toGroupAndVersion(apiVersion string) (string, string) {
-	items := strings.Split(apiVersion, "/")
-	if len(items) == 1 {
-		return "", items[0]
-	}
-	return items[0], items[1]
+	}, nil
 }
 
 func (c *Controller) initDynamicWatcher() {
@@ -152,19 +133,16 @@ func (c *Controller) createInformer(wf *api.Workflow) error {
 func (c *Controller) handlerForDynamicInformer() cache.ResourceEventHandlerFuncs {
 	return cache.ResourceEventHandlerFuncs{
 		AddFunc: func(obj interface{}) {
-			res := objToResourceIdentifier(obj)
-			log.Debugln("Added resource", res)
-			c.handleTrigger(res, []string{}, false, false)
+			log.Debugln("Updated resource", obj)
+			c.handleTrigger(obj, []string{}, false, false)
 		},
 		UpdateFunc: func(oldObj, newObj interface{}) {
-			res := objToResourceIdentifier(newObj)
-			log.Debugln("Updated resource", res)
-			c.handleTrigger(res, []string{}, false, false)
+			log.Debugln("Updated resource", newObj)
+			c.handleTrigger(newObj, []string{}, false, false)
 		},
 		DeleteFunc: func(obj interface{}) {
-			res := objToResourceIdentifier(obj)
-			log.Debugln("Deleted resource", res)
-			c.handleTrigger(res, []string{}, true, false)
+			log.Debugln("Deleted resource", obj)
+			c.handleTrigger(obj, []string{}, true, false)
 		},
 	}
 }
