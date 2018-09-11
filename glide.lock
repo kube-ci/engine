@@ -1,5 +1,5 @@
 hash: 59675089a40681f5cf4729fc0555b28f5ddb24862d0da1b036179b21eb7cf481
-updated: 2018-09-10T15:35:26.569621922-07:00
+updated: 2018-09-10T17:07:14.575830269-07:00
 imports:
 - name: bitbucket.org/ww/goautoneg
   version: 75cd24fc2f2c2a2088577d12123ddee5f54e0675
@@ -613,7 +613,7 @@ imports:
   - third_party/forked/golang/json
   - third_party/forked/golang/reflect
 - name: k8s.io/apiserver
-  version: 8573140a007810ee0d5a165647f171b0a77acfe5
+  version: 9970aee1898bc65beb8f3829b2ddf8e191777f78
   repo: https://github.com/pharmer/apiserver.git
   vcs: git
   subpackages:
