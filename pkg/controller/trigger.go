@@ -52,23 +52,23 @@ func (r *TriggerREST) Categories() []string {
 
 func (r *TriggerREST) Create(ctx context.Context, obj runtime.Object, createValidation rest.ValidateObjectFunc, includeUninitialized bool) (runtime.Object, error) {
 	trigger := obj.(*v1alpha1.Trigger)
-	r.controller.handleTrigger(trigger.Request, trigger.Workflows, false, true)
+	if err := r.controller.handleTrigger(trigger.Request, trigger.Workflows, false, true); err != nil {
+		return nil, err
+	}
 	return trigger, nil
 }
 
-func (c *Controller) handleTrigger(obj interface{}, wfNames []string, isDeleteEvent bool, force bool) {
+func (c *Controller) handleTrigger(obj interface{}, wfNames []string, isDeleteEvent bool, force bool) error {
 	// convert object to ResourceIdentifier
 	res, err := c.objToResourceIdentifier(obj)
 	if err != nil {
-		log.Errorf("Failed to parse object, reason: %s", err.Error())
-		return
+		return fmt.Errorf("failed to parse object, reason: %s", err.Error())
 	}
 	// log.Infof("Received trigger, resource: %v, isDeleteEvent: %v, force: %v", res, isDeleteEvent, force)
 
 	workflows, err := c.wfLister.Workflows(metav1.NamespaceAll).List(labels.Everything())
 	if err != nil {
-		log.Errorf("Failed to list workflows, reason: %s", err.Error())
-		return
+		return fmt.Errorf("failed to list workflows, reason: %s", err.Error())
 	}
 
 	// if list is not empty then only trigger for listed workflows
@@ -98,6 +98,7 @@ func (c *Controller) handleTrigger(obj interface{}, wfNames []string, isDeleteEv
 			c.triggerWorkflow(wf, res, isDeleteEvent)
 		}
 	}
+	return nil
 }
 
 func (c *Controller) triggerWorkflow(wf *api.Workflow, res ResourceIdentifier, isDeleteEvent bool) {

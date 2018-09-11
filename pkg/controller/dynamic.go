@@ -66,7 +66,10 @@ func jsonPathData(path string, data interface{}) string {
 }
 
 func (c *Controller) objToResourceIdentifier(obj interface{}) (ResourceIdentifier, error) {
-	o := obj.(*unstructured.Unstructured)
+	o, ok := obj.(*unstructured.Unstructured)
+	if !ok {
+		return ResourceIdentifier{}, fmt.Errorf("failed to convert object to unstructured")
+	}
 
 	apiVersion := o.GetAPIVersion()
 	kind := o.GetKind()
@@ -134,15 +137,21 @@ func (c *Controller) handlerForDynamicInformer() cache.ResourceEventHandlerFuncs
 	return cache.ResourceEventHandlerFuncs{
 		AddFunc: func(obj interface{}) {
 			log.Debugln("Updated resource", obj)
-			c.handleTrigger(obj, []string{}, false, false)
+			if err := c.handleTrigger(obj, nil, false, false); err != nil {
+				log.Errorf(err.Error())
+			}
 		},
 		UpdateFunc: func(oldObj, newObj interface{}) {
 			log.Debugln("Updated resource", newObj)
-			c.handleTrigger(newObj, []string{}, false, false)
+			if err := c.handleTrigger(newObj, nil, false, false); err != nil {
+				log.Errorf(err.Error())
+			}
 		},
 		DeleteFunc: func(obj interface{}) {
 			log.Debugln("Deleted resource", obj)
-			c.handleTrigger(obj, []string{}, true, false)
+			if err := c.handleTrigger(obj, nil, true, false); err != nil {
+				log.Errorf(err.Error())
+			}
 		},
 	}
 }
