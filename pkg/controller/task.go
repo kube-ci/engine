@@ -14,32 +14,32 @@ import (
 
 func (c *Controller) runTasks(wp *api.Workplan) error {
 	for index, task := range wp.Spec.Tasks {
-		log.Infof("Running task[%d] for workplan %s", index, wp.Name)
-
-		if _, err := util.UpdateWorkplanStatus(
-			c.kubeciClient.KubeciV1alpha1(),
-			wp,
-			func(r *api.WorkplanStatus) *api.WorkplanStatus {
-				r.Phase = "Running"
-				r.TaskIndex = index
-				r.Reason = fmt.Sprintf("Running task[%d]", index)
-				return r
-			},
-			api.EnableStatusSubresource,
-		); err != nil {
-			return err
-		}
-
+		var err error
 		pod := podSpecForTasks(wp, task, index)
-		pod, err := c.kubeClient.CoreV1().Pods(pod.Namespace).Create(pod)
-		if err != nil {
-			return fmt.Errorf("failed to create pod %s for task[%d], reason: %s", pod.Name, index, err.Error())
+
+		if wp.Status.Phase == api.WorkplanPending || index > wp.Status.TaskIndex {
+			log.Infof("Running task[%d] for workplan %s", index, wp.Name)
+			if pod, err = c.kubeClient.CoreV1().Pods(pod.Namespace).Create(pod); err != nil {
+				return fmt.Errorf("failed to create pod %s for task[%d], reason: %s", pod.Name, index, err.Error())
+			}
+			if wp, err = util.UpdateWorkplanStatus(
+				c.kubeciClient.KubeciV1alpha1(),
+				wp,
+				func(r *api.WorkplanStatus) *api.WorkplanStatus {
+					r.Phase = api.WorkplanRunning
+					r.TaskIndex = index
+					r.Reason = fmt.Sprintf("Running task[%d]", index)
+					return r
+				},
+				api.EnableStatusSubresource,
+			); err != nil {
+				return err
+			}
 		}
 
 		// wait until pod completes
 		for {
-			pod, err = c.kubeClient.CoreV1().Pods(pod.Namespace).Get(pod.Name, metav1.GetOptions{})
-			if err != nil {
+			if pod, err = c.kubeClient.CoreV1().Pods(pod.Namespace).Get(pod.Name, metav1.GetOptions{}); err != nil {
 				return err
 			}
 			if pod.Status.Phase == core.PodSucceeded {

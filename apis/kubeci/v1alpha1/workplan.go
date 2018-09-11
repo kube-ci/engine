@@ -36,10 +36,20 @@ type WorkplanSpec struct {
 	EnvFrom []corev1.EnvFromSource `json:"envFrom,omitempty"`
 }
 
+type WorkplanPhase string
+
+const (
+	WorkplanPending       WorkplanPhase = "Pending"
+	WorkplanRunning       WorkplanPhase = "Running"
+	WorkplanSucceeded     WorkplanPhase = "Succeeded"
+	WorkplanFailed        WorkplanPhase = "Failed"
+	WorkplanUninitialized WorkplanPhase = ""
+)
+
 type WorkplanStatus struct {
-	Phase     string `json:"phase"`
-	Reason    string `json:"reason"`
-	TaskIndex int    `json:"taskIndex"`
+	Phase     WorkplanPhase `json:"phase"`
+	Reason    string        `json:"reason"`
+	TaskIndex int           `json:"taskIndex"`
 }
 
 type TriggeredFor struct {

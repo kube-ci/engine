@@ -7,11 +7,16 @@ import (
 	"kube.ci/kubeci/client/clientset/versioned/typed/kubeci/v1alpha1/util"
 )
 
+// process only add and delete events
+// uninitialized: newly created
+// running: previously created, but operator restarted before it succeeded
+
 func (c *Controller) initWorkplanWatcher() {
 	c.wpInformer = c.kubeciInformerFactory.Kubeci().V1alpha1().Workplans().Informer()
 	c.wpQueue = queue.New("Workplan", c.MaxNumRequeues, c.NumThreads, c.runWorkplanInjector)
-	// TODO: use enableStatusSubresource variable
-	c.wpInformer.AddEventHandler(queue.DefaultEventHandler(c.wpQueue.GetQueue()))
+	c.wpInformer.AddEventHandler(queue.NewEventHandler(c.wpQueue.GetQueue(), func(oldObj, newObj interface{}) bool {
+		return false
+	}))
 	c.wpLister = c.kubeciInformerFactory.Kubeci().V1alpha1().Workplans().Lister()
 }
 
@@ -26,8 +31,7 @@ func (c *Controller) runWorkplanInjector(key string) error {
 		log.Warningf("Workplan %s does not exist anymore\n", key)
 	} else {
 		wp := obj.(*api.Workplan).DeepCopy()
-		if wp.Status.Phase == "" {
-			// not processed yet, process a workplan only once, ignore any updates
+		if wp.Status.Phase == api.WorkplanUninitialized || wp.Status.Phase == api.WorkplanRunning {
 			log.Infof("Sync/Add/Update for workplan %s", key)
 			if err := c.reconcileForWorkplan(wp); err != nil {
 				return err
@@ -44,30 +48,34 @@ func (c *Controller) reconcileForWorkplan(wp *api.Workplan) error {
 }
 
 func (c *Controller) executeWorkplan(wp *api.Workplan) {
-	log.Infof("Executing workplan %s", wp.Name)
-
-	if _, err := util.UpdateWorkplanStatus(
-		c.kubeciClient.KubeciV1alpha1(),
-		wp,
-		func(r *api.WorkplanStatus) *api.WorkplanStatus {
-			r.Phase = "Pending"
-			r.TaskIndex = -1
-			r.Reason = "Initializing tasks"
-			return r
-		},
-		api.EnableStatusSubresource,
-	); err != nil {
-		log.Errorf(err.Error())
-		return
-	}
-
-	if err := c.runTasks(wp); err != nil {
-		log.Errorf("Failed to execute workplan: %s, reason: %s", wp.Name, err.Error())
-		if _, err := util.UpdateWorkplanStatus(
+	var err error
+	if wp.Status.Phase == api.WorkplanUninitialized {
+		log.Infof("Executing workplan %s", wp.Name)
+		if wp, err = util.UpdateWorkplanStatus(
 			c.kubeciClient.KubeciV1alpha1(),
 			wp,
 			func(r *api.WorkplanStatus) *api.WorkplanStatus {
-				r.Phase = "Failed"
+				r.Phase = api.WorkplanPending
+				r.TaskIndex = -1
+				r.Reason = "Initializing tasks"
+				return r
+			},
+			api.EnableStatusSubresource,
+		); err != nil {
+			log.Errorf(err.Error())
+			return
+		}
+	} else if wp.Status.Phase == api.WorkplanRunning {
+		log.Infof("Resuming workplan %s", wp.Name)
+	}
+
+	if err = c.runTasks(wp); err != nil {
+		log.Errorf("Failed to execute workplan: %s, reason: %s", wp.Name, err.Error())
+		if wp, err = util.UpdateWorkplanStatus(
+			c.kubeciClient.KubeciV1alpha1(),
+			wp,
+			func(r *api.WorkplanStatus) *api.WorkplanStatus {
+				r.Phase = api.WorkplanFailed
 				r.TaskIndex = -1
 				r.Reason = err.Error()
 				return r
@@ -80,11 +88,11 @@ func (c *Controller) executeWorkplan(wp *api.Workplan) {
 	}
 
 	log.Infof("Workplan %s completed successfully", wp.Name)
-	if _, err := util.UpdateWorkplanStatus(
+	if wp, err = util.UpdateWorkplanStatus(
 		c.kubeciClient.KubeciV1alpha1(),
 		wp,
 		func(r *api.WorkplanStatus) *api.WorkplanStatus {
-			r.Phase = "Completed"
+			r.Phase = api.WorkplanSucceeded
 			r.TaskIndex = -1
 			r.Reason = "All tasks completed successfully"
 			return r
