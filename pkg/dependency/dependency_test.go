@@ -14,7 +14,19 @@ var cleanupStep = v1alpha1.Step{
 	Args:     []string{"-rf", "/kubeci/*"},
 }
 
-var stepsData = [][]v1alpha1.Step{
+var nonDagSteps = []v1alpha1.Step{
+	{
+		Name: "A",
+	},
+	{
+		Name: "B",
+	},
+	{
+		Name: "C",
+	},
+}
+
+var dagStepsData = [][]v1alpha1.Step{
 	{
 		{
 			Name: "A",
@@ -65,11 +77,28 @@ var stepsData = [][]v1alpha1.Step{
 			Dependency: []string{"D"},
 		},
 	},
+	{
+		{
+			Name: "A",
+		},
+		{
+			Name:       "B",
+			Dependency: []string{"A"},
+		},
+		{
+			Name:       "C",
+			Dependency: []string{"B"},
+		},
+		{
+			Name:       "D",
+			Dependency: []string{"C"},
+		},
+	},
 }
 
-func TestResolveDependency(t *testing.T) {
-	for _, steps := range stepsData {
-		if tasks, err := ResolveDependency(steps, cleanupStep); err != nil {
+func TestResolveDependencyForDag(t *testing.T) {
+	for _, steps := range dagStepsData {
+		if tasks, err := ResolveDependency(steps, cleanupStep, v1alpha1.ExecutionOrderDAG); err != nil {
 			t.Errorf(err.Error())
 		} else {
 			oneliners.PrettyJson(tasks)
@@ -77,8 +106,24 @@ func TestResolveDependency(t *testing.T) {
 	}
 }
 
+func TestResolveDependencyForSerial(t *testing.T) {
+	if tasks, err := ResolveDependency(nonDagSteps, cleanupStep, v1alpha1.ExecutionOrderSerial); err != nil {
+		t.Errorf(err.Error())
+	} else {
+		oneliners.PrettyJson(tasks)
+	}
+}
+
+func TestResolveDependencyForParallel(t *testing.T) {
+	if tasks, err := ResolveDependency(nonDagSteps, cleanupStep, v1alpha1.ExecutionOrderParallel); err != nil {
+		t.Errorf(err.Error())
+	} else {
+		oneliners.PrettyJson(tasks)
+	}
+}
+
 func TestDagToLayers(t *testing.T) {
-	for _, steps := range stepsData {
+	for _, steps := range dagStepsData {
 		stepsMap := make(map[string]v1alpha1.Step, 0)
 		for _, step := range steps {
 			stepsMap[step.Name] = step

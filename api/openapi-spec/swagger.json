@@ -2080,6 +2080,9 @@
             "$ref": "#/definitions/io.k8s.api.core.v1.EnvFromSource"
           }
         },
+        "executionOrder": {
+          "type": "string"
+        },
         "serviceAccount": {
           "description": "ServiceAccount with triggering-resource/configmaps/secrets watch/read permissions",
           "type": "string"
@@ -2204,6 +2207,7 @@
       }
     },
     "com.github.appscode.go.encoding.json.types.IntHash": {
+      "description": "IntHash represents as int64 Generation and string Hash. It is json serialized into \u003cint64\u003e$\u003chash_string\u003e.",
       "type": "string"
     },
     "io.k8s.api.core.v1.ConfigMapEnvSource": {
@@ -2822,6 +2826,7 @@
       }
     },
     "io.k8s.apimachinery.pkg.apis.meta.v1.Time": {
+      "description": "Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.  Wrappers are provided for many of the factory methods that the time package offers.",
       "type": "string",
       "format": "date-time"
     },

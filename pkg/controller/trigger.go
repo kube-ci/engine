@@ -312,7 +312,7 @@ func (c *Controller) createWorkplan(wf *api.Workflow, secretRef *core.SecretEnvS
 		Args:     []string{"-c", "echo deleting files/folders; ls /kubeci; rm -rf /kubeci/*"},
 	}
 
-	tasks, err := dependency.ResolveDependency(wf.Spec.Steps, cleanupStep)
+	tasks, err := dependency.ResolveDependency(wf.Spec.Steps, cleanupStep, wf.Spec.ExecutionOrder)
 	if err != nil {
 		return nil, err
 	}
