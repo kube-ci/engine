@@ -98,7 +98,7 @@ var dagStepsData = [][]v1alpha1.Step{
 
 func TestResolveDependencyForDag(t *testing.T) {
 	for _, steps := range dagStepsData {
-		if tasks, err := ResolveDependency(steps, cleanupStep, v1alpha1.ExecutionOrderTypeDag); err != nil {
+		if tasks, err := ResolveDependency(steps, cleanupStep, v1alpha1.ExecutionOrderDAG); err != nil {
 			t.Errorf(err.Error())
 		} else {
 			oneliners.PrettyJson(tasks)
@@ -107,7 +107,7 @@ func TestResolveDependencyForDag(t *testing.T) {
 }
 
 func TestResolveDependencyForSerial(t *testing.T) {
-	if tasks, err := ResolveDependency(nonDagSteps, cleanupStep, v1alpha1.ExecutionOrderTypeSerial); err != nil {
+	if tasks, err := ResolveDependency(nonDagSteps, cleanupStep, v1alpha1.ExecutionOrderSerial); err != nil {
 		t.Errorf(err.Error())
 	} else {
 		oneliners.PrettyJson(tasks)
@@ -115,7 +115,7 @@ func TestResolveDependencyForSerial(t *testing.T) {
 }
 
 func TestResolveDependencyForParallel(t *testing.T) {
-	if tasks, err := ResolveDependency(nonDagSteps, cleanupStep, v1alpha1.ExecutionOrderTypeParallel); err != nil {
+	if tasks, err := ResolveDependency(nonDagSteps, cleanupStep, v1alpha1.ExecutionOrderParallel); err != nil {
 		t.Errorf(err.Error())
 	} else {
 		oneliners.PrettyJson(tasks)
