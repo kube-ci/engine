@@ -1,7 +1,7 @@
 apiVersion: kubeci.kube.ci/v1alpha1
 kind: Workflow
 metadata:
-  name: wf-force-trigger
+  name: wf-serial
   namespace: default
 spec:
   allowForceTrigger: true

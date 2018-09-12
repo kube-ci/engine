@@ -1,7 +1,7 @@
 apiVersion: kubeci.kube.ci/v1alpha1
 kind: Workflow
 metadata:
-  name: wf-force-trigger
+  name: wf-dag
   namespace: default
 spec:
   allowForceTrigger: true
@@ -16,7 +16,7 @@ spec:
     envFromPath:
       META_NAME: '{$.data.hello}'
   serviceAccount: wf-sa
-  executionOrder: parallel
+  executionOrder: dag
   steps:
   - name: step-01
     image: alpine
@@ -32,6 +32,8 @@ spec:
     args:
     - -c
     - date; sleep 5s; date
+    dependency:
+    - step-01
   - name: step-03
     image: alpine
     commands:
@@ -39,5 +41,34 @@ spec:
     args:
     - -c
     - date; sleep 5s; date
-    
+    dependency:
+    - step-01
+  - name: step-04
+    image: alpine
+    commands:
+    - sh
+    args:
+    - -c
+    - date; sleep 5s; date
+    dependency:
+    - step-03
+  - name: step-05
+    image: alpine
+    commands:
+    - sh
+    args:
+    - -c
+    - date; sleep 5s; date
+    dependency:
+    - step-04
+  - name: step-06
+    image: alpine
+    commands:
+    - sh
+    args:
+    - -c
+    - date; sleep 5s; date
+    dependency:
+    - step-04
 
+# dependency: 01 | 02 03 | 04 | 05 06
