@@ -24,9 +24,9 @@ type Workflow struct {
 type ExecutionOrderType string
 
 const (
-	SerialExecution   ExecutionOrderType = "serial"
-	ParallelExecution ExecutionOrderType = "parallel"
-	DagExecution      ExecutionOrderType = "dag"
+	ExecutionOrderTypeSerial   ExecutionOrderType = "Serial"
+	ExecutionOrderTypeParallel ExecutionOrderType = "Parallel"
+	ExecutionOrderTypeDag      ExecutionOrderType = "DAG"
 )
 
 type WorkflowSpec struct {

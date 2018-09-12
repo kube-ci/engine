@@ -16,7 +16,7 @@ spec:
         ok-to-test:
     onCreateOrUpdate: true
     onDelete: false
-  executionOrder: dag
+  executionOrder: DAG
   steps:
   - name: step-clone
     image: alpine/git

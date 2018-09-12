@@ -16,7 +16,7 @@ spec:
     envFromPath:
       META_NAME: '{$.data.hello}'
   serviceAccount: wf-sa
-  executionOrder: parallel
+  executionOrder: Parallel
   steps:
   - name: step-01
     image: alpine

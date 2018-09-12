@@ -16,7 +16,7 @@ spec:
     envFromPath:
       META_NAME: '{$.data.hello}'
   serviceAccount: wf-sa
-  executionOrder: dag
+  executionOrder: DAG
   steps:
   - name: step-01
     image: alpine

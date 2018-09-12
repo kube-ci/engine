@@ -10,7 +10,7 @@ import (
 // TODO: check in validation webhook
 // TODO: set default in using mutation webhook
 func ResolveDependency(workflowSteps []v1alpha1.Step, cleanupStep v1alpha1.Step, order v1alpha1.ExecutionOrderType) ([]v1alpha1.Task, error) {
-	if order != v1alpha1.DagExecution {
+	if order != v1alpha1.ExecutionOrderTypeDag {
 		for _, step := range workflowSteps {
 			if len(step.Dependency) != 0 {
 				return nil, fmt.Errorf("dependencies are valid only when ExecutionOrder is dag")
@@ -22,7 +22,7 @@ func ResolveDependency(workflowSteps []v1alpha1.Step, cleanupStep v1alpha1.Step,
 	var layers [][]v1alpha1.Step
 
 	switch order {
-	case v1alpha1.DagExecution:
+	case v1alpha1.ExecutionOrderTypeDag:
 		stepsMap := make(map[string]v1alpha1.Step, 0)
 		for _, step := range workflowSteps {
 			stepsMap[step.Name] = step
@@ -30,9 +30,9 @@ func ResolveDependency(workflowSteps []v1alpha1.Step, cleanupStep v1alpha1.Step,
 		if layers, err = dagToLayers(stepsMap); err != nil {
 			return nil, err
 		}
-	case v1alpha1.ParallelExecution:
+	case v1alpha1.ExecutionOrderTypeParallel:
 		layers = append(layers, workflowSteps) // add all steps in one layer
-	default: // default is v1alpha1.SerialExecution
+	default: // default is v1alpha1.ExecutionOrderTypeSerial
 		for _, step := range workflowSteps {
 			layers = append(layers, []v1alpha1.Step{step}) // add each step in new layer
 		}
