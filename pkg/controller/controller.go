@@ -73,6 +73,7 @@ func (c *Controller) RunInformers(stopCh <-chan struct{}) {
 	log.Info("Starting kubeci controller")
 	c.kubeInformerFactory.Start(stopCh)
 	c.kubeciInformerFactory.Start(stopCh)
+	go c.initDynamicWatcher() // run in separate routine and wait until sync
 
 	// Wait for all involved caches to be synced, before processing items from the queue is started
 	for _, v := range c.kubeInformerFactory.WaitForCacheSync(stopCh) {
