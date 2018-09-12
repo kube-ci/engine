@@ -11052,9 +11052,9 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 								},
 							},
 						},
-						"dag": {
+						"executionOrder": {
 							SchemaProps: spec.SchemaProps{
-								Type:   []string{"boolean"},
+								Type:   []string{"string"},
 								Format: "",
 							},
 						},

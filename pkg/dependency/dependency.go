@@ -7,27 +7,38 @@ import (
 	"kube.ci/kubeci/apis/kubeci/v1alpha1"
 )
 
-func ResolveDependency(workflowSteps []v1alpha1.Step, cleanupStep v1alpha1.Step, dag bool) ([]v1alpha1.Task, error) {
-	stepsMap := make(map[string]v1alpha1.Step, 0)
-	for _, step := range workflowSteps {
-		stepsMap[step.Name] = step
+// TODO: check in validation webhook
+// TODO: set default in using mutation webhook
+func ResolveDependency(workflowSteps []v1alpha1.Step, cleanupStep v1alpha1.Step, order v1alpha1.ExecutionOrderType) ([]v1alpha1.Task, error) {
+	if order != v1alpha1.DagExecution {
+		for _, step := range workflowSteps {
+			if len(step.Dependency) != 0 {
+				return nil, fmt.Errorf("dependencies are valid only when ExecutionOrder is dag")
+			}
+		}
 	}
 
+	var err error
 	var layers [][]v1alpha1.Step
-	if dag {
-		var err error
-		if layers, err = dagToLayers(stepsMap); err != nil { // TODO: check in validation webhook
+
+	switch order {
+	case v1alpha1.DagExecution:
+		stepsMap := make(map[string]v1alpha1.Step, 0)
+		for _, step := range workflowSteps {
+			stepsMap[step.Name] = step
+		}
+		if layers, err = dagToLayers(stepsMap); err != nil {
 			return nil, err
 		}
-	} else {
+	case v1alpha1.ParallelExecution:
+		layers = append(layers, workflowSteps) // add all steps in one layer
+	default: // default is v1alpha1.SerialExecution
 		for _, step := range workflowSteps {
-			if len(step.Dependency) != 0 { // TODO: check in validation webhook
-				return nil, fmt.Errorf("should not specify dependency when dag is false")
-			}
-			layers = append(layers, []v1alpha1.Step{step})
+			layers = append(layers, []v1alpha1.Step{step}) // add each step in new layer
 		}
 	}
 
+	// add clean-up step in new layer
 	layers = append(layers, []v1alpha1.Step{cleanupStep})
 
 	return layersToTasks(layers), nil

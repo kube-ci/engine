@@ -2073,15 +2073,15 @@
         "allowForceTrigger": {
           "type": "boolean"
         },
-        "dag": {
-          "type": "boolean"
-        },
         "envFrom": {
           "description": "set container environment variables from configmaps and secrets",
           "type": "array",
           "items": {
             "$ref": "#/definitions/io.k8s.api.core.v1.EnvFromSource"
           }
+        },
+        "executionOrder": {
+          "type": "string"
         },
         "serviceAccount": {
           "description": "ServiceAccount with triggering-resource/configmaps/secrets watch/read permissions",

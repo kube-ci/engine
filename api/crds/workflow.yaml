@@ -308,8 +308,6 @@ spec:
           properties:
             allowForceTrigger:
               type: boolean
-            dag:
-              type: boolean
             envFrom:
               description: set container environment variables from configmaps and
                 secrets
@@ -345,6 +343,8 @@ spec:
                         description: Specify whether the Secret must be defined
                         type: boolean
               type: array
+            executionOrder:
+              type: string
             serviceAccount:
               description: ServiceAccount with triggering-resource/configmaps/secrets
                 watch/read permissions
