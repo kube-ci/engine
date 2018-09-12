@@ -100,7 +100,7 @@ func (c *Controller) objToResourceIdentifier(obj interface{}) (ResourceIdentifie
 
 func (c *Controller) initDynamicWatcher() {
 	// resync periods
-	discoveryInterval := c.ResyncPeriod
+	discoveryInterval := 5 * time.Second
 	informerRelist := c.ResyncPeriod
 
 	// Periodically refresh discovery to pick up newly-installed resources.
@@ -109,15 +109,16 @@ func (c *Controller) initDynamicWatcher() {
 	// We don't care about stopping this cleanly since it has no external effects.
 	resources.Start(discoveryInterval)
 
+	log.Infof("Waiting for sync")
+	for !resources.HasSynced() {
+		time.Sleep(time.Second)
+	}
+	log.Infof("Synced discovery-info for dynamic watcher")
+
 	// Create dynamic clientset (factory for dynamic clients).
 	c.dynClient = dynamicclientset.New(c.clientConfig, resources)
 	// Create dynamic informer factory (for sharing dynamic informers).
 	c.dynInformersFactory = dynamicinformer.NewSharedInformerFactory(c.dynClient, informerRelist)
-
-	log.Infof("Waiting for sync")
-	if !resources.HasSynced() {
-		time.Sleep(time.Second)
-	}
 }
 
 func (c *Controller) createInformer(wf *api.Workflow) error {
