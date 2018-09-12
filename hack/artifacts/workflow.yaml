@@ -15,6 +15,7 @@ spec:
         repository: kubeci-gpig
     onCreateOrUpdate: true
     onDelete: false
+  dag: true
   steps:
   - name: step-clone
     image: alpine/git

@@ -25,6 +25,7 @@ type WorkflowSpec struct {
 	AllowForceTrigger bool      `json:"allowForceTrigger,omitempty"`
 	Triggers          []Trigger `json:"triggers,omitempty"`
 	Steps             []Step    `json:"steps,omitempty"`
+	Dag               bool      `json:"dag,omitempty"`
 	// set container environment variables from configmaps and secrets
 	EnvFrom []corev1.EnvFromSource `json:"envFrom,omitempty"`
 	// ServiceAccount with triggering-resource/configmaps/secrets watch/read permissions

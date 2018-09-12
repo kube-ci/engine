@@ -11052,6 +11052,12 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 								},
 							},
 						},
+						"dag": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"boolean"},
+								Format: "",
+							},
+						},
 						"envFrom": {
 							SchemaProps: spec.SchemaProps{
 								Description: "set container environment variables from configmaps and secrets",

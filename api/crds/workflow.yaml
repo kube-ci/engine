@@ -308,6 +308,8 @@ spec:
           properties:
             allowForceTrigger:
               type: boolean
+            dag:
+              type: boolean
             envFrom:
               description: set container environment variables from configmaps and
                 secrets

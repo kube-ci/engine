@@ -7,15 +7,25 @@ import (
 	"kube.ci/kubeci/apis/kubeci/v1alpha1"
 )
 
-func ResolveDependency(workflowSteps []v1alpha1.Step, cleanupStep v1alpha1.Step) ([]v1alpha1.Task, error) {
+func ResolveDependency(workflowSteps []v1alpha1.Step, cleanupStep v1alpha1.Step, dag bool) ([]v1alpha1.Task, error) {
 	stepsMap := make(map[string]v1alpha1.Step, 0)
 	for _, step := range workflowSteps {
 		stepsMap[step.Name] = step
 	}
 
-	layers, err := dagToLayers(stepsMap)
-	if err != nil {
-		return nil, err
+	var layers [][]v1alpha1.Step
+	if dag {
+		var err error
+		if layers, err = dagToLayers(stepsMap); err != nil { // TODO: check in validation webhook
+			return nil, err
+		}
+	} else {
+		for _, step := range workflowSteps {
+			if len(step.Dependency) != 0 { // TODO: check in validation webhook
+				return nil, fmt.Errorf("should not specify dependency when dag is false")
+			}
+			layers = append(layers, []v1alpha1.Step{step})
+		}
 	}
 
 	layers = append(layers, []v1alpha1.Step{cleanupStep})

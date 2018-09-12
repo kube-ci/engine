@@ -14,6 +14,18 @@ var cleanupStep = v1alpha1.Step{
 	Args:     []string{"-rf", "/kubeci/*"},
 }
 
+var serialSteps = []v1alpha1.Step{
+	{
+		Name: "A",
+	},
+	{
+		Name: "B",
+	},
+	{
+		Name: "C",
+	},
+}
+
 var stepsData = [][]v1alpha1.Step{
 	{
 		{
@@ -65,15 +77,39 @@ var stepsData = [][]v1alpha1.Step{
 			Dependency: []string{"D"},
 		},
 	},
+	{
+		{
+			Name: "A",
+		},
+		{
+			Name:       "B",
+			Dependency: []string{"A"},
+		},
+		{
+			Name:       "C",
+			Dependency: []string{"B"},
+		},
+		{
+			Name:       "D",
+			Dependency: []string{"C"},
+		},
+	},
 }
 
 func TestResolveDependency(t *testing.T) {
+	// dag steps
 	for _, steps := range stepsData {
-		if tasks, err := ResolveDependency(steps, cleanupStep); err != nil {
+		if tasks, err := ResolveDependency(steps, cleanupStep, true); err != nil {
 			t.Errorf(err.Error())
 		} else {
 			oneliners.PrettyJson(tasks)
 		}
+	}
+	// serial steps
+	if tasks, err := ResolveDependency(serialSteps, cleanupStep, false); err != nil {
+		t.Errorf(err.Error())
+	} else {
+		oneliners.PrettyJson(tasks)
 	}
 }
 
