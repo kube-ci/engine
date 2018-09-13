@@ -15,12 +15,13 @@ import (
 )
 
 type config struct {
-	EnableRBAC     bool
-	KubeciImageTag string
-	DockerRegistry string
-	MaxNumRequeues int
-	NumThreads     int
-	ResyncPeriod   time.Duration
+	EnableRBAC        bool
+	KubeciImageTag    string
+	DockerRegistry    string
+	MaxNumRequeues    int
+	NumThreads        int
+	ResyncPeriod      time.Duration
+	DiscoveryInterval time.Duration
 }
 
 type Config struct {

@@ -16,28 +16,30 @@ import (
 )
 
 type ExtraOptions struct {
-	EnableRBAC     bool
-	KubeciImageTag string
-	DockerRegistry string
-	MaxNumRequeues int
-	NumThreads     int
-	ScratchDir     string
-	QPS            float64
-	Burst          int
-	ResyncPeriod   time.Duration
+	EnableRBAC        bool
+	KubeciImageTag    string
+	DockerRegistry    string
+	MaxNumRequeues    int
+	NumThreads        int
+	ScratchDir        string
+	QPS               float64
+	Burst             int
+	ResyncPeriod      time.Duration
+	DiscoveryInterval time.Duration
 }
 
 func NewExtraOptions() *ExtraOptions {
 	api.EnableStatusSubresource = true
 	return &ExtraOptions{
-		DockerRegistry: docker.ACRegistry,
-		KubeciImageTag: stringz.Val(v.Version.Version, "canary"),
-		MaxNumRequeues: 5,
-		NumThreads:     2,
-		ScratchDir:     "/tmp",
-		QPS:            100,
-		Burst:          100,
-		ResyncPeriod:   10 * time.Minute,
+		DockerRegistry:    docker.ACRegistry,
+		KubeciImageTag:    stringz.Val(v.Version.Version, "canary"),
+		MaxNumRequeues:    5,
+		NumThreads:        2,
+		ScratchDir:        "/tmp",
+		QPS:               100,
+		Burst:             100,
+		ResyncPeriod:      10 * time.Minute,
+		DiscoveryInterval: 10 * time.Second,
 	}
 }
 
@@ -49,7 +51,8 @@ func (s *ExtraOptions) AddGoFlags(fs *flag.FlagSet) {
 
 	fs.Float64Var(&s.QPS, "qps", s.QPS, "The maximum QPS to the master from this client")
 	fs.IntVar(&s.Burst, "burst", s.Burst, "The maximum burst for throttle")
-	fs.DurationVar(&s.ResyncPeriod, "resync-period", s.ResyncPeriod, "If non-zero, will re-list this often. Otherwise, re-list will be delayed aslong as possible (until the upstream source closes the watch or times out.")
+	fs.DurationVar(&s.ResyncPeriod, "resync-period", s.ResyncPeriod, "If non-zero, will re-list this often. Otherwise, re-list will be delayed as long as possible (until the upstream source closes the watch or times out.")
+	fs.DurationVar(&s.DiscoveryInterval, "discovery-interval", s.DiscoveryInterval, "If non-zero, will refresh discovery info this often.")
 
 	fs.BoolVar(&api.EnableStatusSubresource, "enable-status-subresource", api.EnableStatusSubresource, "If true, uses sub resource for crds.")
 }
@@ -69,6 +72,7 @@ func (s *ExtraOptions) ApplyTo(cfg *controller.Config) error {
 	cfg.MaxNumRequeues = s.MaxNumRequeues
 	cfg.NumThreads = s.NumThreads
 	cfg.ResyncPeriod = s.ResyncPeriod
+	cfg.DiscoveryInterval = s.DiscoveryInterval
 
 	cfg.ClientConfig.QPS = float32(s.QPS)
 	cfg.ClientConfig.Burst = s.Burst
