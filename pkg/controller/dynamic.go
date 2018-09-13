@@ -99,8 +99,8 @@ func (c *Controller) objToResourceIdentifier(obj interface{}) (ResourceIdentifie
 }
 
 func (c *Controller) initDynamicWatcher() {
-	// resync periods
-	discoveryInterval := c.ResyncPeriod
+	// set discovery-interval and resync-period
+	discoveryInterval := c.DiscoveryInterval
 	informerRelist := c.ResyncPeriod
 
 	// Periodically refresh discovery to pick up newly-installed resources.
