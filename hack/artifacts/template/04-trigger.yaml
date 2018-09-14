@@ -1,0 +1,16 @@
+apiVersion: trigger.kubeci.kube.ci/v1alpha1
+kind: Trigger
+metadata:
+  name: testing-wf-template
+  namespace: default
+workflows:
+- wf-test
+request:
+  apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: my-config
+    namespace: default
+    selfLink: /api/v1/namespaces/default/configmaps/my-config
+  data:
+    hello: world

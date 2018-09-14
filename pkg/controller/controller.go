@@ -47,6 +47,9 @@ type Controller struct {
 	wpInformer cache.SharedIndexInformer
 	wpLister   api_listers.WorkplanLister
 
+	// WorkflowTemplate
+	wtLister api_listers.WorkflowTemplateLister
+
 	dynClient           *dynamicclientset.Clientset
 	dynInformersFactory *dynamicinformer.SharedInformerFactory
 
@@ -63,6 +66,7 @@ func (c *Controller) ensureCustomResourceDefinitions() error {
 	crds := []*crd_api.CustomResourceDefinition{
 		api.Workflow{}.CustomResourceDefinition(),
 		api.Workplan{}.CustomResourceDefinition(),
+		api.WorkflowTemplate{}.CustomResourceDefinition(),
 	}
 	return crdutils.RegisterCRDs(c.crdClient, crds)
 }

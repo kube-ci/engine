@@ -1,0 +1,20 @@
+apiVersion: kubeci.kube.ci/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: wf-template
+  namespace: default
+spec:
+  steps:
+  - name: step-echo
+    image: ${image}
+    commands:
+    - ${shell}
+    args:
+    - -c
+    - ${cmd}
+  parameters:
+  - key: image
+    default: busybox
+  - key: shell
+    default: sh
+  - key: cmd

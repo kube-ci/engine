@@ -30,6 +30,7 @@ func generateCRDDefinitions() {
 	crds := []*crd_api.CustomResourceDefinition{
 		v1alpha1.Workflow{}.CustomResourceDefinition(),
 		v1alpha1.Workplan{}.CustomResourceDefinition(),
+		v1alpha1.WorkflowTemplate{}.CustomResourceDefinition(),
 	}
 	for _, crd := range crds {
 		filename := filepath.Join(gort.GOPath(), "/src/kube.ci/kubeci/api/crds", crd.Spec.Names.Singular+".yaml")
@@ -72,6 +73,7 @@ func generateSwaggerJson() {
 		Resources: []openapi.TypeInfo{
 			{v1alpha1.SchemeGroupVersion, v1alpha1.ResourceWorkflows, v1alpha1.ResourceKindWorkflow, true},
 			{v1alpha1.SchemeGroupVersion, v1alpha1.ResourceWorkplans, v1alpha1.ResourceKindWorkplan, true},
+			{v1alpha1.SchemeGroupVersion, v1alpha1.ResourceWorkflowTemplates, v1alpha1.ResourceKindWorkflowTemplate, true},
 		},
 	})
 	if err != nil {
