@@ -94,9 +94,9 @@ kubectl create clusterrolebinding serviceaccounts-cluster-admin --clusterrole=cl
 
 cat $REPO_ROOT/hack/dev/apiregistration.yaml | envsubst | kubectl apply -f -
 
-#if [ "$KUBECI_ENABLE_WEBHOOK" = true ]; then
-#  cat $REPO_ROOT/hack/deploy/validating-webhook.yaml | envsubst | kubectl apply -f -
-#fi
+if [ "$KUBECI_ENABLE_WEBHOOK" = true ]; then
+  cat $REPO_ROOT/hack/deploy/validating-webhook.yaml | envsubst | kubectl apply -f -
+fi
 
 $REPO_ROOT/hack/make.py
 
