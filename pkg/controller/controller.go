@@ -57,9 +57,9 @@ type Controller struct {
 	// store triggered-for in workplans and initially sync from available workplans
 	observedWorkflows observedWorkflows
 
-	// TODO: close unused informers
 	// only one informer is created for a specific resource (among all workflows)
 	// we should close a informer when no workflow need that informer (when workflows deleted or updated)
+	dynamicInformers dynamicInformers
 }
 
 func (c *Controller) ensureCustomResourceDefinitions() error {

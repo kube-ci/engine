@@ -52,22 +52,33 @@ func (c *Controller) runWorkflowInjector(key string) error {
 		log.Errorf("Fetching object with key %s from store failed with %v", key, err)
 		return err
 	}
-
 	if !exist {
 		log.Warningf("Workflow %s does not exist anymore\n", key)
-		c.observedWorkflows.delete(key)
+		if err := c.deleteForWorkflow(key); err != nil {
+			return err
+		}
 	} else {
 		log.Infof("Sync/Add/Update for Workflow %s\n", key)
 		wf := obj.(*api.Workflow).DeepCopy()
 		if err := c.reconcileForWorkflow(wf); err != nil {
 			return err
 		}
-		c.observedWorkflows.set(wf)
 	}
-
 	return nil
 }
 
 func (c *Controller) reconcileForWorkflow(wf *api.Workflow) error {
-	return c.createInformer(wf)
+	if err := c.reconcileInformers(wf.Key(), wf.Spec.Triggers); err != nil {
+		return err
+	}
+	c.observedWorkflows.set(wf)
+	return nil
+}
+
+func (c *Controller) deleteForWorkflow(key string) error {
+	if err := c.reconcileInformers(key, nil); err != nil {
+		return err
+	}
+	c.observedWorkflows.delete(key)
+	return nil
 }

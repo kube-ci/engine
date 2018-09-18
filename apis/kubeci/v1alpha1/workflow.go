@@ -1,6 +1,8 @@
 package v1alpha1
 
 import (
+	"fmt"
+
 	"github.com/appscode/go/types"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -95,4 +97,8 @@ func (wf Workflow) Reference() metav1.OwnerReference {
 		UID:                wf.UID,
 		BlockOwnerDeletion: types.TrueP(),
 	}
+}
+
+func (t Trigger) ResourceKey() string {
+	return fmt.Sprintf("%s.%s", t.Resource, t.APIVersion)
 }

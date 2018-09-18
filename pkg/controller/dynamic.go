@@ -3,6 +3,7 @@ package controller
 import (
 	"bytes"
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/appscode/go/encoding/json/types"
@@ -14,6 +15,7 @@ import (
 	meta_util "github.com/appscode/kutil/meta"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime/schema"
+	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/client-go/discovery"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/util/jsonpath"
@@ -118,17 +120,88 @@ func (c *Controller) initDynamicWatcher() {
 	if !resources.HasSynced() {
 		time.Sleep(time.Second)
 	}
+
+	log.Infof("Starting informer GC")
+	go c.runInformerGC()
 }
 
-func (c *Controller) createInformer(wf *api.Workflow) error {
-	for _, trigger := range wf.Spec.Triggers {
-		informer, err := c.dynInformersFactory.Resource(trigger.APIVersion, trigger.Resource)
-		if err != nil {
-			return err
-		}
-		informer.Informer().AddEventHandler(c.handlerForDynamicInformer())
-		log.Infof("Created informer for resource %s/%s", trigger.APIVersion, trigger.Resource)
+type dynamicInformers struct {
+	lock  sync.Mutex
+	items map[string]informerStore
+}
+
+type informerStore struct {
+	informer          *dynamicinformer.ResourceInformer
+	workflows         sets.String
+	DeletionTimestamp time.Time
+}
+
+// periodically check for unused informers after resync period
+func (c *Controller) runInformerGC() {
+	ticker := time.NewTicker(c.ResyncPeriod)
+	defer ticker.Stop()
+	for range ticker.C {
+		c.closeInformers()
 	}
+}
+
+// close informers which are unused for more than resync period
+func (c *Controller) closeInformers() {
+	c.dynamicInformers.lock.Lock()
+	defer c.dynamicInformers.lock.Unlock()
+
+	for resourceKey, store := range c.dynamicInformers.items {
+		if !store.DeletionTimestamp.IsZero() && time.Since(store.DeletionTimestamp) > c.ResyncPeriod {
+			log.Infof("Closing unused informer for resource %s", resourceKey)
+			store.informer.Close()
+			delete(c.dynamicInformers.items, resourceKey)
+		}
+	}
+}
+
+func (c *Controller) reconcileInformers(workflowKey string, triggers []api.Trigger) error {
+	// we need lock for the whole process
+	c.dynamicInformers.lock.Lock()
+	defer c.dynamicInformers.lock.Unlock()
+
+	requiredInformers := sets.NewString()
+
+	for _, trigger := range triggers {
+		requiredInformers.Insert(trigger.ResourceKey())
+
+		store, ok := c.dynamicInformers.items[trigger.ResourceKey()]
+		if !ok { // informer not created
+			var err error
+			if store.informer, err = c.dynInformersFactory.Resource(trigger.APIVersion, trigger.Resource); err != nil {
+				return err
+			}
+			store.informer.Informer().AddEventHandler(c.handlerForDynamicInformer())
+		}
+		// store workflow
+		if store.workflows == nil {
+			store.workflows = sets.NewString(workflowKey)
+		} else {
+			store.workflows.Insert(workflowKey)
+		}
+		store.DeletionTimestamp = time.Time{}                   // set DeletionTimestamp to zero
+		c.dynamicInformers.items[trigger.ResourceKey()] = store // save in map
+
+		log.Infof("Created informer for resource %s", trigger.ResourceKey())
+	}
+
+	createdInformers := sets.StringKeySet(c.dynamicInformers.items)
+	diff := createdInformers.Difference(requiredInformers)
+	for resourceKey := range diff {
+		store := c.dynamicInformers.items[resourceKey]
+		if store.workflows.Has(workflowKey) {
+			store.workflows.Delete(workflowKey) // delete previously inserted workflow
+			if store.workflows.Len() == 0 {     // unused informer, set deletion timestamp, don't delete immediately
+				store.DeletionTimestamp = time.Now()
+			}
+		}
+		c.dynamicInformers.items[resourceKey] = store // save in map
+	}
+
 	return nil
 }
 
