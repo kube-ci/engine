@@ -9,8 +9,6 @@ import (
 	webhook "github.com/appscode/kubernetes-webhook-util/admission/v1beta1/generic"
 	"github.com/appscode/kutil/meta"
 	"github.com/appscode/kutil/tools/queue"
-	"github.com/fatih/structs"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"kube.ci/kubeci/apis/kubeci"
@@ -32,9 +30,9 @@ func (c *Controller) NewWorkplanWebhook() hooks.AdmissionHook {
 		&admission.ResourceHandlerFuncs{
 			// should not allow spec update
 			UpdateFunc: func(oldObj, newObj runtime.Object) (runtime.Object, error) {
-				oldStruct := structs.New(oldObj.(metav1.Object))
-				nuStruct := structs.New(newObj.(metav1.Object))
-				if !meta.Equal(oldStruct.Field("Spec").Value(), nuStruct.Field("Spec").Value()) {
+				oldWp := oldObj.(*api.Workplan)
+				newWp := newObj.(*api.Workplan)
+				if !meta.Equal(oldWp.Spec, newWp.Spec) {
 					return nil, fmt.Errorf("workplan spec is immutable")
 				}
 				return nil, nil
