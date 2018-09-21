@@ -5,7 +5,7 @@ metadata:
   namespace: default
 spec:
   steps:
-  - name: step-echo
+  - name: step-echo-${#count}
     image: ${image}
     commands:
     - ${shell}
@@ -13,8 +13,12 @@ spec:
     - -c
     - ${cmd}
   parameters:
+  - key: count
+    default: asdf
   - key: image
     default: busybox
   - key: shell
     default: sh
   - key: cmd
+
+# https://github.com/drone/envsubst/blob/master/eval_test.go

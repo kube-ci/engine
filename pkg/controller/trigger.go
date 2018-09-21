@@ -3,10 +3,10 @@ package controller
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/appscode/go/log"
 	"github.com/appscode/go/types"
+	"github.com/drone/envsubst"
 	authorizationapi "k8s.io/api/authorization/v1"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -386,10 +386,13 @@ func (c *Controller) resolveTemplate(wf *api.Workflow) ([]api.Step, error) {
 	}
 
 	applyReplacements := func(in string) string {
-		for k, v := range values {
-			in = strings.Replace(in, fmt.Sprintf("${%s}", k), v, -1)
+		out, err := envsubst.Eval(in, func(s string) string {
+			return values[s]
+		})
+		if err != nil { // if error found, return original one
+			return in
 		}
-		return in
+		return out
 	}
 
 	var steps []api.Step
