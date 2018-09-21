@@ -1,11 +1,45 @@
 package controller
 
 import (
+	"fmt"
+
 	"github.com/appscode/go/log"
+	"github.com/appscode/kubernetes-webhook-util/admission"
+	hooks "github.com/appscode/kubernetes-webhook-util/admission/v1beta1"
+	webhook "github.com/appscode/kubernetes-webhook-util/admission/v1beta1/generic"
+	"github.com/appscode/kutil/meta"
 	"github.com/appscode/kutil/tools/queue"
+	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/runtime/schema"
+	"kube.ci/kubeci/apis/kubeci"
 	api "kube.ci/kubeci/apis/kubeci/v1alpha1"
 	"kube.ci/kubeci/client/clientset/versioned/typed/kubeci/v1alpha1/util"
 )
+
+func (c *Controller) NewWorkplanWebhook() hooks.AdmissionHook {
+	return webhook.NewGenericWebhook(
+		schema.GroupVersionResource{
+			Group:    "admission.kubeci.kube.ci",
+			Version:  "v1alpha1",
+			Resource: "workplans",
+		},
+		"workplan",
+		[]string{kubeci.GroupName},
+		api.SchemeGroupVersion.WithKind("Workplan"),
+		nil,
+		&admission.ResourceHandlerFuncs{
+			// should not allow spec update
+			UpdateFunc: func(oldObj, newObj runtime.Object) (runtime.Object, error) {
+				oldWp := oldObj.(*api.Workplan)
+				newWp := newObj.(*api.Workplan)
+				if !meta.Equal(oldWp.Spec, newWp.Spec) {
+					return nil, fmt.Errorf("workplan spec is immutable")
+				}
+				return nil, nil
+			},
+		},
+	)
+}
 
 // process only add and delete events
 // uninitialized: newly created

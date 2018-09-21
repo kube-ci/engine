@@ -68,6 +68,7 @@ func (o KubeciOptions) Config() (*server.KubeciServerConfig, error) {
 	serverConfig.OpenAPIConfig.IgnorePrefixes = []string{
 		"/swaggerapi",
 		"/apis/admission.kubeci.kube.ci/v1alpha1/workflows",
+		"/apis/admission.kubeci.kube.ci/v1alpha1/workplans",
 		"/apis/trigger.kubeci.kube.ci/v1alpha1",
 	}
 

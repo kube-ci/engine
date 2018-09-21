@@ -23,3 +23,20 @@ webhooks:
     resources:
     - workflows
   failurePolicy: Fail
+- name: workplan.admission.kubeci.kube.ci
+  clientConfig:
+    service:
+      namespace: default
+      name: kubernetes
+      path: /apis/admission.kubeci.kube.ci/v1alpha1/workplans
+    caBundle: ${KUBE_CA}
+  rules:
+  - operations:
+    - UPDATE
+    apiGroups:
+    - kubeci.kube.ci
+    apiVersions:
+    - "*"
+    resources:
+    - workplans
+  failurePolicy: Fail
