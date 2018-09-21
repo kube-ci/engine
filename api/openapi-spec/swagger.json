@@ -2813,16 +2813,6 @@
         }
       }
     },
-    "ci.kube.kubeci.apis.kubeci.v1alpha1.Parameter": {
-      "properties": {
-        "default": {
-          "type": "string"
-        },
-        "key": {
-          "type": "string"
-        }
-      }
-    },
     "ci.kube.kubeci.apis.kubeci.v1alpha1.Step": {
       "properties": {
         "args": {
@@ -3083,12 +3073,6 @@
     },
     "ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowTemplateSpec": {
       "properties": {
-        "parameters": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Parameter"
-          }
-        },
         "steps": {
           "type": "array",
           "items": {

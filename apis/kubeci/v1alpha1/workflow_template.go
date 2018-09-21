@@ -21,13 +21,7 @@ type WorkflowTemplate struct {
 }
 
 type WorkflowTemplateSpec struct {
-	Steps      []Step      `json:"steps,omitempty"`
-	Parameters []Parameter `json:"parameters,omitempty"`
-}
-
-type Parameter struct {
-	Key     string  `json:"key,omitempty"`
-	Default *string `json:"default,omitempty"`
+	Steps []Step `json:"steps,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

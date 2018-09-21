@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/appscode/envsubst"
 	"github.com/appscode/go/log"
 	"github.com/appscode/go/types"
-	"github.com/drone/envsubst"
 	authorizationapi "k8s.io/api/authorization/v1"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -373,40 +373,35 @@ func (c *Controller) resolveTemplate(wf *api.Workflow) ([]api.Step, error) {
 		return nil, err
 	}
 
-	values := make(map[string]string)
-	for _, param := range template.Spec.Parameters {
-		arg, ok := wf.Spec.Template.Arguments[param.Key]
-		if ok {
-			values[param.Key] = arg
-		} else if param.Default != nil {
-			values[param.Key] = *param.Default
-		} else {
-			return nil, fmt.Errorf("no argument/default found for key: %s, template: %s", param.Key, template.Name)
-		}
-	}
-
-	applyReplacements := func(in string) string {
-		out, err := envsubst.Eval(in, func(s string) string {
-			return values[s]
+	applyReplacements := func(in string) (string, error) {
+		return envsubst.Eval(in, func(s string) (string, bool) {
+			value, ok := wf.Spec.Template.Arguments[s]
+			return value, ok
 		})
-		if err != nil { // if error found, return original one
-			return in
-		}
-		return out
 	}
 
 	var steps []api.Step
 	for _, step := range template.Spec.Steps {
-		step.Name = applyReplacements(step.Name)
-		step.Image = applyReplacements(step.Image)
+		if step.Name, err = applyReplacements(step.Name); err != nil {
+			return nil, err
+		}
+		if step.Image, err = applyReplacements(step.Image); err != nil {
+			return nil, err
+		}
 		for i := range step.Commands {
-			step.Commands[i] = applyReplacements(step.Commands[i])
+			if step.Commands[i], err = applyReplacements(step.Commands[i]); err != nil {
+				return nil, err
+			}
 		}
 		for i := range step.Args {
-			step.Args[i] = applyReplacements(step.Args[i])
+			if step.Args[i], err = applyReplacements(step.Args[i]); err != nil {
+				return nil, err
+			}
 		}
 		for i := range step.Dependency {
-			step.Dependency[i] = applyReplacements(step.Dependency[i])
+			if step.Dependency[i], err = applyReplacements(step.Dependency[i]); err != nil {
+				return nil, err
+			}
 		}
 		steps = append(steps, step)
 	}

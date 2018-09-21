@@ -312,14 +312,6 @@ spec:
               type: string
         spec:
           properties:
-            parameters:
-              items:
-                properties:
-                  default:
-                    type: string
-                  key:
-                    type: string
-              type: array
             steps:
               items:
                 properties:

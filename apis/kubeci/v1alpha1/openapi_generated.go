@@ -270,7 +270,6 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"k8s.io/apimachinery/pkg/runtime.Unknown":                        schema_k8sio_apimachinery_pkg_runtime_Unknown(ref),
 		"k8s.io/apimachinery/pkg/version.Info":                           schema_k8sio_apimachinery_pkg_version_Info(ref),
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.ObjectReference":            schema_kubeci_apis_kubeci_v1alpha1_ObjectReference(ref),
-		"kube.ci/kubeci/apis/kubeci/v1alpha1.Parameter":                  schema_kubeci_apis_kubeci_v1alpha1_Parameter(ref),
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.Step":                       schema_kubeci_apis_kubeci_v1alpha1_Step(ref),
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.Task":                       schema_kubeci_apis_kubeci_v1alpha1_Task(ref),
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.Template":                   schema_kubeci_apis_kubeci_v1alpha1_Template(ref),
@@ -11730,30 +11729,6 @@ func schema_kubeci_apis_kubeci_v1alpha1_ObjectReference(ref common.ReferenceCall
 	}
 }
 
-func schema_kubeci_apis_kubeci_v1alpha1_Parameter(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Properties: map[string]spec.Schema{
-					"key": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-					"default": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{},
-	}
-}
-
 func schema_kubeci_apis_kubeci_v1alpha1_Step(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -12240,23 +12215,11 @@ func schema_kubeci_apis_kubeci_v1alpha1_WorkflowTemplateSpec(ref common.Referenc
 							},
 						},
 					},
-					"parameters": {
-						SchemaProps: spec.SchemaProps{
-							Type: []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Ref: ref("kube.ci/kubeci/apis/kubeci/v1alpha1.Parameter"),
-									},
-								},
-							},
-						},
-					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"kube.ci/kubeci/apis/kubeci/v1alpha1.Parameter", "kube.ci/kubeci/apis/kubeci/v1alpha1.Step"},
+			"kube.ci/kubeci/apis/kubeci/v1alpha1.Step"},
 	}
 }
 
