@@ -36,6 +36,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&WorkflowList{},
 		&Workplan{},
 		&WorkplanList{},
+		&WorkflowTemplate{},
+		&WorkflowTemplateList{},
 	)
 
 	scheme.AddKnownTypes(SchemeGroupVersion,

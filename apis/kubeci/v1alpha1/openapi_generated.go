@@ -272,11 +272,15 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.ObjectReference":            schema_kubeci_apis_kubeci_v1alpha1_ObjectReference(ref),
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.Step":                       schema_kubeci_apis_kubeci_v1alpha1_Step(ref),
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.Task":                       schema_kubeci_apis_kubeci_v1alpha1_Task(ref),
+		"kube.ci/kubeci/apis/kubeci/v1alpha1.Template":                   schema_kubeci_apis_kubeci_v1alpha1_Template(ref),
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.Trigger":                    schema_kubeci_apis_kubeci_v1alpha1_Trigger(ref),
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.TriggeredFor":               schema_kubeci_apis_kubeci_v1alpha1_TriggeredFor(ref),
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.Workflow":                   schema_kubeci_apis_kubeci_v1alpha1_Workflow(ref),
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.WorkflowList":               schema_kubeci_apis_kubeci_v1alpha1_WorkflowList(ref),
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.WorkflowSpec":               schema_kubeci_apis_kubeci_v1alpha1_WorkflowSpec(ref),
+		"kube.ci/kubeci/apis/kubeci/v1alpha1.WorkflowTemplate":           schema_kubeci_apis_kubeci_v1alpha1_WorkflowTemplate(ref),
+		"kube.ci/kubeci/apis/kubeci/v1alpha1.WorkflowTemplateList":       schema_kubeci_apis_kubeci_v1alpha1_WorkflowTemplateList(ref),
+		"kube.ci/kubeci/apis/kubeci/v1alpha1.WorkflowTemplateSpec":       schema_kubeci_apis_kubeci_v1alpha1_WorkflowTemplateSpec(ref),
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.Workplan":                   schema_kubeci_apis_kubeci_v1alpha1_Workplan(ref),
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.WorkplanList":               schema_kubeci_apis_kubeci_v1alpha1_WorkplanList(ref),
 		"kube.ci/kubeci/apis/kubeci/v1alpha1.WorkplanSpec":               schema_kubeci_apis_kubeci_v1alpha1_WorkplanSpec(ref),
@@ -11828,6 +11832,37 @@ func schema_kubeci_apis_kubeci_v1alpha1_Task(ref common.ReferenceCallback) commo
 	}
 }
 
+func schema_kubeci_apis_kubeci_v1alpha1_Template(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"arguments": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type:   []string{"string"},
+										Format: "",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{},
+	}
+}
+
 func schema_kubeci_apis_kubeci_v1alpha1_Trigger(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -12042,6 +12077,11 @@ func schema_kubeci_apis_kubeci_v1alpha1_WorkflowSpec(ref common.ReferenceCallbac
 							},
 						},
 					},
+					"template": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kube.ci/kubeci/apis/kubeci/v1alpha1.Template"),
+						},
+					},
 					"executionOrder": {
 						SchemaProps: spec.SchemaProps{
 							Type:   []string{"string"},
@@ -12072,7 +12112,114 @@ func schema_kubeci_apis_kubeci_v1alpha1_WorkflowSpec(ref common.ReferenceCallbac
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.EnvFromSource", "kube.ci/kubeci/apis/kubeci/v1alpha1.Step", "kube.ci/kubeci/apis/kubeci/v1alpha1.Trigger"},
+			"k8s.io/api/core/v1.EnvFromSource", "kube.ci/kubeci/apis/kubeci/v1alpha1.Step", "kube.ci/kubeci/apis/kubeci/v1alpha1.Template", "kube.ci/kubeci/apis/kubeci/v1alpha1.Trigger"},
+	}
+}
+
+func schema_kubeci_apis_kubeci_v1alpha1_WorkflowTemplate(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("kube.ci/kubeci/apis/kubeci/v1alpha1.WorkflowTemplateSpec"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "kube.ci/kubeci/apis/kubeci/v1alpha1.WorkflowTemplateSpec"},
+	}
+}
+
+func schema_kubeci_apis_kubeci_v1alpha1_WorkflowTemplateList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("kube.ci/kubeci/apis/kubeci/v1alpha1.WorkflowTemplate"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"metadata", "items"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "kube.ci/kubeci/apis/kubeci/v1alpha1.WorkflowTemplate"},
+	}
+}
+
+func schema_kubeci_apis_kubeci_v1alpha1_WorkflowTemplateSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Properties: map[string]spec.Schema{
+					"steps": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("kube.ci/kubeci/apis/kubeci/v1alpha1.Step"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"kube.ci/kubeci/apis/kubeci/v1alpha1.Step"},
 	}
 }
 

@@ -32,6 +32,10 @@ func (c *FakeKubeciV1alpha1) Workflows(namespace string) v1alpha1.WorkflowInterf
 	return &FakeWorkflows{c, namespace}
 }
 
+func (c *FakeKubeciV1alpha1) WorkflowTemplates(namespace string) v1alpha1.WorkflowTemplateInterface {
+	return &FakeWorkflowTemplates{c, namespace}
+}
+
 func (c *FakeKubeciV1alpha1) Workplans(namespace string) v1alpha1.WorkplanInterface {
 	return &FakeWorkplans{c, namespace}
 }

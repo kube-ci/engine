@@ -28,6 +28,7 @@ import (
 type KubeciV1alpha1Interface interface {
 	RESTClient() rest.Interface
 	WorkflowsGetter
+	WorkflowTemplatesGetter
 	WorkplansGetter
 }
 
@@ -38,6 +39,10 @@ type KubeciV1alpha1Client struct {
 
 func (c *KubeciV1alpha1Client) Workflows(namespace string) WorkflowInterface {
 	return newWorkflows(c, namespace)
+}
+
+func (c *KubeciV1alpha1Client) WorkflowTemplates(namespace string) WorkflowTemplateInterface {
+	return newWorkflowTemplates(c, namespace)
 }
 
 func (c *KubeciV1alpha1Client) Workplans(namespace string) WorkplanInterface {

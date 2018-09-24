@@ -55,6 +55,8 @@ func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource
 	// Group=kubeci.kube.ci, Version=v1alpha1
 	case v1alpha1.SchemeGroupVersion.WithResource("workflows"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Kubeci().V1alpha1().Workflows().Informer()}, nil
+	case v1alpha1.SchemeGroupVersion.WithResource("workflowtemplates"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Kubeci().V1alpha1().WorkflowTemplates().Informer()}, nil
 	case v1alpha1.SchemeGroupVersion.WithResource("workplans"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Kubeci().V1alpha1().Workplans().Informer()}, nil
 

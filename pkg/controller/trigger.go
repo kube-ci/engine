@@ -6,6 +6,7 @@ import (
 
 	"github.com/appscode/go/log"
 	"github.com/appscode/go/types"
+	"github.com/drone/envsubst"
 	authorizationapi "k8s.io/api/authorization/v1"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -312,7 +313,12 @@ func (c *Controller) createWorkplan(wf *api.Workflow, secretRef *core.SecretEnvS
 		Args:     []string{"-c", "echo deleting files/folders; ls /kubeci; rm -rf /kubeci/*"},
 	}
 
-	tasks, err := dependency.ResolveDependency(wf.Spec.Steps, cleanupStep, wf.Spec.ExecutionOrder)
+	steps, err := c.resolveTemplate(wf)
+	if err != nil {
+		return nil, fmt.Errorf("can not resolve template for workflow %s, reason: %s", wf.Key(), err)
+	}
+
+	tasks, err := dependency.ResolveDependency(steps, cleanupStep, wf.Spec.ExecutionOrder)
 	if err != nil {
 		return nil, err
 	}
@@ -352,6 +358,54 @@ func (c *Controller) createWorkplan(wf *api.Workflow, secretRef *core.SecretEnvS
 	}
 
 	return wp, nil
+}
+
+func (c *Controller) resolveTemplate(wf *api.Workflow) ([]api.Step, error) {
+	if wf.Spec.Template == nil {
+		return wf.Spec.Steps, nil
+	}
+	if len(wf.Spec.Steps) != 0 {
+		return nil, fmt.Errorf("should not specify steps when template is used")
+	}
+
+	template, err := c.wtLister.WorkflowTemplates(wf.Namespace).Get(wf.Spec.Template.Name)
+	if err != nil {
+		return nil, err
+	}
+
+	applyReplacements := func(in string) (string, error) {
+		return envsubst.Eval(in, func(s string) (string, bool) {
+			value, ok := wf.Spec.Template.Arguments[s]
+			return value, ok
+		})
+	}
+
+	var steps []api.Step
+	for _, step := range template.Spec.Steps {
+		if step.Name, err = applyReplacements(step.Name); err != nil {
+			return nil, err
+		}
+		if step.Image, err = applyReplacements(step.Image); err != nil {
+			return nil, err
+		}
+		for i := range step.Commands {
+			if step.Commands[i], err = applyReplacements(step.Commands[i]); err != nil {
+				return nil, err
+			}
+		}
+		for i := range step.Args {
+			if step.Args[i], err = applyReplacements(step.Args[i]); err != nil {
+				return nil, err
+			}
+		}
+		for i := range step.Dependency {
+			if step.Dependency[i], err = applyReplacements(step.Dependency[i]); err != nil {
+				return nil, err
+			}
+		}
+		steps = append(steps, step)
+	}
+	return steps, nil
 }
 
 func (c *Controller) createSecret(wf *api.Workflow, data map[string]string) (*core.SecretEnvSource, error) {

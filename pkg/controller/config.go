@@ -62,6 +62,7 @@ func (c *Config) New() (*Controller, error) {
 	ctrl.initWorkflowWatcher()
 	ctrl.initWorkplanWatcher()
 	ctrl.initDynamicWatcher()
+	ctrl.initWorkflowTemplateWatcher()
 
 	return ctrl, nil
 }
