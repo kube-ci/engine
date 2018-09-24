@@ -114,4 +114,5 @@ func (c *Controller) RunInformers(stopCh <-chan struct{}) {
 
 	c.wfQueue.Run(stopCh)
 	c.wpQueue.Run(stopCh)
+	c.runInformerGC(stopCh)
 }

@@ -16,6 +16,7 @@ import (
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/util/sets"
+	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/client-go/discovery"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/util/jsonpath"
@@ -120,9 +121,6 @@ func (c *Controller) initDynamicWatcher() {
 	if !resources.HasSynced() {
 		time.Sleep(time.Second)
 	}
-
-	log.Infof("Starting informer GC")
-	go c.runInformerGC()
 }
 
 type dynamicInformers struct {
@@ -137,12 +135,9 @@ type informerStore struct {
 }
 
 // periodically check for unused informers after resync period
-func (c *Controller) runInformerGC() {
-	ticker := time.NewTicker(c.ResyncPeriod)
-	defer ticker.Stop()
-	for range ticker.C {
-		c.closeInformers()
-	}
+func (c *Controller) runInformerGC(stopCh <-chan struct{}) {
+	log.Infof("Starting informer GC")
+	go wait.JitterUntil(c.closeInformers, c.ResyncPeriod, 0.0, true, stopCh)
 }
 
 // close informers which are unused for more than resync period
