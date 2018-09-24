@@ -91,3 +91,5 @@ import:
   repo: https://github.com/appscode/envsubst.git
   vcs: git
   version: master
+- package: golang.org/x/text
+  version: b19bf474d317b857955b12035d2c5acb57ce8b01

@@ -1,5 +1,5 @@
-hash: 59675089a40681f5cf4729fc0555b28f5ddb24862d0da1b036179b21eb7cf481
-updated: 2018-09-13T08:10:41.541791015-07:00
+hash: 187e270839bba566207034bb693344582eda7111710ddcba52db45fbb3b7d199
+updated: 2018-09-24T02:09:15.603884865-07:00
 imports:
 - name: bitbucket.org/ww/goautoneg
   version: 75cd24fc2f2c2a2088577d12123ddee5f54e0675
@@ -38,7 +38,7 @@ imports:
   - registry/admissionreview/v1beta1
   - runtime/serializer/versioning
 - name: github.com/appscode/kutil
-  version: bd85e3e1c4d9dcec96249e0dee148bbe6c3c6092
+  version: bd70cefb33397b4c196aca7e33cab656755e195e
   subpackages:
   - apiextensions/v1beta1
   - discovery
@@ -181,6 +181,13 @@ imports:
   subpackages:
   - digestset
   - reference
+- name: github.com/drone/envsubst
+  version: 040bfb31793af7d79e5c6ad57fc553d70afe2fa1
+  repo: https://github.com/appscode/envsubst.git
+  vcs: git
+  subpackages:
+  - parse
+  - path
 - name: github.com/elazarl/go-bindata-assetfs
   version: 3dcc96556217539f50599357fb481ac0dc7439b9
 - name: github.com/emicklei/go-restful
@@ -192,7 +199,7 @@ imports:
 - name: github.com/evanphx/json-patch
   version: afac545df32f2287a079e2dfb7ba2745a643747e
 - name: github.com/fatih/structs
-  version: ebf56d35bba727c68ac77f56f2fcf90b181851aa
+  version: 4966fc68f5b7593aafa6cbbba2d65ec6e1416047
 - name: github.com/ghodss/yaml
   version: 73d445a93680fa1a78ae23a5839bad48f32ba1ee
 - name: github.com/go-openapi/jsonpointer
@@ -462,7 +469,7 @@ imports:
   subpackages:
   - rate
 - name: google.golang.org/api
-  version: 7ca32eb868bf53ea2fc406698eb98583a8073d19
+  version: 920bb1beccf73147754c5567fce5b1f32cd3030f
   subpackages:
   - storage/v1
 - name: google.golang.org/appengine

@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/appscode/envsubst"
 	"github.com/appscode/go/log"
 	"github.com/appscode/go/types"
+	"github.com/drone/envsubst"
 	authorizationapi "k8s.io/api/authorization/v1"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
