@@ -1,6 +1,7 @@
 package v1alpha1
 
 import (
+	"github.com/appscode/go/types"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -35,11 +36,14 @@ type WorkflowSpec struct {
 	Steps             []Step         `json:"steps,omitempty"`
 	Template          *Template      `json:"template,omitempty"`
 	ExecutionOrder    ExecutionOrder `json:"executionOrder,omitempty"`
+	// set explicit environment variables
+	EnvVar []corev1.EnvVar `json:"envVar,omitempty"`
 	// set container environment variables from configmaps and secrets
 	EnvFrom []corev1.EnvFromSource `json:"envFrom,omitempty"`
 	// ServiceAccount with triggering-resource/configmaps/secrets watch/read permissions
 	// TODO: also use this in pods ?
-	ServiceAccount string `json:"serviceAccount,omitempty"`
+	ServiceAccount string          `json:"serviceAccount,omitempty"`
+	Volumes        []corev1.Volume `json:"volumes,omitempty"`
 }
 
 type Template struct {
@@ -62,11 +66,12 @@ type Trigger struct {
 }
 
 type Step struct {
-	Name       string   `json:"name,omitempty"`
-	Image      string   `json:"image,omitempty"`
-	Commands   []string `json:"commands,omitempty"`
-	Args       []string `json:"args,omitempty"`
-	Dependency []string `json:"dependency,omitempty"`
+	Name         string               `json:"name,omitempty"`
+	Image        string               `json:"image,omitempty"`
+	Commands     []string             `json:"commands,omitempty"`
+	Args         []string             `json:"args,omitempty"`
+	Dependency   []string             `json:"dependency,omitempty"`
+	VolumeMounts []corev1.VolumeMount `json:"volumeMounts,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -78,6 +83,16 @@ type WorkflowList struct {
 	Items []Workflow `json:"items"`
 }
 
-func (wf *Workflow) Key() string {
+func (wf Workflow) Key() string {
 	return wf.Namespace + "/" + wf.Name
+}
+
+func (wf Workflow) Reference() metav1.OwnerReference {
+	return metav1.OwnerReference{
+		APIVersion:         SchemeGroupVersion.Group + "/" + SchemeGroupVersion.Version,
+		Kind:               ResourceKindWorkflow,
+		Name:               wf.Name,
+		UID:                wf.UID,
+		BlockOwnerDeletion: types.TrueP(),
+	}
 }

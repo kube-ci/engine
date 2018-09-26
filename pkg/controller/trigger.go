@@ -306,19 +306,12 @@ func (c *Controller) checkAccess(res authorizationapi.ResourceAttributes, servic
 }
 
 func (c *Controller) createWorkplan(wf *api.Workflow, secretRef *core.SecretEnvSource, triggeredFor api.TriggeredFor) (*api.Workplan, error) {
-	cleanupStep := api.Step{
-		Name:     "cleanup-step",
-		Image:    "alpine",
-		Commands: []string{"sh"},
-		Args:     []string{"-c", "echo deleting files/folders; ls /kubeci; rm -rf /kubeci/*"},
-	}
+	var (
+		preSteps  []api.Step
+		postSteps = []api.Step{cleanupStep}
+	)
 
-	steps, err := c.resolveTemplate(wf)
-	if err != nil {
-		return nil, fmt.Errorf("can not resolve template for workflow %s, reason: %s", wf.Key(), err)
-	}
-
-	tasks, err := dependency.ResolveDependency(steps, cleanupStep, wf.Spec.ExecutionOrder)
+	tasks, err := dependency.ResolveDependency(wf.Spec.Steps, preSteps, postSteps, wf.Spec.ExecutionOrder)
 	if err != nil {
 		return nil, err
 	}
@@ -340,8 +333,10 @@ func (c *Controller) createWorkplan(wf *api.Workflow, secretRef *core.SecretEnvS
 		Spec: api.WorkplanSpec{
 			Workflow:     wf.Name,
 			Tasks:        tasks,
+			EnvVar:       wf.Spec.EnvVar,
 			EnvFrom:      wf.Spec.EnvFrom,
 			TriggeredFor: triggeredFor,
+			Volumes:      wf.Spec.Volumes,
 		},
 	}
 
@@ -411,17 +406,9 @@ func (c *Controller) resolveTemplate(wf *api.Workflow) ([]api.Step, error) {
 func (c *Controller) createSecret(wf *api.Workflow, data map[string]string) (*core.SecretEnvSource, error) {
 	secret := &core.Secret{
 		ObjectMeta: metav1.ObjectMeta{
-			GenerateName: wf.Name + "-",
-			Namespace:    wf.Namespace,
-			OwnerReferences: []metav1.OwnerReference{ // TODO: use workplan as owner ?
-				{
-					APIVersion:         api.SchemeGroupVersion.Group + "/" + api.SchemeGroupVersion.Version,
-					Kind:               api.ResourceKindWorkflow,
-					Name:               wf.Name,
-					UID:                wf.UID,
-					BlockOwnerDeletion: types.TrueP(),
-				},
-			},
+			GenerateName:    wf.Name + "-",
+			Namespace:       wf.Namespace,
+			OwnerReferences: []metav1.OwnerReference{wf.Reference()}, // TODO: use workplan as owner ?
 		},
 		StringData: data,
 	}

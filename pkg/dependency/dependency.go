@@ -9,7 +9,7 @@ import (
 
 // TODO: check in validation webhook
 // TODO: set default in using mutation webhook
-func ResolveDependency(workflowSteps []v1alpha1.Step, cleanupStep v1alpha1.Step, order v1alpha1.ExecutionOrder) ([]v1alpha1.Task, error) {
+func ResolveDependency(workflowSteps []v1alpha1.Step, preSteps, postSteps []v1alpha1.Step, order v1alpha1.ExecutionOrder) ([]v1alpha1.Task, error) {
 	if order != v1alpha1.ExecutionOrderDAG {
 		for _, step := range workflowSteps {
 			if len(step.Dependency) != 0 {
@@ -38,8 +38,13 @@ func ResolveDependency(workflowSteps []v1alpha1.Step, cleanupStep v1alpha1.Step,
 		}
 	}
 
-	// add clean-up step in new layer
-	layers = append(layers, []v1alpha1.Step{cleanupStep})
+	// pre and post steps in new layers
+	if len(preSteps) > 0 {
+		layers = append([][]v1alpha1.Step{preSteps}, layers...)
+	}
+	if len(postSteps) > 0 {
+		layers = append(layers, postSteps)
+	}
 
 	return layersToTasks(layers), nil
 }

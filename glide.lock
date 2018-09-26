@@ -1,5 +1,5 @@
 hash: 187e270839bba566207034bb693344582eda7111710ddcba52db45fbb3b7d199
-updated: 2018-09-24T02:09:15.603884865-07:00
+updated: 2018-09-26T16:04:14.732504034+06:00
 imports:
 - name: bitbucket.org/ww/goautoneg
   version: 75cd24fc2f2c2a2088577d12123ddee5f54e0675
@@ -41,6 +41,7 @@ imports:
   version: bd70cefb33397b4c196aca7e33cab656755e195e
   subpackages:
   - apiextensions/v1beta1
+  - core/v1
   - discovery
   - dynamic/clientset
   - dynamic/discovery
@@ -52,6 +53,8 @@ imports:
   - tools/certstore
   - tools/clientcmd
   - tools/queue
+- name: github.com/appscode/mergo
+  version: 9f23e2d6bd2a77f959b2bf6acdbefd708a83a4a4
 - name: github.com/appscode/ocutil
   version: 9e3ab89e810deaabe1fd353d01913aaf7dbe6e6d
 - name: github.com/appscode/osm
@@ -167,7 +170,7 @@ imports:
   - daemon
   - journal
 - name: github.com/cpuguy83/go-md2man
-  version: 20f5889cbdc3c73dbd2862796665e7c465ade7d1
+  version: 71acacd42f85e5e82f70a55327789582a5200a90
   subpackages:
   - md2man
 - name: github.com/davecgh/go-spew
@@ -207,7 +210,7 @@ imports:
 - name: github.com/go-openapi/jsonreference
   version: 13c6e3589ad90f49bd3e3bbe2c2cb3d7a4142272
 - name: github.com/go-openapi/spec
-  version: 1de3e0542de65ad8d75452a595886fdd0befb363
+  version: 7abd5745472fff5eb3685386d5fb8bf38683154d
 - name: github.com/go-openapi/swag
   version: f3f9494671f93fcff853e3c6e9e948b3eb71e590
 - name: github.com/gogo/protobuf
@@ -235,7 +238,7 @@ imports:
 - name: github.com/google/btree
   version: 7d79101e329e5a3adf994758c578dab82b90c017
 - name: github.com/google/go-cmp
-  version: 3af367b6b30c263d47e8895973edcca9a49cf029
+  version: 875f8df8b7965f1eac1098d36d677f807ac0b49e
   subpackages:
   - cmp
   - cmp/internal/diff
@@ -469,7 +472,7 @@ imports:
   subpackages:
   - rate
 - name: google.golang.org/api
-  version: 920bb1beccf73147754c5567fce5b1f32cd3030f
+  version: e5ba110cb6cd042d05ea6ea2ce9dd13198c6387a
   subpackages:
   - storage/v1
 - name: google.golang.org/appengine
@@ -620,7 +623,7 @@ imports:
   - third_party/forked/golang/json
   - third_party/forked/golang/reflect
 - name: k8s.io/apiserver
-  version: 9970aee1898bc65beb8f3829b2ddf8e191777f78
+  version: dea48c5b25a85e0fa07fec5bd5b8ec8fcaae6653
   repo: https://github.com/pharmer/apiserver.git
   vcs: git
   subpackages:
