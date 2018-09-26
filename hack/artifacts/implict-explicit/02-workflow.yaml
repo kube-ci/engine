@@ -1,0 +1,39 @@
+apiVersion: kubeci.kube.ci/v1alpha1
+kind: Workflow
+metadata:
+  name: wf-cred
+  namespace: default
+spec:
+  allowForceTrigger: true
+  triggers:
+  - apiVersion: v1
+    kind: ConfigMap
+    resource: configmaps
+    namespace: default
+    name: my-config
+    onCreateOrUpdate: true
+    onDelete: false
+  serviceAccount: wf-sa
+  excutionOrder: Serial
+  steps:
+  - name: step-echo
+    image: alpine
+    commands:
+    - sh
+    args:
+    - -c
+    - pwd; echo $HOME # print working-dir and $HOME
+  - name: step-ls
+    image: alpine
+    commands:
+    - sh
+    args:
+    - -c
+    - ls -laR /kube-ci/project
+    volumeMounts: # explicit volume mounts
+    - name: git-volume
+      mountPath: /kube-ci/project
+  volumes: # explicit volumes
+  - name: git-volume
+    gitRepo:
+      repository: "git@github.com:kube-ci/project.git"

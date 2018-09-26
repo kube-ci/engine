@@ -11785,10 +11785,23 @@ func schema_kubeci_apis_kubeci_v1alpha1_Step(ref common.ReferenceCallback) commo
 							},
 						},
 					},
+					"volumeMounts": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("k8s.io/api/core/v1.VolumeMount"),
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
-		Dependencies: []string{},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.VolumeMount"},
 	}
 }
 
@@ -12088,6 +12101,19 @@ func schema_kubeci_apis_kubeci_v1alpha1_WorkflowSpec(ref common.ReferenceCallbac
 							Format: "",
 						},
 					},
+					"envVar": {
+						SchemaProps: spec.SchemaProps{
+							Description: "set explicit environment variables",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("k8s.io/api/core/v1.EnvVar"),
+									},
+								},
+							},
+						},
+					},
 					"envFrom": {
 						SchemaProps: spec.SchemaProps{
 							Description: "set container environment variables from configmaps and secrets",
@@ -12108,11 +12134,23 @@ func schema_kubeci_apis_kubeci_v1alpha1_WorkflowSpec(ref common.ReferenceCallbac
 							Format:      "",
 						},
 					},
+					"volumes": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("k8s.io/api/core/v1.Volume"),
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.EnvFromSource", "kube.ci/kubeci/apis/kubeci/v1alpha1.Step", "kube.ci/kubeci/apis/kubeci/v1alpha1.Template", "kube.ci/kubeci/apis/kubeci/v1alpha1.Trigger"},
+			"k8s.io/api/core/v1.EnvFromSource", "k8s.io/api/core/v1.EnvVar", "k8s.io/api/core/v1.Volume", "kube.ci/kubeci/apis/kubeci/v1alpha1.Step", "kube.ci/kubeci/apis/kubeci/v1alpha1.Template", "kube.ci/kubeci/apis/kubeci/v1alpha1.Trigger"},
 	}
 }
 
@@ -12338,6 +12376,19 @@ func schema_kubeci_apis_kubeci_v1alpha1_WorkplanSpec(ref common.ReferenceCallbac
 							Ref: ref("kube.ci/kubeci/apis/kubeci/v1alpha1.TriggeredFor"),
 						},
 					},
+					"envVar": {
+						SchemaProps: spec.SchemaProps{
+							Description: "set explicit environment variables",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("k8s.io/api/core/v1.EnvVar"),
+									},
+								},
+							},
+						},
+					},
 					"envFrom": {
 						SchemaProps: spec.SchemaProps{
 							Description: "set container environment variables from configmaps and secrets",
@@ -12351,12 +12402,24 @@ func schema_kubeci_apis_kubeci_v1alpha1_WorkplanSpec(ref common.ReferenceCallbac
 							},
 						},
 					},
+					"volumes": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("k8s.io/api/core/v1.Volume"),
+									},
+								},
+							},
+						},
+					},
 				},
 				Required: []string{"triggeredFor"},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.EnvFromSource", "kube.ci/kubeci/apis/kubeci/v1alpha1.Task", "kube.ci/kubeci/apis/kubeci/v1alpha1.TriggeredFor"},
+			"k8s.io/api/core/v1.EnvFromSource", "k8s.io/api/core/v1.EnvVar", "k8s.io/api/core/v1.Volume", "kube.ci/kubeci/apis/kubeci/v1alpha1.Task", "kube.ci/kubeci/apis/kubeci/v1alpha1.TriggeredFor"},
 	}
 }
 

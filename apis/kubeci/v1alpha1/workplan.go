@@ -1,7 +1,8 @@
 package v1alpha1
 
 import (
-	"github.com/appscode/go/encoding/json/types"
+	htypes "github.com/appscode/go/encoding/json/types"
+	"github.com/appscode/go/types"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -32,8 +33,11 @@ type WorkplanSpec struct {
 	Workflow     string       `json:"workflow,omitempty"`
 	Tasks        []Task       `json:"tasks,omitempty"`
 	TriggeredFor TriggeredFor `json:"triggeredFor"`
+	// set explicit environment variables
+	EnvVar []corev1.EnvVar `json:"envVar,omitempty"`
 	// set container environment variables from configmaps and secrets
 	EnvFrom []corev1.EnvFromSource `json:"envFrom,omitempty"`
+	Volumes []corev1.Volume        `json:"volumes,omitempty"`
 }
 
 type WorkplanPhase string
@@ -54,7 +58,7 @@ type WorkplanStatus struct {
 
 type TriggeredFor struct {
 	ObjectReference    ObjectReference `json:"objectReference,omitempty"`
-	ResourceGeneration *types.IntHash  `json:"resourceGeneration,omitempty"`
+	ResourceGeneration *htypes.IntHash `json:"resourceGeneration,omitempty"`
 }
 
 type ObjectReference struct {
@@ -71,4 +75,14 @@ type WorkplanList struct {
 	metav1.ListMeta `json:"metadata"`
 
 	Items []Workplan `json:"items"`
+}
+
+func (wp Workplan) Reference() metav1.OwnerReference {
+	return metav1.OwnerReference{
+		APIVersion:         SchemeGroupVersion.Group + "/" + SchemeGroupVersion.Version,
+		Kind:               ResourceKindWorkplan,
+		Name:               wp.Name,
+		UID:                wp.UID,
+		BlockOwnerDeletion: types.TrueP(),
+	}
 }
