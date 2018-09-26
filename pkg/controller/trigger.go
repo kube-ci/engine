@@ -309,7 +309,18 @@ func (c *Controller) createWorkplan(wf *api.Workflow, secretRef *core.SecretEnvS
 	var (
 		preSteps  []api.Step
 		postSteps = []api.Step{cleanupStep}
+		volumes   = wf.Spec.Volumes
 	)
+
+	// credential initializer step
+	step, secretVolumes, err := c.credentialInitializer(wf)
+	if err != nil {
+		return nil, err
+	}
+	if step != nil {
+		preSteps = append(preSteps, *step)
+		volumes = append(volumes, secretVolumes...)
+	}
 
 	tasks, err := dependency.ResolveDependency(wf.Spec.Steps, preSteps, postSteps, wf.Spec.ExecutionOrder)
 	if err != nil {
@@ -336,7 +347,7 @@ func (c *Controller) createWorkplan(wf *api.Workflow, secretRef *core.SecretEnvS
 			EnvVar:       wf.Spec.EnvVar,
 			EnvFrom:      wf.Spec.EnvFrom,
 			TriggeredFor: triggeredFor,
-			Volumes:      wf.Spec.Volumes,
+			Volumes:      volumes,
 		},
 	}
 

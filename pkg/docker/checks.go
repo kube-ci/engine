@@ -1,7 +1,7 @@
 package docker
 
 const (
-	ACRegistry  = "appscode"
+	ACRegistry  = "kubeci"
 	ImageKubeci = "kubeci"
 )
 
