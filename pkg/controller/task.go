@@ -84,7 +84,7 @@ func containerForStep(wp *api.Workplan, step api.Step) core.Container {
 		Command:      step.Commands,
 		Args:         step.Args,
 		EnvFrom:      wp.Spec.EnvFrom,
-		Env:          core_util.UpsertEnvVars(implicitEnvVars, wp.Spec.EnvFrom),
+		Env:          core_util.UpsertEnvVars(implicitEnvVars, wp.Spec.EnvVar...),
 		WorkingDir:   workingDir,
 		VolumeMounts: core_util.UpsertVolumeMount(implicitVolumeMounts, step.VolumeMounts...),
 	}
