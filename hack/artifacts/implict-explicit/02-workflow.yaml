@@ -1,7 +1,7 @@
 apiVersion: kubeci.kube.ci/v1alpha1
 kind: Workflow
 metadata:
-  name: wf-cred
+  name: wf-implicit
   namespace: default
 spec:
   allowForceTrigger: true
@@ -29,11 +29,12 @@ spec:
     - sh
     args:
     - -c
-    - ls -laR /kube-ci/project
+    - ls -laR /test-volume
     volumeMounts: # explicit volume mounts
-    - name: git-volume
-      mountPath: /kube-ci/project
+    - name: test-volume
+      mountPath: /test-volume
   volumes: # explicit volumes
-  - name: git-volume
-    gitRepo:
-      repository: "git@github.com:kube-ci/project.git"
+  - name: test-volume
+    hostPath:
+      path: /tmp
+      type: Directory

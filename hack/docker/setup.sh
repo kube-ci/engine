@@ -49,6 +49,7 @@ RUN set -x \
 
 COPY kubeci /usr/bin/kubeci
 
+USER nobody:nobody
 ENTRYPOINT ["kubeci"]
 EOL
   local cmd="docker build -t $DOCKER_REGISTRY/$IMG:$TAG ."

@@ -63,7 +63,7 @@ func podSpecForTasks(wp *api.Workplan, task api.Task, index int) *core.Pod {
 		},
 		Spec: core.PodSpec{
 			RestartPolicy: core.RestartPolicyNever,
-			Volumes:       core_util.UpsertVolume(getImplicitVolumes(wp.Name), wp.Spec.Volumes...),
+			Volumes:       core_util.UpsertVolume(wp.Spec.Volumes, getImplicitVolumes(wp.Name)...),
 		},
 	}
 
@@ -84,8 +84,8 @@ func containerForStep(wp *api.Workplan, step api.Step) core.Container {
 		Command:      step.Commands,
 		Args:         step.Args,
 		EnvFrom:      wp.Spec.EnvFrom,
-		Env:          core_util.UpsertEnvVars(implicitEnvVars, wp.Spec.EnvVar...),
-		WorkingDir:   workingDir,
-		VolumeMounts: core_util.UpsertVolumeMount(implicitVolumeMounts, step.VolumeMounts...),
+		Env:          core_util.UpsertEnvVars(wp.Spec.EnvVar, implicitEnvVars...),
+		WorkingDir:   implicitWorkingDir,
+		VolumeMounts: core_util.UpsertVolumeMount(step.VolumeMounts, implicitVolumeMounts...),
 	}
 }

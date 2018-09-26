@@ -4,7 +4,7 @@ metadata:
   name: testing-force-trigger
   namespace: default
 workflows:
-- wf-cred
+- wf-implicit
 request:
   apiVersion: v1
   kind: ConfigMap

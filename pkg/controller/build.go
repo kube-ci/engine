@@ -1,15 +1,15 @@
 package controller
 
 import (
-	"fmt"
+	"path"
 
 	core "k8s.io/api/core/v1"
 	api "kube.ci/kubeci/apis/kubeci/v1alpha1"
 )
 
 const (
-	homeDir    = "/kubeci/home"
-	workingDir = "/kubeci/workspace"
+	implicitHomeDir    = "/kubeci/home"
+	implicitWorkingDir = "/kubeci/workspace"
 )
 
 var (
@@ -22,15 +22,15 @@ var (
 
 	implicitEnvVars = []core.EnvVar{{
 		Name:  "HOME",
-		Value: homeDir,
+		Value: implicitHomeDir,
 	}}
 
 	implicitVolumeMounts = []core.VolumeMount{{
 		Name:      "home",
-		MountPath: homeDir,
+		MountPath: implicitHomeDir,
 	}, {
 		Name:      "workspace",
-		MountPath: workingDir,
+		MountPath: implicitWorkingDir,
 	}}
 )
 
@@ -40,7 +40,7 @@ func getImplicitVolumes(wpName string) []core.Volume {
 		Name: "home",
 		VolumeSource: core.VolumeSource{
 			HostPath: &core.HostPathVolumeSource{
-				Path: fmt.Sprintf("/kubeci/%s/home", wpName),
+				Path: path.Join("/kubeci", wpName, "home"),
 				Type: &hostPathType,
 			},
 		},
@@ -48,7 +48,7 @@ func getImplicitVolumes(wpName string) []core.Volume {
 		Name: "workspace",
 		VolumeSource: core.VolumeSource{
 			HostPath: &core.HostPathVolumeSource{
-				Path: fmt.Sprintf("/kubeci/%s/workspace", wpName),
+				Path: path.Join("/kubeci", wpName, "workspace"),
 				Type: &hostPathType,
 			},
 		},
