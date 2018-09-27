@@ -54,7 +54,7 @@ func (*gitConfigBuilder) MatchingAnnotations(secret *corev1.Secret) []string {
 
 	for k, v := range secret.Annotations {
 		if strings.HasPrefix(k, annotationPrefix) {
-			flags = append(flags, fmt.Sprintf("-%s=%s=%s", flagName, secret.Name, v))
+			flags = append(flags, fmt.Sprintf("--%s=%s=%s", flagName, secret.Name, v))
 		}
 	}
 	return flags

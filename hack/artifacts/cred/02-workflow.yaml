@@ -14,11 +14,27 @@ spec:
     onCreateOrUpdate: true
     onDelete: false
   serviceAccount: wf-sa
+  executionOrder: Serial
   steps:
-  - name: step-echo
+  - name: step-ls-home
     image: alpine
     commands:
     - sh
     args:
     - -c
     - ls -laR $HOME
+  - name: step-clone
+    image: alpine/git
+    commands:
+    - sh
+    args:
+    - -c
+    - ln -s $HOME/.ssh /root/.ssh; git clone git@github.com:diptadas/kubeci-gpig.git
+    # HACK: https://github.com/knative/build/blob/master/cmd/git-init/main.go#L59
+  - name: step-ls-repo
+    image: alpine
+    commands:
+    - sh
+    args:
+    - -c
+    - ls -la kubeci-gpig
