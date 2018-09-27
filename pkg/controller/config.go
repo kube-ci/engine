@@ -53,6 +53,7 @@ func (c *Config) New() (*Controller, error) {
 		kubeciInformerFactory: kubeci_informers.NewSharedInformerFactory(c.KubeciClient, c.ResyncPeriod),
 		recorder:              eventer.NewEventRecorder(c.KubeClient, "kubeci-controller"),
 		observedWorkflows:     observedWorkflows{items: make(map[string]workflowState)},
+		dynamicInformers:      dynamicInformers{items: make(map[string]informerStore)},
 	}
 
 	if err := ctrl.ensureCustomResourceDefinitions(); err != nil {

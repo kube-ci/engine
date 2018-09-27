@@ -1,0 +1,33 @@
+apiVersion: kubeci.kube.ci/v1alpha1
+kind: Workflow
+metadata:
+  name: wf-01
+  namespace: default
+spec:
+  allowForceTrigger: true
+  triggers:
+  - apiVersion: v1
+    kind: Pod
+    resource: pods
+  steps:
+  - name: list
+    image: alpine
+    commands:
+    - ls
+---
+apiVersion: kubeci.kube.ci/v1alpha1
+kind: Workflow
+metadata:
+  name: wf-02
+  namespace: default
+spec:
+  allowForceTrigger: true
+  triggers:
+  - apiVersion: v1
+    kind: Secret
+    resource: secrets
+  steps:
+  - name: list
+    image: alpine
+    commands:
+    - ls
