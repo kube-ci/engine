@@ -6,6 +6,7 @@ import (
 
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/kubernetes/plugin/pkg/admission/serviceaccount"
 	api "kube.ci/kubeci/apis/kubeci/v1alpha1"
 	"kube.ci/kubeci/pkg/credentials"
 	"kube.ci/kubeci/pkg/credentials/dockercreds"
@@ -64,7 +65,7 @@ func getImplicitVolumes(wpName string) []core.Volume {
 func (c *Controller) credentialInitializer(wf *api.Workflow) (*api.Step, []core.Volume, error) {
 	serviceAccountName := wf.Spec.ServiceAccount
 	if serviceAccountName == "" {
-		serviceAccountName = "default"
+		serviceAccountName = serviceaccount.DefaultServiceAccountName
 	}
 	sa, err := c.kubeClient.CoreV1().ServiceAccounts(wf.Namespace).Get(serviceAccountName, metav1.GetOptions{})
 	if err != nil {
