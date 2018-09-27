@@ -1,5 +1,5 @@
 hash: 187e270839bba566207034bb693344582eda7111710ddcba52db45fbb3b7d199
-updated: 2018-09-26T16:04:14.732504034+06:00
+updated: 2018-09-27T15:05:36.904987758+06:00
 imports:
 - name: bitbucket.org/ww/goautoneg
   version: 75cd24fc2f2c2a2088577d12123ddee5f54e0675
@@ -414,6 +414,8 @@ imports:
 - name: golang.org/x/crypto
   version: 49796115aa4b964c318aad4f3084fdb41e9aa067
   subpackages:
+  - ed25519
+  - ed25519/internal/edwards25519
   - ssh/terminal
 - name: golang.org/x/net
   version: 1c05540f6879653db88113bc4a2b70aec4bd491f
@@ -472,7 +474,7 @@ imports:
   subpackages:
   - rate
 - name: google.golang.org/api
-  version: e5ba110cb6cd042d05ea6ea2ce9dd13198c6387a
+  version: 76f31e4d17c2f1190154e8fab72d772db9a59a5d
   subpackages:
   - storage/v1
 - name: google.golang.org/appengine
@@ -522,6 +524,12 @@ imports:
   version: ca60c6d796d4b1f7bb2a8fd5271d8a59aeffb4bf
   repo: https://github.com/appscode/cron.git
   vcs: git
+- name: gopkg.in/square/go-jose.v2
+  version: f8f38de21b4dcd69d0413faf231983f5fd6634b1
+  subpackages:
+  - cipher
+  - json
+  - jwt
 - name: gopkg.in/yaml.v2
   version: 670d4cfef0544295bc27a114dbac37980d83185a
 - name: k8s.io/api
@@ -604,6 +612,7 @@ imports:
   - pkg/util/diff
   - pkg/util/errors
   - pkg/util/framer
+  - pkg/util/initialization
   - pkg/util/intstr
   - pkg/util/json
   - pkg/util/mergepatch
@@ -904,38 +913,141 @@ imports:
   version: a4529464e4629c21224b3d52edfe0ea91b072862
   subpackages:
   - pkg/api/legacyscheme
+  - pkg/api/pod
+  - pkg/api/ref
+  - pkg/apis/admissionregistration
+  - pkg/apis/admissionregistration/install
+  - pkg/apis/admissionregistration/v1alpha1
+  - pkg/apis/admissionregistration/v1beta1
   - pkg/apis/apps
   - pkg/apis/apps/install
   - pkg/apis/apps/v1
   - pkg/apis/apps/v1beta1
   - pkg/apis/apps/v1beta2
+  - pkg/apis/authentication
+  - pkg/apis/authentication/install
+  - pkg/apis/authentication/v1
+  - pkg/apis/authentication/v1beta1
+  - pkg/apis/authorization
+  - pkg/apis/authorization/install
+  - pkg/apis/authorization/v1
+  - pkg/apis/authorization/v1beta1
   - pkg/apis/autoscaling
+  - pkg/apis/autoscaling/install
+  - pkg/apis/autoscaling/v1
+  - pkg/apis/autoscaling/v2beta1
   - pkg/apis/batch
   - pkg/apis/batch/install
   - pkg/apis/batch/v1
   - pkg/apis/batch/v1beta1
   - pkg/apis/batch/v2alpha1
+  - pkg/apis/certificates
+  - pkg/apis/certificates/install
+  - pkg/apis/certificates/v1beta1
+  - pkg/apis/componentconfig
+  - pkg/apis/componentconfig/install
+  - pkg/apis/componentconfig/v1alpha1
   - pkg/apis/core
   - pkg/apis/core/install
   - pkg/apis/core/v1
+  - pkg/apis/events
+  - pkg/apis/events/install
+  - pkg/apis/events/v1beta1
   - pkg/apis/extensions
   - pkg/apis/extensions/install
   - pkg/apis/extensions/v1beta1
   - pkg/apis/networking
+  - pkg/apis/networking/install
+  - pkg/apis/networking/v1
   - pkg/apis/policy
+  - pkg/apis/policy/install
+  - pkg/apis/policy/v1beta1
   - pkg/apis/rbac
   - pkg/apis/rbac/install
   - pkg/apis/rbac/v1
   - pkg/apis/rbac/v1alpha1
   - pkg/apis/rbac/v1beta1
+  - pkg/apis/scheduling
+  - pkg/apis/scheduling/install
+  - pkg/apis/scheduling/v1alpha1
+  - pkg/apis/scheduling/v1beta1
+  - pkg/apis/settings
+  - pkg/apis/settings/install
+  - pkg/apis/settings/v1alpha1
   - pkg/apis/storage
   - pkg/apis/storage/install
   - pkg/apis/storage/v1
   - pkg/apis/storage/v1alpha1
   - pkg/apis/storage/v1beta1
+  - pkg/client/clientset_generated/internalclientset
+  - pkg/client/clientset_generated/internalclientset/scheme
+  - pkg/client/clientset_generated/internalclientset/typed/admissionregistration/internalversion
+  - pkg/client/clientset_generated/internalclientset/typed/apps/internalversion
+  - pkg/client/clientset_generated/internalclientset/typed/authentication/internalversion
+  - pkg/client/clientset_generated/internalclientset/typed/authorization/internalversion
+  - pkg/client/clientset_generated/internalclientset/typed/autoscaling/internalversion
+  - pkg/client/clientset_generated/internalclientset/typed/batch/internalversion
+  - pkg/client/clientset_generated/internalclientset/typed/certificates/internalversion
+  - pkg/client/clientset_generated/internalclientset/typed/core/internalversion
+  - pkg/client/clientset_generated/internalclientset/typed/events/internalversion
+  - pkg/client/clientset_generated/internalclientset/typed/extensions/internalversion
+  - pkg/client/clientset_generated/internalclientset/typed/networking/internalversion
+  - pkg/client/clientset_generated/internalclientset/typed/policy/internalversion
+  - pkg/client/clientset_generated/internalclientset/typed/rbac/internalversion
+  - pkg/client/clientset_generated/internalclientset/typed/scheduling/internalversion
+  - pkg/client/clientset_generated/internalclientset/typed/settings/internalversion
+  - pkg/client/clientset_generated/internalclientset/typed/storage/internalversion
+  - pkg/client/informers/informers_generated/internalversion
+  - pkg/client/informers/informers_generated/internalversion/admissionregistration
+  - pkg/client/informers/informers_generated/internalversion/admissionregistration/internalversion
+  - pkg/client/informers/informers_generated/internalversion/apps
+  - pkg/client/informers/informers_generated/internalversion/apps/internalversion
+  - pkg/client/informers/informers_generated/internalversion/autoscaling
+  - pkg/client/informers/informers_generated/internalversion/autoscaling/internalversion
+  - pkg/client/informers/informers_generated/internalversion/batch
+  - pkg/client/informers/informers_generated/internalversion/batch/internalversion
+  - pkg/client/informers/informers_generated/internalversion/certificates
+  - pkg/client/informers/informers_generated/internalversion/certificates/internalversion
+  - pkg/client/informers/informers_generated/internalversion/core
+  - pkg/client/informers/informers_generated/internalversion/core/internalversion
+  - pkg/client/informers/informers_generated/internalversion/extensions
+  - pkg/client/informers/informers_generated/internalversion/extensions/internalversion
+  - pkg/client/informers/informers_generated/internalversion/internalinterfaces
+  - pkg/client/informers/informers_generated/internalversion/networking
+  - pkg/client/informers/informers_generated/internalversion/networking/internalversion
+  - pkg/client/informers/informers_generated/internalversion/policy
+  - pkg/client/informers/informers_generated/internalversion/policy/internalversion
+  - pkg/client/informers/informers_generated/internalversion/rbac
+  - pkg/client/informers/informers_generated/internalversion/rbac/internalversion
+  - pkg/client/informers/informers_generated/internalversion/scheduling
+  - pkg/client/informers/informers_generated/internalversion/scheduling/internalversion
+  - pkg/client/informers/informers_generated/internalversion/settings
+  - pkg/client/informers/informers_generated/internalversion/settings/internalversion
+  - pkg/client/informers/informers_generated/internalversion/storage
+  - pkg/client/informers/informers_generated/internalversion/storage/internalversion
+  - pkg/client/listers/admissionregistration/internalversion
+  - pkg/client/listers/apps/internalversion
+  - pkg/client/listers/autoscaling/internalversion
+  - pkg/client/listers/batch/internalversion
+  - pkg/client/listers/certificates/internalversion
+  - pkg/client/listers/core/internalversion
+  - pkg/client/listers/extensions/internalversion
+  - pkg/client/listers/networking/internalversion
+  - pkg/client/listers/policy/internalversion
+  - pkg/client/listers/rbac/internalversion
+  - pkg/client/listers/scheduling/internalversion
+  - pkg/client/listers/settings/internalversion
+  - pkg/client/listers/storage/internalversion
   - pkg/features
+  - pkg/kubeapiserver/admission
+  - pkg/kubeapiserver/admission/util
+  - pkg/kubelet/apis
+  - pkg/master/ports
+  - pkg/quota
+  - pkg/serviceaccount
   - pkg/util/parsers
   - pkg/util/pointer
+  - plugin/pkg/admission/serviceaccount
 testImports:
 - name: github.com/TamalSaha/go-oneliners
   version: 82a97ec58df4809a2bc57ebbbcc1e6a2feb78111
