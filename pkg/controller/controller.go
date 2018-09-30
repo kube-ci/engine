@@ -5,6 +5,7 @@ import (
 	"sort"
 
 	"github.com/appscode/go/log"
+	reg_util "github.com/appscode/kutil/admissionregistration/v1beta1"
 	crdutils "github.com/appscode/kutil/apiextensions/v1beta1"
 	dynamicclientset "github.com/appscode/kutil/dynamic/clientset"
 	dynamicinformer "github.com/appscode/kutil/dynamic/informer"
@@ -71,6 +72,14 @@ func (c *Controller) ensureCustomResourceDefinitions() error {
 	return crdutils.RegisterCRDs(c.crdClient, crds)
 }
 
+func (c *Controller) Run(stopCh <-chan struct{}) {
+	go c.RunInformers(stopCh)
+
+	cancel, _ := reg_util.SyncValidatingWebhookCABundle(c.clientConfig, validatingWebhook)
+	<-stopCh
+	cancel()
+}
+
 func (c *Controller) RunInformers(stopCh <-chan struct{}) {
 	defer runtime.HandleCrash()
 
@@ -115,4 +124,7 @@ func (c *Controller) RunInformers(stopCh <-chan struct{}) {
 	c.wfQueue.Run(stopCh)
 	c.wpQueue.Run(stopCh)
 	c.runInformerGC(stopCh)
+
+	<-stopCh
+	log.Infoln("Stopping KubeCI controller")
 }

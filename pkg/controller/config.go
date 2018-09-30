@@ -3,6 +3,7 @@ package controller
 import (
 	"time"
 
+	reg_util "github.com/appscode/kutil/admissionregistration/v1beta1"
 	core "k8s.io/api/core/v1"
 	crd_cs "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/typed/apiextensions/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -12,6 +13,10 @@ import (
 	cs "kube.ci/kubeci/client/clientset/versioned"
 	kubeci_informers "kube.ci/kubeci/client/informers/externalversions"
 	"kube.ci/kubeci/pkg/eventer"
+)
+
+const (
+	validatingWebhook = "admission.kubeci.kube.ci"
 )
 
 type config struct {
@@ -57,6 +62,9 @@ func (c *Config) New() (*Controller, error) {
 	}
 
 	if err := ctrl.ensureCustomResourceDefinitions(); err != nil {
+		return nil, err
+	}
+	if err := reg_util.UpdateValidatingWebhookCABundle(ctrl.clientConfig, validatingWebhook); err != nil {
 		return nil, err
 	}
 
