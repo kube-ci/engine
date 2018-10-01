@@ -27,9 +27,9 @@ import (
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	cache "k8s.io/client-go/tools/cache"
-	versioned "kube.ci/kubeci/client/clientset/versioned"
-	internalinterfaces "kube.ci/kubeci/client/informers/externalversions/internalinterfaces"
-	kubeci "kube.ci/kubeci/client/informers/externalversions/kubeci"
+	versioned "kube.ci/engine/client/clientset/versioned"
+	engine "kube.ci/engine/client/informers/externalversions/engine"
+	internalinterfaces "kube.ci/engine/client/informers/externalversions/internalinterfaces"
 )
 
 // SharedInformerOption defines the functional option type for SharedInformerFactory.
@@ -172,9 +172,9 @@ type SharedInformerFactory interface {
 	ForResource(resource schema.GroupVersionResource) (GenericInformer, error)
 	WaitForCacheSync(stopCh <-chan struct{}) map[reflect.Type]bool
 
-	Kubeci() kubeci.Interface
+	Engine() engine.Interface
 }
 
-func (f *sharedInformerFactory) Kubeci() kubeci.Interface {
-	return kubeci.New(f, f.namespace, f.tweakListOptions)
+func (f *sharedInformerFactory) Engine() engine.Interface {
+	return engine.New(f, f.namespace, f.tweakListOptions)
 }

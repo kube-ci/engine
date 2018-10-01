@@ -24,11 +24,11 @@ import (
 	"k8s.io/client-go/discovery"
 	fakediscovery "k8s.io/client-go/discovery/fake"
 	"k8s.io/client-go/testing"
-	clientset "kube.ci/kubeci/client/clientset/versioned"
-	kubeciv1alpha1 "kube.ci/kubeci/client/clientset/versioned/typed/kubeci/v1alpha1"
-	fakekubeciv1alpha1 "kube.ci/kubeci/client/clientset/versioned/typed/kubeci/v1alpha1/fake"
-	triggerv1alpha1 "kube.ci/kubeci/client/clientset/versioned/typed/trigger/v1alpha1"
-	faketriggerv1alpha1 "kube.ci/kubeci/client/clientset/versioned/typed/trigger/v1alpha1/fake"
+	clientset "kube.ci/engine/client/clientset/versioned"
+	enginev1alpha1 "kube.ci/engine/client/clientset/versioned/typed/engine/v1alpha1"
+	fakeenginev1alpha1 "kube.ci/engine/client/clientset/versioned/typed/engine/v1alpha1/fake"
+	triggerv1alpha1 "kube.ci/engine/client/clientset/versioned/typed/trigger/v1alpha1"
+	faketriggerv1alpha1 "kube.ci/engine/client/clientset/versioned/typed/trigger/v1alpha1/fake"
 )
 
 // NewSimpleClientset returns a clientset that will respond with the provided objects.
@@ -73,14 +73,14 @@ func (c *Clientset) Discovery() discovery.DiscoveryInterface {
 
 var _ clientset.Interface = &Clientset{}
 
-// KubeciV1alpha1 retrieves the KubeciV1alpha1Client
-func (c *Clientset) KubeciV1alpha1() kubeciv1alpha1.KubeciV1alpha1Interface {
-	return &fakekubeciv1alpha1.FakeKubeciV1alpha1{Fake: &c.Fake}
+// EngineV1alpha1 retrieves the EngineV1alpha1Client
+func (c *Clientset) EngineV1alpha1() enginev1alpha1.EngineV1alpha1Interface {
+	return &fakeenginev1alpha1.FakeEngineV1alpha1{Fake: &c.Fake}
 }
 
-// Kubeci retrieves the KubeciV1alpha1Client
-func (c *Clientset) Kubeci() kubeciv1alpha1.KubeciV1alpha1Interface {
-	return &fakekubeciv1alpha1.FakeKubeciV1alpha1{Fake: &c.Fake}
+// Engine retrieves the EngineV1alpha1Client
+func (c *Clientset) Engine() enginev1alpha1.EngineV1alpha1Interface {
+	return &fakeenginev1alpha1.FakeEngineV1alpha1{Fake: &c.Fake}
 }
 
 // TriggerV1alpha1 retrieves the TriggerV1alpha1Client

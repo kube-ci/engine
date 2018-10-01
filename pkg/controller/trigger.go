@@ -14,10 +14,10 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apiserver/pkg/registry/rest"
-	api "kube.ci/kubeci/apis/kubeci/v1alpha1"
-	"kube.ci/kubeci/apis/trigger/v1alpha1"
-	"kube.ci/kubeci/pkg/dependency"
-	"kube.ci/kubeci/pkg/eventer"
+	api "kube.ci/engine/apis/engine/v1alpha1"
+	"kube.ci/engine/apis/trigger/v1alpha1"
+	"kube.ci/engine/pkg/dependency"
+	"kube.ci/engine/pkg/eventer"
 )
 
 type TriggerREST struct {
@@ -358,7 +358,7 @@ func (c *Controller) createWorkplan(wf *api.Workflow, secretRef *core.SecretEnvS
 	}
 
 	log.Infof("Creating workplan for workflow %s", wf.Name)
-	wp, err = c.kubeciClient.KubeciV1alpha1().Workplans(wp.Namespace).Create(wp)
+	wp, err = c.kubeciClient.EngineV1alpha1().Workplans(wp.Namespace).Create(wp)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create workplan for workflow %s", wf.Name)
 	}

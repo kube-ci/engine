@@ -22,15 +22,15 @@ import (
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"
-	kubeciv1alpha1 "kube.ci/kubeci/client/clientset/versioned/typed/kubeci/v1alpha1"
-	triggerv1alpha1 "kube.ci/kubeci/client/clientset/versioned/typed/trigger/v1alpha1"
+	enginev1alpha1 "kube.ci/engine/client/clientset/versioned/typed/engine/v1alpha1"
+	triggerv1alpha1 "kube.ci/engine/client/clientset/versioned/typed/trigger/v1alpha1"
 )
 
 type Interface interface {
 	Discovery() discovery.DiscoveryInterface
-	KubeciV1alpha1() kubeciv1alpha1.KubeciV1alpha1Interface
+	EngineV1alpha1() enginev1alpha1.EngineV1alpha1Interface
 	// Deprecated: please explicitly pick a version if possible.
-	Kubeci() kubeciv1alpha1.KubeciV1alpha1Interface
+	Engine() enginev1alpha1.EngineV1alpha1Interface
 	TriggerV1alpha1() triggerv1alpha1.TriggerV1alpha1Interface
 	// Deprecated: please explicitly pick a version if possible.
 	Trigger() triggerv1alpha1.TriggerV1alpha1Interface
@@ -40,19 +40,19 @@ type Interface interface {
 // version included in a Clientset.
 type Clientset struct {
 	*discovery.DiscoveryClient
-	kubeciV1alpha1  *kubeciv1alpha1.KubeciV1alpha1Client
+	engineV1alpha1  *enginev1alpha1.EngineV1alpha1Client
 	triggerV1alpha1 *triggerv1alpha1.TriggerV1alpha1Client
 }
 
-// KubeciV1alpha1 retrieves the KubeciV1alpha1Client
-func (c *Clientset) KubeciV1alpha1() kubeciv1alpha1.KubeciV1alpha1Interface {
-	return c.kubeciV1alpha1
+// EngineV1alpha1 retrieves the EngineV1alpha1Client
+func (c *Clientset) EngineV1alpha1() enginev1alpha1.EngineV1alpha1Interface {
+	return c.engineV1alpha1
 }
 
-// Deprecated: Kubeci retrieves the default version of KubeciClient.
+// Deprecated: Engine retrieves the default version of EngineClient.
 // Please explicitly pick a version.
-func (c *Clientset) Kubeci() kubeciv1alpha1.KubeciV1alpha1Interface {
-	return c.kubeciV1alpha1
+func (c *Clientset) Engine() enginev1alpha1.EngineV1alpha1Interface {
+	return c.engineV1alpha1
 }
 
 // TriggerV1alpha1 retrieves the TriggerV1alpha1Client
@@ -82,7 +82,7 @@ func NewForConfig(c *rest.Config) (*Clientset, error) {
 	}
 	var cs Clientset
 	var err error
-	cs.kubeciV1alpha1, err = kubeciv1alpha1.NewForConfig(&configShallowCopy)
+	cs.engineV1alpha1, err = enginev1alpha1.NewForConfig(&configShallowCopy)
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +102,7 @@ func NewForConfig(c *rest.Config) (*Clientset, error) {
 // panics if there is an error in the config.
 func NewForConfigOrDie(c *rest.Config) *Clientset {
 	var cs Clientset
-	cs.kubeciV1alpha1 = kubeciv1alpha1.NewForConfigOrDie(c)
+	cs.engineV1alpha1 = enginev1alpha1.NewForConfigOrDie(c)
 	cs.triggerV1alpha1 = triggerv1alpha1.NewForConfigOrDie(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClientForConfigOrDie(c)
@@ -112,7 +112,7 @@ func NewForConfigOrDie(c *rest.Config) *Clientset {
 // New creates a new Clientset for the given RESTClient.
 func New(c rest.Interface) *Clientset {
 	var cs Clientset
-	cs.kubeciV1alpha1 = kubeciv1alpha1.New(c)
+	cs.engineV1alpha1 = enginev1alpha1.New(c)
 	cs.triggerV1alpha1 = triggerv1alpha1.New(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClient(c)

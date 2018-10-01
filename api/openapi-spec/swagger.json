@@ -44,7 +44,7 @@
         }
       }
     },
-    "/apis/kubeci.kube.ci/": {
+    "/apis/engine.kube.ci/": {
       "get": {
         "description": "get information of a group",
         "consumes": [
@@ -61,9 +61,9 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi"
+          "engineKubeCi"
         ],
-        "operationId": "getKubeciKubeCiAPIGroup",
+        "operationId": "getEngineKubeCiAPIGroup",
         "responses": {
           "200": {
             "description": "OK",
@@ -74,7 +74,7 @@
         }
       }
     },
-    "/apis/kubeci.kube.ci/v1alpha1/": {
+    "/apis/engine.kube.ci/v1alpha1/": {
       "get": {
         "description": "get available resources",
         "consumes": [
@@ -91,9 +91,9 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "getKubeciKubeCiV1alpha1APIResources",
+        "operationId": "getEngineKubeCiV1alpha1APIResources",
         "responses": {
           "200": {
             "description": "OK",
@@ -104,7 +104,7 @@
         }
       }
     },
-    "/apis/kubeci.kube.ci/v1alpha1/namespaces/{namespace}/workflows": {
+    "/apis/engine.kube.ci/v1alpha1/namespaces/{namespace}/workflows": {
       "get": {
         "description": "list or watch objects of kind Workflow",
         "consumes": [
@@ -121,9 +121,9 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "listKubeciKubeCiV1alpha1NamespacedWorkflow",
+        "operationId": "listEngineKubeCiV1alpha1NamespacedWorkflow",
         "parameters": [
           {
             "uniqueItems": true,
@@ -186,13 +186,13 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowList"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowList"
             }
           }
         },
         "x-kubernetes-action": "list",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "Workflow"
         }
@@ -211,16 +211,16 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "createKubeciKubeCiV1alpha1NamespacedWorkflow",
+        "operationId": "createEngineKubeCiV1alpha1NamespacedWorkflow",
         "parameters": [
           {
             "name": "body",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Workflow"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workflow"
             }
           }
         ],
@@ -228,25 +228,25 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Workflow"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workflow"
             }
           },
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Workflow"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workflow"
             }
           },
           "202": {
             "description": "Accepted",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Workflow"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workflow"
             }
           }
         },
         "x-kubernetes-action": "post",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "Workflow"
         }
@@ -265,9 +265,9 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "deleteKubeciKubeCiV1alpha1CollectionNamespacedWorkflow",
+        "operationId": "deleteEngineKubeCiV1alpha1CollectionNamespacedWorkflow",
         "parameters": [
           {
             "uniqueItems": true,
@@ -336,7 +336,7 @@
         },
         "x-kubernetes-action": "deletecollection",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "Workflow"
         }
@@ -359,7 +359,7 @@
         }
       ]
     },
-    "/apis/kubeci.kube.ci/v1alpha1/namespaces/{namespace}/workflows/{name}": {
+    "/apis/engine.kube.ci/v1alpha1/namespaces/{namespace}/workflows/{name}": {
       "get": {
         "description": "read the specified Workflow",
         "consumes": [
@@ -374,20 +374,20 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "readKubeciKubeCiV1alpha1NamespacedWorkflow",
+        "operationId": "readEngineKubeCiV1alpha1NamespacedWorkflow",
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Workflow"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workflow"
             }
           }
         },
         "x-kubernetes-action": "get",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "Workflow"
         }
@@ -406,16 +406,16 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "replaceKubeciKubeCiV1alpha1NamespacedWorkflow",
+        "operationId": "replaceEngineKubeCiV1alpha1NamespacedWorkflow",
         "parameters": [
           {
             "name": "body",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Workflow"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workflow"
             }
           }
         ],
@@ -423,19 +423,19 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Workflow"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workflow"
             }
           },
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Workflow"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workflow"
             }
           }
         },
         "x-kubernetes-action": "put",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "Workflow"
         }
@@ -454,9 +454,9 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "deleteKubeciKubeCiV1alpha1NamespacedWorkflow",
+        "operationId": "deleteEngineKubeCiV1alpha1NamespacedWorkflow",
         "parameters": [
           {
             "name": "body",
@@ -498,7 +498,7 @@
         },
         "x-kubernetes-action": "delete",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "Workflow"
         }
@@ -519,9 +519,9 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "patchKubeciKubeCiV1alpha1NamespacedWorkflow",
+        "operationId": "patchEngineKubeCiV1alpha1NamespacedWorkflow",
         "parameters": [
           {
             "name": "body",
@@ -536,13 +536,13 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Workflow"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workflow"
             }
           }
         },
         "x-kubernetes-action": "patch",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "Workflow"
         }
@@ -573,7 +573,7 @@
         }
       ]
     },
-    "/apis/kubeci.kube.ci/v1alpha1/namespaces/{namespace}/workflowtemplates": {
+    "/apis/engine.kube.ci/v1alpha1/namespaces/{namespace}/workflowtemplates": {
       "get": {
         "description": "list or watch objects of kind WorkflowTemplate",
         "consumes": [
@@ -590,9 +590,9 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "listKubeciKubeCiV1alpha1NamespacedWorkflowTemplate",
+        "operationId": "listEngineKubeCiV1alpha1NamespacedWorkflowTemplate",
         "parameters": [
           {
             "uniqueItems": true,
@@ -655,13 +655,13 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowTemplateList"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplateList"
             }
           }
         },
         "x-kubernetes-action": "list",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "WorkflowTemplate"
         }
@@ -680,16 +680,16 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "createKubeciKubeCiV1alpha1NamespacedWorkflowTemplate",
+        "operationId": "createEngineKubeCiV1alpha1NamespacedWorkflowTemplate",
         "parameters": [
           {
             "name": "body",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowTemplate"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplate"
             }
           }
         ],
@@ -697,25 +697,25 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowTemplate"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplate"
             }
           },
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowTemplate"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplate"
             }
           },
           "202": {
             "description": "Accepted",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowTemplate"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplate"
             }
           }
         },
         "x-kubernetes-action": "post",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "WorkflowTemplate"
         }
@@ -734,9 +734,9 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "deleteKubeciKubeCiV1alpha1CollectionNamespacedWorkflowTemplate",
+        "operationId": "deleteEngineKubeCiV1alpha1CollectionNamespacedWorkflowTemplate",
         "parameters": [
           {
             "uniqueItems": true,
@@ -805,7 +805,7 @@
         },
         "x-kubernetes-action": "deletecollection",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "WorkflowTemplate"
         }
@@ -828,7 +828,7 @@
         }
       ]
     },
-    "/apis/kubeci.kube.ci/v1alpha1/namespaces/{namespace}/workflowtemplates/{name}": {
+    "/apis/engine.kube.ci/v1alpha1/namespaces/{namespace}/workflowtemplates/{name}": {
       "get": {
         "description": "read the specified WorkflowTemplate",
         "consumes": [
@@ -843,20 +843,20 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "readKubeciKubeCiV1alpha1NamespacedWorkflowTemplate",
+        "operationId": "readEngineKubeCiV1alpha1NamespacedWorkflowTemplate",
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowTemplate"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplate"
             }
           }
         },
         "x-kubernetes-action": "get",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "WorkflowTemplate"
         }
@@ -875,16 +875,16 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "replaceKubeciKubeCiV1alpha1NamespacedWorkflowTemplate",
+        "operationId": "replaceEngineKubeCiV1alpha1NamespacedWorkflowTemplate",
         "parameters": [
           {
             "name": "body",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowTemplate"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplate"
             }
           }
         ],
@@ -892,19 +892,19 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowTemplate"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplate"
             }
           },
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowTemplate"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplate"
             }
           }
         },
         "x-kubernetes-action": "put",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "WorkflowTemplate"
         }
@@ -923,9 +923,9 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "deleteKubeciKubeCiV1alpha1NamespacedWorkflowTemplate",
+        "operationId": "deleteEngineKubeCiV1alpha1NamespacedWorkflowTemplate",
         "parameters": [
           {
             "name": "body",
@@ -967,7 +967,7 @@
         },
         "x-kubernetes-action": "delete",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "WorkflowTemplate"
         }
@@ -988,9 +988,9 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "patchKubeciKubeCiV1alpha1NamespacedWorkflowTemplate",
+        "operationId": "patchEngineKubeCiV1alpha1NamespacedWorkflowTemplate",
         "parameters": [
           {
             "name": "body",
@@ -1005,13 +1005,13 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowTemplate"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplate"
             }
           }
         },
         "x-kubernetes-action": "patch",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "WorkflowTemplate"
         }
@@ -1042,7 +1042,7 @@
         }
       ]
     },
-    "/apis/kubeci.kube.ci/v1alpha1/namespaces/{namespace}/workplans": {
+    "/apis/engine.kube.ci/v1alpha1/namespaces/{namespace}/workplans": {
       "get": {
         "description": "list or watch objects of kind Workplan",
         "consumes": [
@@ -1059,9 +1059,9 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "listKubeciKubeCiV1alpha1NamespacedWorkplan",
+        "operationId": "listEngineKubeCiV1alpha1NamespacedWorkplan",
         "parameters": [
           {
             "uniqueItems": true,
@@ -1124,13 +1124,13 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.WorkplanList"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkplanList"
             }
           }
         },
         "x-kubernetes-action": "list",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "Workplan"
         }
@@ -1149,16 +1149,16 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "createKubeciKubeCiV1alpha1NamespacedWorkplan",
+        "operationId": "createEngineKubeCiV1alpha1NamespacedWorkplan",
         "parameters": [
           {
             "name": "body",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Workplan"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workplan"
             }
           }
         ],
@@ -1166,25 +1166,25 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Workplan"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workplan"
             }
           },
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Workplan"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workplan"
             }
           },
           "202": {
             "description": "Accepted",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Workplan"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workplan"
             }
           }
         },
         "x-kubernetes-action": "post",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "Workplan"
         }
@@ -1203,9 +1203,9 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "deleteKubeciKubeCiV1alpha1CollectionNamespacedWorkplan",
+        "operationId": "deleteEngineKubeCiV1alpha1CollectionNamespacedWorkplan",
         "parameters": [
           {
             "uniqueItems": true,
@@ -1274,7 +1274,7 @@
         },
         "x-kubernetes-action": "deletecollection",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "Workplan"
         }
@@ -1297,7 +1297,7 @@
         }
       ]
     },
-    "/apis/kubeci.kube.ci/v1alpha1/namespaces/{namespace}/workplans/{name}": {
+    "/apis/engine.kube.ci/v1alpha1/namespaces/{namespace}/workplans/{name}": {
       "get": {
         "description": "read the specified Workplan",
         "consumes": [
@@ -1312,20 +1312,20 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "readKubeciKubeCiV1alpha1NamespacedWorkplan",
+        "operationId": "readEngineKubeCiV1alpha1NamespacedWorkplan",
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Workplan"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workplan"
             }
           }
         },
         "x-kubernetes-action": "get",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "Workplan"
         }
@@ -1344,16 +1344,16 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "replaceKubeciKubeCiV1alpha1NamespacedWorkplan",
+        "operationId": "replaceEngineKubeCiV1alpha1NamespacedWorkplan",
         "parameters": [
           {
             "name": "body",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Workplan"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workplan"
             }
           }
         ],
@@ -1361,19 +1361,19 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Workplan"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workplan"
             }
           },
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Workplan"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workplan"
             }
           }
         },
         "x-kubernetes-action": "put",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "Workplan"
         }
@@ -1392,9 +1392,9 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "deleteKubeciKubeCiV1alpha1NamespacedWorkplan",
+        "operationId": "deleteEngineKubeCiV1alpha1NamespacedWorkplan",
         "parameters": [
           {
             "name": "body",
@@ -1436,7 +1436,7 @@
         },
         "x-kubernetes-action": "delete",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "Workplan"
         }
@@ -1457,9 +1457,9 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "patchKubeciKubeCiV1alpha1NamespacedWorkplan",
+        "operationId": "patchEngineKubeCiV1alpha1NamespacedWorkplan",
         "parameters": [
           {
             "name": "body",
@@ -1474,13 +1474,13 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Workplan"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workplan"
             }
           }
         },
         "x-kubernetes-action": "patch",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "Workplan"
         }
@@ -1511,7 +1511,7 @@
         }
       ]
     },
-    "/apis/kubeci.kube.ci/v1alpha1/watch/namespaces/{namespace}/workflows": {
+    "/apis/engine.kube.ci/v1alpha1/watch/namespaces/{namespace}/workflows": {
       "get": {
         "description": "watch individual changes to a list of Workflow",
         "consumes": [
@@ -1528,9 +1528,9 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "watchKubeciKubeCiV1alpha1NamespacedWorkflowList",
+        "operationId": "watchEngineKubeCiV1alpha1NamespacedWorkflowList",
         "responses": {
           "200": {
             "description": "OK",
@@ -1541,7 +1541,7 @@
         },
         "x-kubernetes-action": "watchlist",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "Workflow"
         }
@@ -1620,7 +1620,7 @@
         }
       ]
     },
-    "/apis/kubeci.kube.ci/v1alpha1/watch/namespaces/{namespace}/workflows/{name}": {
+    "/apis/engine.kube.ci/v1alpha1/watch/namespaces/{namespace}/workflows/{name}": {
       "get": {
         "description": "watch changes to an object of kind Workflow",
         "consumes": [
@@ -1637,9 +1637,9 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "watchKubeciKubeCiV1alpha1NamespacedWorkflow",
+        "operationId": "watchEngineKubeCiV1alpha1NamespacedWorkflow",
         "responses": {
           "200": {
             "description": "OK",
@@ -1650,7 +1650,7 @@
         },
         "x-kubernetes-action": "watch",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "Workflow"
         }
@@ -1737,7 +1737,7 @@
         }
       ]
     },
-    "/apis/kubeci.kube.ci/v1alpha1/watch/namespaces/{namespace}/workflowtemplates": {
+    "/apis/engine.kube.ci/v1alpha1/watch/namespaces/{namespace}/workflowtemplates": {
       "get": {
         "description": "watch individual changes to a list of WorkflowTemplate",
         "consumes": [
@@ -1754,9 +1754,9 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "watchKubeciKubeCiV1alpha1NamespacedWorkflowTemplateList",
+        "operationId": "watchEngineKubeCiV1alpha1NamespacedWorkflowTemplateList",
         "responses": {
           "200": {
             "description": "OK",
@@ -1767,7 +1767,7 @@
         },
         "x-kubernetes-action": "watchlist",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "WorkflowTemplate"
         }
@@ -1846,7 +1846,7 @@
         }
       ]
     },
-    "/apis/kubeci.kube.ci/v1alpha1/watch/namespaces/{namespace}/workflowtemplates/{name}": {
+    "/apis/engine.kube.ci/v1alpha1/watch/namespaces/{namespace}/workflowtemplates/{name}": {
       "get": {
         "description": "watch changes to an object of kind WorkflowTemplate",
         "consumes": [
@@ -1863,9 +1863,9 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "watchKubeciKubeCiV1alpha1NamespacedWorkflowTemplate",
+        "operationId": "watchEngineKubeCiV1alpha1NamespacedWorkflowTemplate",
         "responses": {
           "200": {
             "description": "OK",
@@ -1876,7 +1876,7 @@
         },
         "x-kubernetes-action": "watch",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "WorkflowTemplate"
         }
@@ -1963,7 +1963,7 @@
         }
       ]
     },
-    "/apis/kubeci.kube.ci/v1alpha1/watch/namespaces/{namespace}/workplans": {
+    "/apis/engine.kube.ci/v1alpha1/watch/namespaces/{namespace}/workplans": {
       "get": {
         "description": "watch individual changes to a list of Workplan",
         "consumes": [
@@ -1980,9 +1980,9 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "watchKubeciKubeCiV1alpha1NamespacedWorkplanList",
+        "operationId": "watchEngineKubeCiV1alpha1NamespacedWorkplanList",
         "responses": {
           "200": {
             "description": "OK",
@@ -1993,7 +1993,7 @@
         },
         "x-kubernetes-action": "watchlist",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "Workplan"
         }
@@ -2072,7 +2072,7 @@
         }
       ]
     },
-    "/apis/kubeci.kube.ci/v1alpha1/watch/namespaces/{namespace}/workplans/{name}": {
+    "/apis/engine.kube.ci/v1alpha1/watch/namespaces/{namespace}/workplans/{name}": {
       "get": {
         "description": "watch changes to an object of kind Workplan",
         "consumes": [
@@ -2089,9 +2089,9 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "watchKubeciKubeCiV1alpha1NamespacedWorkplan",
+        "operationId": "watchEngineKubeCiV1alpha1NamespacedWorkplan",
         "responses": {
           "200": {
             "description": "OK",
@@ -2102,7 +2102,7 @@
         },
         "x-kubernetes-action": "watch",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "Workplan"
         }
@@ -2189,7 +2189,7 @@
         }
       ]
     },
-    "/apis/kubeci.kube.ci/v1alpha1/watch/workflows": {
+    "/apis/engine.kube.ci/v1alpha1/watch/workflows": {
       "get": {
         "description": "watch individual changes to a list of Workflow",
         "consumes": [
@@ -2206,9 +2206,9 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "watchKubeciKubeCiV1alpha1WorkflowListForAllNamespaces",
+        "operationId": "watchEngineKubeCiV1alpha1WorkflowListForAllNamespaces",
         "responses": {
           "200": {
             "description": "OK",
@@ -2219,7 +2219,7 @@
         },
         "x-kubernetes-action": "watchlist",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "Workflow"
         }
@@ -2290,7 +2290,7 @@
         }
       ]
     },
-    "/apis/kubeci.kube.ci/v1alpha1/watch/workflowtemplates": {
+    "/apis/engine.kube.ci/v1alpha1/watch/workflowtemplates": {
       "get": {
         "description": "watch individual changes to a list of WorkflowTemplate",
         "consumes": [
@@ -2307,9 +2307,9 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "watchKubeciKubeCiV1alpha1WorkflowTemplateListForAllNamespaces",
+        "operationId": "watchEngineKubeCiV1alpha1WorkflowTemplateListForAllNamespaces",
         "responses": {
           "200": {
             "description": "OK",
@@ -2320,7 +2320,7 @@
         },
         "x-kubernetes-action": "watchlist",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "WorkflowTemplate"
         }
@@ -2391,7 +2391,7 @@
         }
       ]
     },
-    "/apis/kubeci.kube.ci/v1alpha1/watch/workplans": {
+    "/apis/engine.kube.ci/v1alpha1/watch/workplans": {
       "get": {
         "description": "watch individual changes to a list of Workplan",
         "consumes": [
@@ -2408,9 +2408,9 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "watchKubeciKubeCiV1alpha1WorkplanListForAllNamespaces",
+        "operationId": "watchEngineKubeCiV1alpha1WorkplanListForAllNamespaces",
         "responses": {
           "200": {
             "description": "OK",
@@ -2421,7 +2421,7 @@
         },
         "x-kubernetes-action": "watchlist",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "Workplan"
         }
@@ -2492,7 +2492,7 @@
         }
       ]
     },
-    "/apis/kubeci.kube.ci/v1alpha1/workflows": {
+    "/apis/engine.kube.ci/v1alpha1/workflows": {
       "get": {
         "description": "list or watch objects of kind Workflow",
         "consumes": [
@@ -2509,20 +2509,20 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "listKubeciKubeCiV1alpha1WorkflowForAllNamespaces",
+        "operationId": "listEngineKubeCiV1alpha1WorkflowForAllNamespaces",
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowList"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowList"
             }
           }
         },
         "x-kubernetes-action": "list",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "Workflow"
         }
@@ -2593,7 +2593,7 @@
         }
       ]
     },
-    "/apis/kubeci.kube.ci/v1alpha1/workflowtemplates": {
+    "/apis/engine.kube.ci/v1alpha1/workflowtemplates": {
       "get": {
         "description": "list or watch objects of kind WorkflowTemplate",
         "consumes": [
@@ -2610,20 +2610,20 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "listKubeciKubeCiV1alpha1WorkflowTemplateForAllNamespaces",
+        "operationId": "listEngineKubeCiV1alpha1WorkflowTemplateForAllNamespaces",
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowTemplateList"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplateList"
             }
           }
         },
         "x-kubernetes-action": "list",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "WorkflowTemplate"
         }
@@ -2694,7 +2694,7 @@
         }
       ]
     },
-    "/apis/kubeci.kube.ci/v1alpha1/workplans": {
+    "/apis/engine.kube.ci/v1alpha1/workplans": {
       "get": {
         "description": "list or watch objects of kind Workplan",
         "consumes": [
@@ -2711,20 +2711,20 @@
           "https"
         ],
         "tags": [
-          "kubeciKubeCi_v1alpha1"
+          "engineKubeCi_v1alpha1"
         ],
-        "operationId": "listKubeciKubeCiV1alpha1WorkplanForAllNamespaces",
+        "operationId": "listEngineKubeCiV1alpha1WorkplanForAllNamespaces",
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.WorkplanList"
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkplanList"
             }
           }
         },
         "x-kubernetes-action": "list",
         "x-kubernetes-group-version-kind": {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "Workplan"
         }
@@ -2797,7 +2797,7 @@
     }
   },
   "definitions": {
-    "ci.kube.kubeci.apis.kubeci.v1alpha1.ObjectReference": {
+    "ci.kube.engine.apis.engine.v1alpha1.ObjectReference": {
       "properties": {
         "apiVersion": {
           "type": "string"
@@ -2813,7 +2813,7 @@
         }
       }
     },
-    "ci.kube.kubeci.apis.kubeci.v1alpha1.Step": {
+    "ci.kube.engine.apis.engine.v1alpha1.Step": {
       "properties": {
         "args": {
           "type": "array",
@@ -2847,7 +2847,7 @@
         }
       }
     },
-    "ci.kube.kubeci.apis.kubeci.v1alpha1.Task": {
+    "ci.kube.engine.apis.engine.v1alpha1.Task": {
       "required": [
         "SerialSteps",
         "ParallelSteps"
@@ -2857,19 +2857,19 @@
           "description": "analogous to init-containers",
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Step"
+            "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Step"
           }
         },
         "SerialSteps": {
           "description": "analogous to a single pod",
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Step"
+            "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Step"
           }
         }
       }
     },
-    "ci.kube.kubeci.apis.kubeci.v1alpha1.Template": {
+    "ci.kube.engine.apis.engine.v1alpha1.Template": {
       "properties": {
         "arguments": {
           "type": "object",
@@ -2882,7 +2882,7 @@
         }
       }
     },
-    "ci.kube.kubeci.apis.kubeci.v1alpha1.Trigger": {
+    "ci.kube.engine.apis.engine.v1alpha1.Trigger": {
       "properties": {
         "apiVersion": {
           "type": "string"
@@ -2917,17 +2917,17 @@
         }
       }
     },
-    "ci.kube.kubeci.apis.kubeci.v1alpha1.TriggeredFor": {
+    "ci.kube.engine.apis.engine.v1alpha1.TriggeredFor": {
       "properties": {
         "objectReference": {
-          "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.ObjectReference"
+          "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.ObjectReference"
         },
         "resourceGeneration": {
           "$ref": "#/definitions/com.github.appscode.go.encoding.json.types.IntHash"
         }
       }
     },
-    "ci.kube.kubeci.apis.kubeci.v1alpha1.Workflow": {
+    "ci.kube.engine.apis.engine.v1alpha1.Workflow": {
       "properties": {
         "apiVersion": {
           "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources",
@@ -2941,18 +2941,18 @@
           "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta"
         },
         "spec": {
-          "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowSpec"
+          "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowSpec"
         }
       },
       "x-kubernetes-group-version-kind": [
         {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "Workflow"
         }
       ]
     },
-    "ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowList": {
+    "ci.kube.engine.apis.engine.v1alpha1.WorkflowList": {
       "required": [
         "metadata",
         "items"
@@ -2965,7 +2965,7 @@
         "items": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Workflow"
+            "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workflow"
           }
         },
         "kind": {
@@ -2978,13 +2978,13 @@
       },
       "x-kubernetes-group-version-kind": [
         {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "WorkflowList"
         }
       ]
     },
-    "ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowSpec": {
+    "ci.kube.engine.apis.engine.v1alpha1.WorkflowSpec": {
       "properties": {
         "allowForceTrigger": {
           "type": "boolean"
@@ -3013,16 +3013,16 @@
         "steps": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Step"
+            "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Step"
           }
         },
         "template": {
-          "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Template"
+          "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Template"
         },
         "triggers": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Trigger"
+            "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Trigger"
           }
         },
         "volumes": {
@@ -3033,7 +3033,7 @@
         }
       }
     },
-    "ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowTemplate": {
+    "ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplate": {
       "properties": {
         "apiVersion": {
           "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources",
@@ -3047,18 +3047,18 @@
           "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta"
         },
         "spec": {
-          "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowTemplateSpec"
+          "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplateSpec"
         }
       },
       "x-kubernetes-group-version-kind": [
         {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "WorkflowTemplate"
         }
       ]
     },
-    "ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowTemplateList": {
+    "ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplateList": {
       "required": [
         "metadata",
         "items"
@@ -3071,7 +3071,7 @@
         "items": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowTemplate"
+            "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplate"
           }
         },
         "kind": {
@@ -3084,23 +3084,23 @@
       },
       "x-kubernetes-group-version-kind": [
         {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "WorkflowTemplateList"
         }
       ]
     },
-    "ci.kube.kubeci.apis.kubeci.v1alpha1.WorkflowTemplateSpec": {
+    "ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplateSpec": {
       "properties": {
         "steps": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Step"
+            "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Step"
           }
         }
       }
     },
-    "ci.kube.kubeci.apis.kubeci.v1alpha1.Workplan": {
+    "ci.kube.engine.apis.engine.v1alpha1.Workplan": {
       "properties": {
         "apiVersion": {
           "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources",
@@ -3114,21 +3114,21 @@
           "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta"
         },
         "spec": {
-          "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.WorkplanSpec"
+          "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkplanSpec"
         },
         "status": {
-          "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.WorkplanStatus"
+          "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkplanStatus"
         }
       },
       "x-kubernetes-group-version-kind": [
         {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "Workplan"
         }
       ]
     },
-    "ci.kube.kubeci.apis.kubeci.v1alpha1.WorkplanList": {
+    "ci.kube.engine.apis.engine.v1alpha1.WorkplanList": {
       "required": [
         "metadata",
         "items"
@@ -3141,7 +3141,7 @@
         "items": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Workplan"
+            "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workplan"
           }
         },
         "kind": {
@@ -3154,13 +3154,13 @@
       },
       "x-kubernetes-group-version-kind": [
         {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "WorkplanList"
         }
       ]
     },
-    "ci.kube.kubeci.apis.kubeci.v1alpha1.WorkplanSpec": {
+    "ci.kube.engine.apis.engine.v1alpha1.WorkplanSpec": {
       "required": [
         "triggeredFor"
       ],
@@ -3182,11 +3182,11 @@
         "tasks": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.Task"
+            "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Task"
           }
         },
         "triggeredFor": {
-          "$ref": "#/definitions/ci.kube.kubeci.apis.kubeci.v1alpha1.TriggeredFor"
+          "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.TriggeredFor"
         },
         "volumes": {
           "type": "array",
@@ -3199,7 +3199,7 @@
         }
       }
     },
-    "ci.kube.kubeci.apis.kubeci.v1alpha1.WorkplanStatus": {
+    "ci.kube.engine.apis.engine.v1alpha1.WorkplanStatus": {
       "required": [
         "phase",
         "reason",
@@ -4588,7 +4588,7 @@
           "kind": "DeleteOptions"
         },
         {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "DeleteOptions"
         }
@@ -4900,7 +4900,7 @@
           "kind": "Status"
         },
         {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "Status"
         }
@@ -4983,7 +4983,7 @@
           "kind": "WatchEvent"
         },
         {
-          "group": "kubeci.kube.ci",
+          "group": "engine.kube.ci",
           "version": "v1alpha1",
           "kind": "WatchEvent"
         }

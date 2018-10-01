@@ -10,12 +10,12 @@ import (
 	openapinamer "k8s.io/apiserver/pkg/endpoints/openapi"
 	genericapiserver "k8s.io/apiserver/pkg/server"
 	genericoptions "k8s.io/apiserver/pkg/server/options"
-	"kube.ci/kubeci/apis/kubeci/v1alpha1"
-	"kube.ci/kubeci/pkg/controller"
-	"kube.ci/kubeci/pkg/server"
+	"kube.ci/engine/apis/engine/v1alpha1"
+	"kube.ci/engine/pkg/controller"
+	"kube.ci/engine/pkg/server"
 )
 
-const defaultEtcdPathPrefix = "/registry/kubeci.kube.ci"
+const defaultEtcdPathPrefix = "/registry/engine.kube.ci"
 
 type KubeciOptions struct {
 	RecommendedOptions *genericoptions.RecommendedOptions
@@ -67,9 +67,9 @@ func (o KubeciOptions) Config() (*server.KubeciServerConfig, error) {
 	serverConfig.OpenAPIConfig.Info.Version = v1alpha1.SchemeGroupVersion.Version
 	serverConfig.OpenAPIConfig.IgnorePrefixes = []string{
 		"/swaggerapi",
-		"/apis/admission.kubeci.kube.ci/v1alpha1/workflows",
-		"/apis/admission.kubeci.kube.ci/v1alpha1/workplans",
-		"/apis/trigger.kubeci.kube.ci/v1alpha1",
+		"/apis/admission.engine.kube.ci/v1alpha1/workflows",
+		"/apis/admission.engine.kube.ci/v1alpha1/workplans",
+		"/apis/trigger.kube.ci/v1alpha1",
 	}
 
 	extraConfig := controller.NewConfig(serverConfig.ClientConfig)

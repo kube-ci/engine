@@ -10,13 +10,13 @@ import (
 	"k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
-	cs "kube.ci/kubeci/client/clientset/versioned"
-	kubeci_informers "kube.ci/kubeci/client/informers/externalversions"
-	"kube.ci/kubeci/pkg/eventer"
+	cs "kube.ci/engine/client/clientset/versioned"
+	kubeci_informers "kube.ci/engine/client/informers/externalversions"
+	"kube.ci/engine/pkg/eventer"
 )
 
 const (
-	validatingWebhook = "admission.kubeci.kube.ci"
+	validatingWebhook = "admission.engine.kube.ci"
 )
 
 type config struct {

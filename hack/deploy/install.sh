@@ -255,13 +255,13 @@ if [ "$KUBECI_UNINSTALL" -eq 1 ]; then
   # https://github.com/kubernetes/kubernetes/issues/60538
   if [ "$KUBECI_PURGE" -eq 1 ]; then
     for crd in "${crds[@]}"; do
-      pairs=($(kubectl get ${crd}.kubeci.kube.ci --all-namespaces -o jsonpath='{range .items[*]}{.metadata.name} {.metadata.namespace} {end}' || true))
+      pairs=($(kubectl get ${crd}.engine.kube.ci --all-namespaces -o jsonpath='{range .items[*]}{.metadata.name} {.metadata.namespace} {end}' || true))
       total=${#pairs[*]}
 
       # save objects
       if [ $total -gt 0 ]; then
         echo "dumping ${crd} objects into ${crd}.yaml"
-        kubectl get ${crd}.kubeci.kube.ci --all-namespaces -o yaml >${crd}.yaml
+        kubectl get ${crd}.engine.kube.ci --all-namespaces -o yaml >${crd}.yaml
       fi
 
       for ((i = 0; i < $total; i += 2)); do
@@ -269,11 +269,11 @@ if [ "$KUBECI_UNINSTALL" -eq 1 ]; then
         namespace=${pairs[$i + 1]}
         # delete crd object
         echo "deleting ${crd} $namespace/$name"
-        kubectl delete ${crd}.kubeci.kube.ci $name -n $namespace
+        kubectl delete ${crd}.engine.kube.ci $name -n $namespace
       done
 
       # delete crd
-      kubectl delete crd ${crd}.kubeci.kube.ci || true
+      kubectl delete crd ${crd}.engine.kube.ci || true
     done
 
     # delete user roles
@@ -348,7 +348,7 @@ $ONESSL wait-until-ready deployment kubeci --namespace $KUBECI_NAMESPACE || {
 
 if [ "$KUBECI_ENABLE_APISERVER" = true ]; then
   echo "waiting until kubeci apiservice is available"
-  $ONESSL wait-until-ready apiservice v1alpha1.admission.kubeci.kube.ci || {
+  $ONESSL wait-until-ready apiservice v1alpha1.admission.engine.kube.ci || {
     echo "KUBECI apiservice failed to be ready"
     exit 1
   }
@@ -356,7 +356,7 @@ fi
 
 echo "waiting until kubeci crds are ready"
 for crd in "${crds[@]}"; do
-  $ONESSL wait-until-ready crd ${crd}.kubeci.kube.ci || {
+  $ONESSL wait-until-ready crd ${crd}.engine.kube.ci || {
     echo "$crd crd failed to be ready"
     exit 1
   }

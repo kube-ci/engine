@@ -15,8 +15,8 @@ import (
 	genericapiserver "k8s.io/apiserver/pkg/server"
 	clientsetscheme "k8s.io/client-go/kubernetes/scheme"
 	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"kube.ci/kubeci/client/clientset/versioned/scheme"
-	"kube.ci/kubeci/pkg/util"
+	"kube.ci/engine/client/clientset/versioned/scheme"
+	"kube.ci/engine/pkg/util"
 )
 
 const (

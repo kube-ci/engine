@@ -7,7 +7,7 @@ metadata:
     rbac.authorization.k8s.io/aggregate-to-edit: "true"
 rules:
 - apiGroups:
-  - kubeci.kube.ci
+  - engine.kube.ci
   resources:
   - workflows
   - workplans
@@ -29,7 +29,7 @@ metadata:
     rbac.authorization.k8s.io/aggregate-to-view: "true"
 rules:
 - apiGroups:
-  - kubeci.kube.ci
+  - engine.kube.ci
   resources:
   - workflows
   - workplans

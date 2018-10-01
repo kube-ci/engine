@@ -2,7 +2,7 @@
 set -xe
 
 GOPATH=$(go env GOPATH)
-REPO_ROOT="$GOPATH/src/kube.ci/kubeci"
+REPO_ROOT="$GOPATH/src/kube.ci/engine"
 
 pushd $REPO_ROOT
 

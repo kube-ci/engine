@@ -7,7 +7,7 @@ import (
 	"github.com/appscode/go/flags"
 	logs "github.com/appscode/go/log/golog"
 	"k8s.io/client-go/util/homedir"
-	"kube.ci/kubeci/pkg/cmds/server"
+	"kube.ci/engine/pkg/cmds/server"
 )
 
 type E2EOptions struct {

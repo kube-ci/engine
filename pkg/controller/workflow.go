@@ -8,14 +8,14 @@ import (
 	"github.com/appscode/kutil/tools/queue"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
-	"kube.ci/kubeci/apis/kubeci"
-	api "kube.ci/kubeci/apis/kubeci/v1alpha1"
+	"kube.ci/engine/apis/engine"
+	api "kube.ci/engine/apis/engine/v1alpha1"
 )
 
 func (c *Controller) NewWorkflowWebhook() hooks.AdmissionHook {
 	return webhook.NewGenericWebhook(
 		schema.GroupVersionResource{
-			Group:    "admission.kubeci.kube.ci",
+			Group:    "admission.engine.kube.ci",
 			Version:  "v1alpha1",
 			Resource: "workflows",
 		},
@@ -35,12 +35,12 @@ func (c *Controller) NewWorkflowWebhook() hooks.AdmissionHook {
 }
 
 func (c *Controller) initWorkflowWatcher() {
-	c.wfInformer = c.kubeciInformerFactory.Kubeci().V1alpha1().Workflows().Informer()
+	c.wfInformer = c.kubeciInformerFactory.Engine().V1alpha1().Workflows().Informer()
 	c.wfQueue = queue.New("Workflow", c.MaxNumRequeues, c.NumThreads, c.runWorkflowInjector)
 	c.wfInformer.AddEventHandler(queue.NewEventHandler(c.wfQueue.GetQueue(), func(oldObj, newObj interface{}) bool {
 		return !c.observedWorkflows.alreadyObserved(newObj.(*api.Workflow))
 	}))
-	c.wfLister = c.kubeciInformerFactory.Kubeci().V1alpha1().Workflows().Lister()
+	c.wfLister = c.kubeciInformerFactory.Engine().V1alpha1().Workflows().Lister()
 }
 
 // always reconcile for add events, it will create required dynamic-informers

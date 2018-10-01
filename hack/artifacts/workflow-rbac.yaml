@@ -36,7 +36,7 @@ metadata:
 data:
   HELLO: world
 ---
-apiVersion: kubeci.kube.ci/v1alpha1
+apiVersion: engine.kube.ci/v1alpha1
 kind: Workflow
 metadata:
   name: wf-json-path

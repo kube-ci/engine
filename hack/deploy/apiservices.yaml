@@ -2,12 +2,12 @@
 apiVersion: apiregistration.k8s.io/v1beta1
 kind: APIService
 metadata:
-  name: v1alpha1.admission.kubeci.kube.ci
+  name: v1alpha1.admission.engine.kube.ci
   labels:
     app: kubeci
 spec:
   caBundle: ${SERVICE_SERVING_CERT_CA}
-  group: admission.kubeci.kube.ci
+  group: admission.engine.kube.ci
   groupPriorityMinimum: 1000
   versionPriority: 15
   service:
@@ -19,12 +19,12 @@ spec:
 apiVersion: apiregistration.k8s.io/v1beta1
 kind: APIService
 metadata:
-  name: v1alpha1.trigger.kubeci.kube.ci
+  name: v1alpha1.trigger.kube.ci
   labels:
     app: kubeci
 spec:
   caBundle: ${SERVICE_SERVING_CERT_CA}
-  group: trigger.kubeci.kube.ci
+  group: trigger.kube.ci
   groupPriorityMinimum: 1000
   versionPriority: 15
   service:

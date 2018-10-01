@@ -21,8 +21,8 @@ package v1alpha1
 import (
 	serializer "k8s.io/apimachinery/pkg/runtime/serializer"
 	rest "k8s.io/client-go/rest"
-	v1alpha1 "kube.ci/kubeci/apis/trigger/v1alpha1"
-	"kube.ci/kubeci/client/clientset/versioned/scheme"
+	v1alpha1 "kube.ci/engine/apis/trigger/v1alpha1"
+	"kube.ci/engine/client/clientset/versioned/scheme"
 )
 
 type TriggerV1alpha1Interface interface {
@@ -30,7 +30,7 @@ type TriggerV1alpha1Interface interface {
 	TriggersGetter
 }
 
-// TriggerV1alpha1Client is used to interact with features provided by the trigger.kubeci.kube.ci group.
+// TriggerV1alpha1Client is used to interact with features provided by the trigger.kube.ci group.
 type TriggerV1alpha1Client struct {
 	restClient rest.Interface
 }

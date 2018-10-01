@@ -26,7 +26,7 @@ import (
 	"strings"
 
 	corev1 "k8s.io/api/core/v1"
-	"kube.ci/kubeci/pkg/credentials"
+	"kube.ci/engine/pkg/credentials"
 )
 
 const sshKnownHosts = "known_hosts"

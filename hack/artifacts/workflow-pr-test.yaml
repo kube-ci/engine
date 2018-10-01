@@ -50,7 +50,7 @@ data:
   DESCRIPTION_FAILURE: kubeci-build-failure
   TEST_SCRIPT: test.sh
 ---
-apiVersion: kubeci.kube.ci/v1alpha1
+apiVersion: engine.kube.ci/v1alpha1
 kind: Workflow
 metadata:
   name: wf-pr-test
