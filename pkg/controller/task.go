@@ -7,8 +7,8 @@ import (
 	core_util "github.com/appscode/kutil/core/v1"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	api "kube.ci/kubeci/apis/kubeci/v1alpha1"
-	"kube.ci/kubeci/client/clientset/versioned/typed/kubeci/v1alpha1/util"
+	api "kube.ci/engine/apis/engine/v1alpha1"
+	"kube.ci/engine/client/clientset/versioned/typed/engine/v1alpha1/util"
 )
 
 func (c *Controller) runTasks(wp *api.Workplan) error {
@@ -22,7 +22,7 @@ func (c *Controller) runTasks(wp *api.Workplan) error {
 				return fmt.Errorf("failed to create pod %s for task[%d], reason: %s", pod.Name, index, err.Error())
 			}
 			if wp, err = util.UpdateWorkplanStatus(
-				c.kubeciClient.KubeciV1alpha1(),
+				c.kubeciClient.EngineV1alpha1(),
 				wp,
 				func(r *api.WorkplanStatus) *api.WorkplanStatus {
 					r.Phase = api.WorkplanRunning

@@ -11,15 +11,15 @@ import (
 	"github.com/appscode/kutil/tools/queue"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
-	"kube.ci/kubeci/apis/kubeci"
-	api "kube.ci/kubeci/apis/kubeci/v1alpha1"
-	"kube.ci/kubeci/client/clientset/versioned/typed/kubeci/v1alpha1/util"
+	"kube.ci/engine/apis/engine"
+	api "kube.ci/engine/apis/engine/v1alpha1"
+	"kube.ci/engine/client/clientset/versioned/typed/engine/v1alpha1/util"
 )
 
 func (c *Controller) NewWorkplanWebhook() hooks.AdmissionHook {
 	return webhook.NewGenericWebhook(
 		schema.GroupVersionResource{
-			Group:    "admission.kubeci.kube.ci",
+			Group:    "admission.engine.kube.ci",
 			Version:  "v1alpha1",
 			Resource: "workplans",
 		},
@@ -46,12 +46,12 @@ func (c *Controller) NewWorkplanWebhook() hooks.AdmissionHook {
 // running: previously created, but operator restarted before it succeeded
 
 func (c *Controller) initWorkplanWatcher() {
-	c.wpInformer = c.kubeciInformerFactory.Kubeci().V1alpha1().Workplans().Informer()
+	c.wpInformer = c.kubeciInformerFactory.Engine().V1alpha1().Workplans().Informer()
 	c.wpQueue = queue.New("Workplan", c.MaxNumRequeues, c.NumThreads, c.runWorkplanInjector)
 	c.wpInformer.AddEventHandler(queue.NewEventHandler(c.wpQueue.GetQueue(), func(oldObj, newObj interface{}) bool {
 		return false
 	}))
-	c.wpLister = c.kubeciInformerFactory.Kubeci().V1alpha1().Workplans().Lister()
+	c.wpLister = c.kubeciInformerFactory.Engine().V1alpha1().Workplans().Lister()
 }
 
 func (c *Controller) runWorkplanInjector(key string) error {
@@ -86,7 +86,7 @@ func (c *Controller) executeWorkplan(wp *api.Workplan) {
 	if wp.Status.Phase == api.WorkplanUninitialized {
 		log.Infof("Executing workplan %s", wp.Name)
 		if wp, err = util.UpdateWorkplanStatus(
-			c.kubeciClient.KubeciV1alpha1(),
+			c.kubeciClient.EngineV1alpha1(),
 			wp,
 			func(r *api.WorkplanStatus) *api.WorkplanStatus {
 				r.Phase = api.WorkplanPending
@@ -106,7 +106,7 @@ func (c *Controller) executeWorkplan(wp *api.Workplan) {
 	if err = c.runTasks(wp); err != nil {
 		log.Errorf("Failed to execute workplan: %s, reason: %s", wp.Name, err.Error())
 		if wp, err = util.UpdateWorkplanStatus(
-			c.kubeciClient.KubeciV1alpha1(),
+			c.kubeciClient.EngineV1alpha1(),
 			wp,
 			func(r *api.WorkplanStatus) *api.WorkplanStatus {
 				r.Phase = api.WorkplanFailed
@@ -123,7 +123,7 @@ func (c *Controller) executeWorkplan(wp *api.Workplan) {
 
 	log.Infof("Workplan %s completed successfully", wp.Name)
 	if wp, err = util.UpdateWorkplanStatus(
-		c.kubeciClient.KubeciV1alpha1(),
+		c.kubeciClient.EngineV1alpha1(),
 		wp,
 		func(r *api.WorkplanStatus) *api.WorkplanStatus {
 			r.Phase = api.WorkplanSucceeded

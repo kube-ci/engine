@@ -22,7 +22,7 @@ import (
 	"testing"
 
 	corev1 "k8s.io/api/core/v1"
-	"kube.ci/kubeci/pkg/credentials"
+	"kube.ci/engine/pkg/credentials"
 )
 
 func TestBasicFlagHandling(t *testing.T) {

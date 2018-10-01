@@ -7,7 +7,7 @@ import (
 	meta_util "github.com/appscode/kutil/meta"
 	"k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"kube.ci/kubeci/apis/kubeci/v1alpha1"
+	"kube.ci/engine/apis/engine/v1alpha1"
 )
 
 func TestJsonPathData(t *testing.T) {
@@ -31,7 +31,7 @@ func TestJsonPathData(t *testing.T) {
 func TestObjectHashWorkflow(t *testing.T) {
 	obj := &v1alpha1.Workflow{
 		TypeMeta: metav1.TypeMeta{
-			APIVersion: "kubeci.kube.ci/v1alpha1",
+			APIVersion: "engine.kube.ci/v1alpha1",
 			Kind:       "Workflow",
 		},
 		ObjectMeta: metav1.ObjectMeta{
@@ -47,9 +47,6 @@ func TestObjectHashWorkflow(t *testing.T) {
 		},
 		Spec: v1alpha1.WorkflowSpec{
 			ServiceAccount: "sa-01",
-		},
-		Status: v1alpha1.WorkflowStatus{
-			ObservedGeneration: 2,
 		},
 	}
 
@@ -89,7 +86,6 @@ func TestObjectHashWorkflow(t *testing.T) {
 
 	// status changed, hash should not change
 	objNew = obj.DeepCopy()
-	objNew.Status.ObservedGeneration = 3
 	hashNew = meta_util.ObjectHash(objNew)
 	if hash != hashNew {
 		t.Errorf("status changed, hash should not changee")

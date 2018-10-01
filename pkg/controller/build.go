@@ -7,11 +7,11 @@ import (
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kubernetes/plugin/pkg/admission/serviceaccount"
-	api "kube.ci/kubeci/apis/kubeci/v1alpha1"
-	"kube.ci/kubeci/pkg/credentials"
-	"kube.ci/kubeci/pkg/credentials/dockercreds"
-	"kube.ci/kubeci/pkg/credentials/gitcreds"
-	"kube.ci/kubeci/pkg/docker"
+	api "kube.ci/engine/apis/engine/v1alpha1"
+	"kube.ci/engine/pkg/credentials"
+	"kube.ci/engine/pkg/credentials/dockercreds"
+	"kube.ci/engine/pkg/credentials/gitcreds"
+	"kube.ci/engine/pkg/docker"
 )
 
 const (

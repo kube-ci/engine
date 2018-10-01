@@ -9,10 +9,10 @@ import (
 	"github.com/spf13/pflag"
 	crd_cs "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/typed/apiextensions/v1beta1"
 	"k8s.io/client-go/kubernetes"
-	api "kube.ci/kubeci/apis/kubeci/v1alpha1"
-	cs "kube.ci/kubeci/client/clientset/versioned"
-	"kube.ci/kubeci/pkg/controller"
-	"kube.ci/kubeci/pkg/docker"
+	api "kube.ci/engine/apis/engine/v1alpha1"
+	cs "kube.ci/engine/client/clientset/versioned"
+	"kube.ci/engine/pkg/controller"
+	"kube.ci/engine/pkg/docker"
 )
 
 type ExtraOptions struct {

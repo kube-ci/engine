@@ -1,4 +1,4 @@
-apiVersion: trigger.kubeci.kube.ci/v1alpha1
+apiVersion: trigger.kube.ci/v1alpha1
 kind: Trigger
 metadata:
   name: testing-wf-template

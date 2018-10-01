@@ -13,7 +13,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	genericapiserver "k8s.io/apiserver/pkg/server"
 	kapi "k8s.io/kube-aggregator/pkg/apis/apiregistration/v1beta1"
-	srvr "kube.ci/kubeci/pkg/cmds/server"
+	srvr "kube.ci/engine/pkg/cmds/server"
 )
 
 func (f *Framework) NewTestKubeciOptions(kubeConfigPath string, controllerOptions *srvr.ExtraOptions) *srvr.KubeciOptions {
@@ -55,8 +55,8 @@ func (f *Framework) StartAPIServerAndOperator(kubeConfigPath string, extraOption
 
 func (f *Framework) EventuallyAPIServerReady() GomegaAsyncAssertion {
 	apiServices := []string{
-		"v1alpha1.admission.kubeci.kube.ci",
-		"v1alpha1.trigger.kubeci.kube.ci",
+		"v1alpha1.admission.engine.kube.ci",
+		"v1alpha1.trigger.kube.ci",
 	}
 
 	return Eventually(

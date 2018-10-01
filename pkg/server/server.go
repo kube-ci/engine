@@ -14,10 +14,10 @@ import (
 	"k8s.io/apimachinery/pkg/version"
 	"k8s.io/apiserver/pkg/registry/rest"
 	genericapiserver "k8s.io/apiserver/pkg/server"
-	"kube.ci/kubeci/apis/trigger"
-	"kube.ci/kubeci/apis/trigger/install"
-	"kube.ci/kubeci/apis/trigger/v1alpha1"
-	"kube.ci/kubeci/pkg/controller"
+	"kube.ci/engine/apis/trigger"
+	"kube.ci/engine/apis/trigger/install"
+	"kube.ci/engine/apis/trigger/v1alpha1"
+	"kube.ci/engine/pkg/controller"
 )
 
 var (

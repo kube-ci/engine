@@ -5,9 +5,9 @@ metadata:
   creationTimestamp: null
   labels:
     app: kubeci
-  name: workflows.kubeci.kube.ci
+  name: workflows.engine.kube.ci
 spec:
-  group: kubeci.kube.ci
+  group: engine.kube.ci
   names:
     categories:
     - kubeci

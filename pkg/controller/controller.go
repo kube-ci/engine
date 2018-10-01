@@ -20,10 +20,10 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/tools/record"
-	api "kube.ci/kubeci/apis/kubeci/v1alpha1"
-	cs "kube.ci/kubeci/client/clientset/versioned"
-	api_informers "kube.ci/kubeci/client/informers/externalversions"
-	api_listers "kube.ci/kubeci/client/listers/kubeci/v1alpha1"
+	api "kube.ci/engine/apis/engine/v1alpha1"
+	cs "kube.ci/engine/client/clientset/versioned"
+	api_informers "kube.ci/engine/client/informers/externalversions"
+	api_listers "kube.ci/engine/client/listers/engine/v1alpha1"
 )
 
 type Controller struct {

@@ -8,8 +8,8 @@ import (
 	logs "github.com/appscode/go/log/golog"
 	_ "k8s.io/client-go/kubernetes/fake"
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
-	_ "kube.ci/kubeci/client/clientset/versioned/fake"
-	"kube.ci/kubeci/pkg/cmds"
+	_ "kube.ci/engine/client/clientset/versioned/fake"
+	"kube.ci/engine/pkg/cmds"
 )
 
 func main() {

@@ -8,7 +8,7 @@ GOPATH=$(go env GOPATH)
 SRC=$GOPATH/src
 BIN=$GOPATH/bin
 ROOT=$GOPATH
-REPO_ROOT=$GOPATH/src/kube.ci/kubeci
+REPO_ROOT=$GOPATH/src/kube.ci/engine
 
 source "$REPO_ROOT/hack/libbuild/common/lib.sh"
 source "$REPO_ROOT/hack/libbuild/common/kubeci_image.sh"
@@ -16,20 +16,20 @@ source "$REPO_ROOT/hack/libbuild/common/kubeci_image.sh"
 APPSCODE_ENV=${APPSCODE_ENV:-dev}
 IMG=kubeci
 
-DIST=$GOPATH/src/kube.ci/kubeci/dist
+DIST=$GOPATH/src/kube.ci/engine/dist
 mkdir -p $DIST
 if [ -f "$DIST/.tag" ]; then
   export $(cat $DIST/.tag | xargs)
 fi
 
 clean() {
-  pushd $GOPATH/src/kube.ci/kubeci/hack/docker
+  pushd $GOPATH/src/kube.ci/engine/hack/docker
   rm kubeci Dockerfile
   popd
 }
 
 build_binary() {
-  pushd $GOPATH/src/kube.ci/kubeci
+  pushd $GOPATH/src/kube.ci/engine
   ./hack/builddeps.sh
   ./hack/make.py build kubeci
   detect_tag $DIST/.tag
@@ -37,7 +37,7 @@ build_binary() {
 }
 
 build_docker() {
-  pushd $GOPATH/src/kube.ci/kubeci/hack/docker
+  pushd $GOPATH/src/kube.ci/engine/hack/docker
   cp $DIST/kubeci/kubeci-alpine-amd64 kubeci
   chmod 755 kubeci
 

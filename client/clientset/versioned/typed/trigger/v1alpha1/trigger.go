@@ -20,7 +20,7 @@ package v1alpha1
 
 import (
 	rest "k8s.io/client-go/rest"
-	v1alpha1 "kube.ci/kubeci/apis/trigger/v1alpha1"
+	v1alpha1 "kube.ci/engine/apis/trigger/v1alpha1"
 )
 
 // TriggersGetter has a method to return a TriggerInterface.

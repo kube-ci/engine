@@ -10,7 +10,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	ka "k8s.io/kube-aggregator/pkg/client/clientset_generated/clientset"
-	cs "kube.ci/kubeci/client/clientset/versioned"
+	cs "kube.ci/engine/client/clientset/versioned"
 )
 
 type Framework struct {

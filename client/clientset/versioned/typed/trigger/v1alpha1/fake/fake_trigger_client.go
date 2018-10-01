@@ -21,7 +21,7 @@ package fake
 import (
 	rest "k8s.io/client-go/rest"
 	testing "k8s.io/client-go/testing"
-	v1alpha1 "kube.ci/kubeci/client/clientset/versioned/typed/trigger/v1alpha1"
+	v1alpha1 "kube.ci/engine/client/clientset/versioned/typed/trigger/v1alpha1"
 )
 
 type FakeTriggerV1alpha1 struct {

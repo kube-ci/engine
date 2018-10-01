@@ -18,12 +18,12 @@ import (
 	clientsetscheme "k8s.io/client-go/kubernetes/scheme"
 	ka "k8s.io/kube-aggregator/pkg/client/clientset_generated/clientset"
 	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	api "kube.ci/kubeci/apis/kubeci/v1alpha1"
-	"kube.ci/kubeci/client/clientset/versioned/scheme"
-	_ "kube.ci/kubeci/client/clientset/versioned/scheme"
-	"kube.ci/kubeci/pkg/controller"
-	"kube.ci/kubeci/pkg/util"
-	"kube.ci/kubeci/test/e2e/framework"
+	api "kube.ci/engine/apis/engine/v1alpha1"
+	"kube.ci/engine/client/clientset/versioned/scheme"
+	_ "kube.ci/engine/client/clientset/versioned/scheme"
+	"kube.ci/engine/pkg/controller"
+	"kube.ci/engine/pkg/util"
+	"kube.ci/engine/test/e2e/framework"
 )
 
 const (
@@ -92,15 +92,15 @@ var _ = AfterSuite(func() {
 	By("Cleaning API server and Webhook stuff")
 
 	if options.EnableWebhook && !options.SelfHostedOperator {
-		root.KubeClient.AdmissionregistrationV1beta1().MutatingWebhookConfigurations().Delete("admission.kubeci.kube.ci", meta.DeleteInBackground())
-		root.KubeClient.AdmissionregistrationV1beta1().ValidatingWebhookConfigurations().Delete("admission.kubeci.kube.ci", meta.DeleteInBackground())
+		root.KubeClient.AdmissionregistrationV1beta1().MutatingWebhookConfigurations().Delete("admission.engine.kube.ci", meta.DeleteInBackground())
+		root.KubeClient.AdmissionregistrationV1beta1().ValidatingWebhookConfigurations().Delete("admission.engine.kube.ci", meta.DeleteInBackground())
 	}
 
 	if !options.SelfHostedOperator {
 		root.KubeClient.CoreV1().Endpoints(root.Namespace()).Delete("kubeci-dev-apiserver", meta.DeleteInBackground())
 		root.KubeClient.CoreV1().Services(root.Namespace()).Delete("kubeci-dev-apiserver", meta.DeleteInBackground())
-		root.KAClient.ApiregistrationV1beta1().APIServices().Delete("v1alpha1.admission.kubeci.kube.ci", meta.DeleteInBackground())
-		root.KAClient.ApiregistrationV1beta1().APIServices().Delete("v1alpha1.trigger.kubeci.kube.ci", meta.DeleteInBackground())
+		root.KAClient.ApiregistrationV1beta1().APIServices().Delete("v1alpha1.admission.engine.kube.ci", meta.DeleteInBackground())
+		root.KAClient.ApiregistrationV1beta1().APIServices().Delete("v1alpha1.trigger.kube.ci", meta.DeleteInBackground())
 	}
 	root.DeleteNamespace(root.Namespace())
 })

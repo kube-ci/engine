@@ -20,7 +20,7 @@ import (
 	"k8s.io/client-go/discovery"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/util/jsonpath"
-	api "kube.ci/kubeci/apis/kubeci/v1alpha1"
+	api "kube.ci/engine/apis/engine/v1alpha1"
 )
 
 type ResourceIdentifier struct {
