@@ -47,7 +47,7 @@ func getImplicitVolumes(wpName string) []core.Volume {
 		Name: "home",
 		VolumeSource: core.VolumeSource{
 			HostPath: &core.HostPathVolumeSource{
-				Path: path.Join("/kubeci", wpName, "home"),
+				Path: path.Join("/var/run/kubeci", wpName, "home"),
 				Type: &hostPathType,
 			},
 		},
@@ -55,7 +55,7 @@ func getImplicitVolumes(wpName string) []core.Volume {
 		Name: "workspace",
 		VolumeSource: core.VolumeSource{
 			HostPath: &core.HostPathVolumeSource{
-				Path: path.Join("/kubeci", wpName, "workspace"),
+				Path: path.Join("/var/run/kubeci", wpName, "workspace"),
 				Type: &hostPathType,
 			},
 		},
