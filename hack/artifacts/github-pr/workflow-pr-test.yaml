@@ -4,10 +4,9 @@ metadata:
   namespace: default
   name: workflow-rbac-sa
 ---
-kind: Role
+kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
-  namespace: default
   name: workflow-rbac-role
 rules:
 - apiGroups: ["git.kube.ci"]
@@ -20,35 +19,30 @@ rules:
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
-  namespace: default
   name: workflow-rbac-binding
+  namespace: default
 subjects:
 - kind: ServiceAccount
   namespace: default
   name: workflow-rbac-sa
 roleRef:
-  kind: Role
+  kind: ClusterRole
   name: workflow-rbac-role
   apiGroup: rbac.authorization.k8s.io
 ---
-kind: ConfigMap
-apiVersion: v1
+# operator needs same permissions but for all namespaces
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
-  name: my-env-config
-  namespace: default
-data:
-  REPO: diptadas/kubeci-gpig
-  URL: https://github.com/diptadas/kubeci-gpig.git
-  REPO_ROOT: /go/src/github.com/diptadas/kubeci-gpig
-  # HEAD_SHA:
-  # TOKEN:
-  # PR_ID:
-  CONTEXT: kubeci
-  TARGET_URL: https://kube.ci
-  DESCRIPTION_PENDING: kubeci-build-pending
-  DESCRIPTION_SUCCESS: kubeci-build-success
-  DESCRIPTION_FAILURE: kubeci-build-failure
-  TEST_SCRIPT: test.sh
+  name: workflow-rbac-binding
+subjects:
+- kind: ServiceAccount
+  namespace: kube-system
+  name: kubeci
+roleRef:
+  kind: ClusterRole
+  name: workflow-rbac-role
+  apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: engine.kube.ci/v1alpha1
 kind: Workflow
@@ -73,12 +67,22 @@ spec:
       PR_NUMBER: '{$.spec.number}'
   serviceAccount: workflow-rbac-sa
   envFrom:
-  - configMapRef:
-      name: my-env-config
   - secretRef:
-      name: my-env-secret
+      name: github-credential
   steps:
+  - name: step-clone
+    image: alpine/git
+    commands:
+    - sh
+    args:
+    - -c
+    - git clone https://github.com/diptadas/kubeci-gpig.git .; git checkout $HEAD_SHA
   - name: step-test
-    image: diptadas/github-pr-test
+    image: golang:alpine
+    commands:
+    - sh
+    args:
+    - -c
+    - cat test.sh | sh
 
-# kubectl create secret generic my-env-secret --from-literal=TOKEN=...
+# kubectl create secret generic github-credential --from-literal=TOKEN=...
