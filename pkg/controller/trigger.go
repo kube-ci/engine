@@ -349,6 +349,12 @@ func (c *Controller) createWorkplan(wf *api.Workflow, secretRef *core.SecretEnvS
 			TriggeredFor: triggeredFor,
 			Volumes:      volumes,
 		},
+		// set initial status
+		// error for uninitialized: status.stepTree in body must be of type array: "null"
+		Status: api.WorkplanStatus{
+			Phase:    api.WorkplanUninitialized,
+			StepTree: InitWorkplanTree(tasks),
+		},
 	}
 
 	if secretRef != nil { // secret with json-path data
@@ -360,7 +366,7 @@ func (c *Controller) createWorkplan(wf *api.Workflow, secretRef *core.SecretEnvS
 	log.Infof("Creating workplan for workflow %s", wf.Name)
 	wp, err = c.kubeciClient.EngineV1alpha1().Workplans(wp.Namespace).Create(wp)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create workplan for workflow %s", wf.Name)
+		return nil, fmt.Errorf("failed to create workplan for workflow %s, reason: %s", wf.Name, err)
 	}
 
 	return wp, nil

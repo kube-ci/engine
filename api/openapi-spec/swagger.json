@@ -2847,6 +2847,35 @@
         }
       }
     },
+    "ci.kube.engine.apis.engine.v1alpha1.StepEntry": {
+      "description": "status of a step containing enough info to collect logs",
+      "required": [
+        "Name",
+        "Namespace",
+        "PodName",
+        "Status",
+        "Reason"
+      ],
+      "properties": {
+        "Name": {
+          "type": "string"
+        },
+        "Namespace": {
+          "description": "container name",
+          "type": "string"
+        },
+        "PodName": {
+          "type": "string"
+        },
+        "Reason": {
+          "description": "simplified container status",
+          "type": "string"
+        },
+        "Status": {
+          "type": "string"
+        }
+      }
+    },
     "ci.kube.engine.apis.engine.v1alpha1.Task": {
       "required": [
         "SerialSteps",
@@ -3203,7 +3232,8 @@
       "required": [
         "phase",
         "reason",
-        "taskIndex"
+        "taskIndex",
+        "stepTree"
       ],
       "properties": {
         "phase": {
@@ -3211,6 +3241,15 @@
         },
         "reason": {
           "type": "string"
+        },
+        "stepTree": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.StepEntry"
+            }
+          }
         },
         "taskIndex": {
           "type": "integer",

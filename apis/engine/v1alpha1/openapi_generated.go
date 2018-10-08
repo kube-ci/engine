@@ -271,6 +271,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"k8s.io/apimachinery/pkg/version.Info":                           schema_k8sio_apimachinery_pkg_version_Info(ref),
 		"kube.ci/engine/apis/engine/v1alpha1.ObjectReference":            schema_engine_apis_engine_v1alpha1_ObjectReference(ref),
 		"kube.ci/engine/apis/engine/v1alpha1.Step":                       schema_engine_apis_engine_v1alpha1_Step(ref),
+		"kube.ci/engine/apis/engine/v1alpha1.StepEntry":                  schema_engine_apis_engine_v1alpha1_StepEntry(ref),
 		"kube.ci/engine/apis/engine/v1alpha1.Task":                       schema_engine_apis_engine_v1alpha1_Task(ref),
 		"kube.ci/engine/apis/engine/v1alpha1.Template":                   schema_engine_apis_engine_v1alpha1_Template(ref),
 		"kube.ci/engine/apis/engine/v1alpha1.Trigger":                    schema_engine_apis_engine_v1alpha1_Trigger(ref),
@@ -11805,6 +11806,52 @@ func schema_engine_apis_engine_v1alpha1_Step(ref common.ReferenceCallback) commo
 	}
 }
 
+func schema_engine_apis_engine_v1alpha1_StepEntry(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "status of a step containing enough info to collect logs",
+				Properties: map[string]spec.Schema{
+					"Name": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"Namespace": {
+						SchemaProps: spec.SchemaProps{
+							Description: "container name",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"PodName": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"Status": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"Reason": {
+						SchemaProps: spec.SchemaProps{
+							Description: "simplified container status",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"Name", "Namespace", "PodName", "Status", "Reason"},
+			},
+		},
+		Dependencies: []string{},
+	}
+}
+
 func schema_engine_apis_engine_v1alpha1_Task(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -12446,10 +12493,30 @@ func schema_engine_apis_engine_v1alpha1_WorkplanStatus(ref common.ReferenceCallb
 							Format: "int32",
 						},
 					},
+					"stepTree": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type: []string{"array"},
+										Items: &spec.SchemaOrArray{
+											Schema: &spec.Schema{
+												SchemaProps: spec.SchemaProps{
+													Ref: ref("kube.ci/engine/apis/engine/v1alpha1.StepEntry"),
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
 				},
-				Required: []string{"phase", "reason", "taskIndex"},
+				Required: []string{"phase", "reason", "taskIndex", "stepTree"},
 			},
 		},
-		Dependencies: []string{},
+		Dependencies: []string{
+			"kube.ci/engine/apis/engine/v1alpha1.StepEntry"},
 	}
 }
