@@ -133,3 +133,16 @@ func dagToLayers(stepsMap map[string]v1alpha1.Step) ([][]v1alpha1.Step, error) {
 
 	return layers, nil
 }
+
+func TasksToLayers(tasks []v1alpha1.Task) [][]v1alpha1.Step {
+	var layers [][]v1alpha1.Step
+	for _, task := range tasks {
+		for _, step := range task.SerialSteps { // serial-steps into separate layers
+			layers = append(layers, []v1alpha1.Step{step})
+		}
+		if len(task.ParallelSteps) != 0 { // parallel-steps into one layer
+			layers = append(layers, task.ParallelSteps)
+		}
+	}
+	return layers
+}
