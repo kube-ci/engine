@@ -47,13 +47,32 @@ const (
 	WorkplanRunning       WorkplanPhase = "Running"
 	WorkplanSucceeded     WorkplanPhase = "Succeeded"
 	WorkplanFailed        WorkplanPhase = "Failed"
-	WorkplanUninitialized WorkplanPhase = ""
+	WorkplanUninitialized WorkplanPhase = "Uninitialized"
 )
+
+type ContainerStatus string
+
+const (
+	ContainerRunning       ContainerStatus = "Running"
+	ContainerWaiting       ContainerStatus = "Waiting"
+	ContainerTerminated    ContainerStatus = "Terminated"
+	ContainerUninitialized ContainerStatus = "Uninitialized" // pod not exists
+)
+
+// status of a step containing enough info to collect logs
+type StepEntry struct {
+	Name      string // container name
+	Namespace string
+	PodName   string
+	Status    ContainerStatus // simplified container status
+	Reason    string          // container status
+}
 
 type WorkplanStatus struct {
 	Phase     WorkplanPhase `json:"phase"`
 	Reason    string        `json:"reason"`
 	TaskIndex int           `json:"taskIndex"`
+	StepTree  [][]StepEntry `json:"stepTree"`
 }
 
 type TriggeredFor struct {

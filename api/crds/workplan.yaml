@@ -1775,6 +1775,32 @@ spec:
               type: string
             reason:
               type: string
+            stepTree:
+              items:
+                items:
+                  description: status of a step containing enough info to collect
+                    logs
+                  properties:
+                    Name:
+                      type: string
+                    Namespace:
+                      description: container name
+                      type: string
+                    PodName:
+                      type: string
+                    Reason:
+                      description: simplified container status
+                      type: string
+                    Status:
+                      type: string
+                  required:
+                  - Name
+                  - Namespace
+                  - PodName
+                  - Status
+                  - Reason
+                type: array
+              type: array
             taskIndex:
               format: int32
               type: integer
@@ -1782,6 +1808,7 @@ spec:
           - phase
           - reason
           - taskIndex
+          - stepTree
   version: v1alpha1
   versions:
   - name: v1alpha1

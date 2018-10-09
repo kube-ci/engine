@@ -5,6 +5,7 @@ import (
 
 	"github.com/appscode/go/log"
 	core_util "github.com/appscode/kutil/core/v1"
+	"github.com/appscode/kutil/meta"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	api "kube.ci/engine/apis/engine/v1alpha1"
@@ -37,16 +38,31 @@ func (c *Controller) runTasks(wp *api.Workplan) error {
 		}
 
 		// wait until pod completes
+		var oldPodStatus core.PodStatus
 		for {
 			if pod, err = c.kubeClient.CoreV1().Pods(pod.Namespace).Get(pod.Name, metav1.GetOptions{}); err != nil {
 				return err
 			}
-			if pod.Status.Phase == core.PodSucceeded {
-				log.Infof("Succeeded pod %s for task[%d] of workplan %s", pod.Name, index, wp.Name)
-				break
-			}
-			if pod.Status.Phase == core.PodFailed {
-				return fmt.Errorf("failed pod %s for task[%d]", pod.Name, index)
+			if !meta.Equal(pod.Status, oldPodStatus) {
+				oldPodStatus = pod.Status
+				if wp, err = util.UpdateWorkplanStatus(
+					c.kubeciClient.EngineV1alpha1(),
+					wp,
+					func(r *api.WorkplanStatus) *api.WorkplanStatus {
+						r.StepTree = UpdateWorkplanTreeForPod(r.StepTree, pod)
+						return r
+					},
+					api.EnableStatusSubresource,
+				); err != nil {
+					return err
+				}
+				if pod.Status.Phase == core.PodSucceeded {
+					log.Infof("Succeeded pod %s for task[%d] of workplan %s", pod.Name, index, wp.Name)
+					break
+				}
+				if pod.Status.Phase == core.PodFailed {
+					return fmt.Errorf("failed pod %s for task[%d]", pod.Name, index)
+				}
 			}
 		}
 	}
