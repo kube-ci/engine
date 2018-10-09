@@ -3,15 +3,27 @@ package dependency
 import (
 	"testing"
 
-	"github.com/TamalSaha/go-oneliners"
+	"github.com/appscode/kutil/meta"
+	"github.com/tamalsaha/go-oneliners"
 	"kube.ci/engine/apis/engine/v1alpha1"
 )
 
-var cleanupStep = v1alpha1.Step{
-	Name:     "cleanup-step",
-	Image:    "alpine",
-	Commands: []string{"rm"},
-	Args:     []string{"-rf", "/kubeci/*"},
+var preSteps = []v1alpha1.Step{
+	{
+		Name: "pre-step-1",
+	},
+	{
+		Name: "pre-step-2",
+	},
+}
+
+var postSteps = []v1alpha1.Step{
+	{
+		Name: "post-step-1",
+	},
+	{
+		Name: "post-step-2",
+	},
 }
 
 var nonDagSteps = []v1alpha1.Step{
@@ -98,7 +110,7 @@ var dagStepsData = [][]v1alpha1.Step{
 
 func TestResolveDependencyForDag(t *testing.T) {
 	for _, steps := range dagStepsData {
-		if tasks, err := ResolveDependency(steps, cleanupStep, v1alpha1.ExecutionOrderDAG); err != nil {
+		if tasks, err := ResolveDependency(steps, preSteps, postSteps, v1alpha1.ExecutionOrderDAG); err != nil {
 			t.Errorf(err.Error())
 		} else {
 			oneliners.PrettyJson(tasks)
@@ -107,7 +119,7 @@ func TestResolveDependencyForDag(t *testing.T) {
 }
 
 func TestResolveDependencyForSerial(t *testing.T) {
-	if tasks, err := ResolveDependency(nonDagSteps, cleanupStep, v1alpha1.ExecutionOrderSerial); err != nil {
+	if tasks, err := ResolveDependency(nonDagSteps, preSteps, postSteps, v1alpha1.ExecutionOrderSerial); err != nil {
 		t.Errorf(err.Error())
 	} else {
 		oneliners.PrettyJson(tasks)
@@ -115,7 +127,7 @@ func TestResolveDependencyForSerial(t *testing.T) {
 }
 
 func TestResolveDependencyForParallel(t *testing.T) {
-	if tasks, err := ResolveDependency(nonDagSteps, cleanupStep, v1alpha1.ExecutionOrderParallel); err != nil {
+	if tasks, err := ResolveDependency(nonDagSteps, preSteps, postSteps, v1alpha1.ExecutionOrderParallel); err != nil {
 		t.Errorf(err.Error())
 	} else {
 		oneliners.PrettyJson(tasks)
@@ -133,6 +145,24 @@ func TestDagToLayers(t *testing.T) {
 			t.Errorf(err.Error())
 		} else {
 			oneliners.PrettyJson(layers)
+		}
+	}
+}
+
+func TestTasksToLayers(t *testing.T) {
+	for _, steps := range dagStepsData {
+		stepsMap := make(map[string]v1alpha1.Step, 0)
+		for _, step := range steps {
+			stepsMap[step.Name] = step
+		}
+		layers, err := dagToLayers(stepsMap)
+		if err != nil {
+			t.Errorf(err.Error())
+		}
+		tasks := layersToTasks(layers)
+		layersNew := TasksToLayers(tasks)
+		if !meta.Equal(layers, layersNew) {
+			t.Errorf("expectd %v, found %v", layers, layersNew)
 		}
 	}
 }
