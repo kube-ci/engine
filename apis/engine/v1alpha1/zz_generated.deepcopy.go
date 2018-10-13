@@ -178,11 +178,7 @@ func (in *TriggeredFor) DeepCopyInto(out *TriggeredFor) {
 	out.ObjectReference = in.ObjectReference
 	if in.ResourceGeneration != nil {
 		in, out := &in.ResourceGeneration, &out.ResourceGeneration
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = (*in).DeepCopy()
-		}
+		*out = (*in).DeepCopy()
 	}
 	return
 }
@@ -276,12 +272,8 @@ func (in *WorkflowSpec) DeepCopyInto(out *WorkflowSpec) {
 	}
 	if in.Template != nil {
 		in, out := &in.Template, &out.Template
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = new(Template)
-			(*in).DeepCopyInto(*out)
-		}
+		*out = new(Template)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.EnvVar != nil {
 		in, out := &in.EnvVar, &out.EnvVar

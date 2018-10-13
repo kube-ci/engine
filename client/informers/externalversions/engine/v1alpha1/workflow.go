@@ -25,7 +25,7 @@ import (
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	watch "k8s.io/apimachinery/pkg/watch"
 	cache "k8s.io/client-go/tools/cache"
-	engine_v1alpha1 "kube.ci/engine/apis/engine/v1alpha1"
+	enginev1alpha1 "kube.ci/engine/apis/engine/v1alpha1"
 	versioned "kube.ci/engine/client/clientset/versioned"
 	internalinterfaces "kube.ci/engine/client/informers/externalversions/internalinterfaces"
 	v1alpha1 "kube.ci/engine/client/listers/engine/v1alpha1"
@@ -70,7 +70,7 @@ func NewFilteredWorkflowInformer(client versioned.Interface, namespace string, r
 				return client.EngineV1alpha1().Workflows(namespace).Watch(options)
 			},
 		},
-		&engine_v1alpha1.Workflow{},
+		&enginev1alpha1.Workflow{},
 		resyncPeriod,
 		indexers,
 	)
@@ -81,7 +81,7 @@ func (f *workflowInformer) defaultInformer(client versioned.Interface, resyncPer
 }
 
 func (f *workflowInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&engine_v1alpha1.Workflow{}, f.defaultInformer)
+	return f.factory.InformerFor(&enginev1alpha1.Workflow{}, f.defaultInformer)
 }
 
 func (f *workflowInformer) Lister() v1alpha1.WorkflowLister {
