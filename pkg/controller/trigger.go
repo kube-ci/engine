@@ -51,7 +51,7 @@ func (r *TriggerREST) Categories() []string {
 	return []string{"kubeci", "ci", "appscode", "all"}
 }
 
-func (r *TriggerREST) Create(ctx context.Context, obj runtime.Object, createValidation rest.ValidateObjectFunc, includeUninitialized bool) (runtime.Object, error) {
+func (r *TriggerREST) Create(ctx context.Context, obj runtime.Object, createValidation rest.ValidateObjectFunc, _ *metav1.CreateOptions) (runtime.Object, error) {
 	trigger := obj.(*v1alpha1.Trigger)
 	if err := r.controller.handleTrigger(trigger.Request, trigger.Workflows, false, true); err != nil {
 		return nil, err

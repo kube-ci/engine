@@ -25,7 +25,7 @@ import (
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	watch "k8s.io/apimachinery/pkg/watch"
 	cache "k8s.io/client-go/tools/cache"
-	engine_v1alpha1 "kube.ci/engine/apis/engine/v1alpha1"
+	enginev1alpha1 "kube.ci/engine/apis/engine/v1alpha1"
 	versioned "kube.ci/engine/client/clientset/versioned"
 	internalinterfaces "kube.ci/engine/client/informers/externalversions/internalinterfaces"
 	v1alpha1 "kube.ci/engine/client/listers/engine/v1alpha1"
@@ -70,7 +70,7 @@ func NewFilteredWorkplanInformer(client versioned.Interface, namespace string, r
 				return client.EngineV1alpha1().Workplans(namespace).Watch(options)
 			},
 		},
-		&engine_v1alpha1.Workplan{},
+		&enginev1alpha1.Workplan{},
 		resyncPeriod,
 		indexers,
 	)
@@ -81,7 +81,7 @@ func (f *workplanInformer) defaultInformer(client versioned.Interface, resyncPer
 }
 
 func (f *workplanInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&engine_v1alpha1.Workplan{}, f.defaultInformer)
+	return f.factory.InformerFor(&enginev1alpha1.Workplan{}, f.defaultInformer)
 }
 
 func (f *workplanInformer) Lister() v1alpha1.WorkplanLister {

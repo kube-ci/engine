@@ -36,11 +36,7 @@ func (in *Trigger) DeepCopyInto(out *Trigger) {
 	}
 	if in.Request != nil {
 		in, out := &in.Request, &out.Request
-		if *in == nil {
-			*out = nil
-		} else {
-			*out = (*in).DeepCopy()
-		}
+		*out = (*in).DeepCopy()
 	}
 	return
 }
