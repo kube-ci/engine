@@ -98,7 +98,7 @@ export KUBECI_RUN_ON_MASTER=0
 export KUBECI_ENABLE_VALIDATING_WEBHOOK=false
 export KUBECI_ENABLE_MUTATING_WEBHOOK=false
 export KUBECI_DOCKER_REGISTRY=kubeci
-export KUBECI_IMAGE_TAG=0.7.0
+export KUBECI_IMAGE_TAG=0.1.0
 export KUBECI_IMAGE_PULL_SECRET=
 export KUBECI_IMAGE_PULL_POLICY=IfNotPresent
 export KUBECI_ENABLE_STATUS_SUBRESOURCE=false
@@ -107,7 +107,7 @@ export KUBECI_UNINSTALL=0
 export KUBECI_PURGE=0
 
 export APPSCODE_ENV=${APPSCODE_ENV:-prod}
-export SCRIPT_LOCATION="curl -fsSL https://raw.githubusercontent.com/appscode/kubeci/0.7.0/"
+export SCRIPT_LOCATION="curl -fsSL https://raw.githubusercontent.com/appscode/kubeci/0.1.0/"
 if [ "$APPSCODE_ENV" = "dev" ]; then
   detect_tag
   export SCRIPT_LOCATION="cat "
