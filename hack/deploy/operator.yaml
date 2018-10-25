@@ -56,6 +56,16 @@ spec:
           name: data-volume
         - mountPath: /tmp
           name: kubeci-scratchdir
+      - name: web-ui
+        image: ${KUBECI_DOCKER_REGISTRY}/kubeci:${KUBECI_IMAGE_TAG}
+        imagePullPolicy: ${KUBECI_IMAGE_PULL_POLICY}
+        args:
+        - workplan-viewer
+        ports:
+        - containerPort: 9090
+        resources:
+          requests:
+            cpu: "100m"
       volumes:
       - emptyDir: {}
         name: data-volume
@@ -100,3 +110,4 @@ spec:
     targetPort: 56789
   selector:
     app: kubeci
+

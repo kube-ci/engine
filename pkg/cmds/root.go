@@ -51,6 +51,8 @@ func NewRootCmd() *cobra.Command {
 	rootCmd.PersistentFlags().BoolVar(&util.EnableAnalytics, "enable-analytics", util.EnableAnalytics, "Send analytical events to Google Analytics")
 
 	rootCmd.AddCommand(NewCmdCredential())
+	rootCmd.AddCommand(NewCmdWorkplanLogs())
+	rootCmd.AddCommand(NewCmdWorkplanViewer())
 	rootCmd.AddCommand(v.NewCmdVersion())
 	stopCh := genericapiserver.SetupSignalHandler()
 	rootCmd.AddCommand(NewCmdRun(os.Stdout, os.Stderr, stopCh))
