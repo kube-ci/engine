@@ -21,20 +21,24 @@ package fake
 import (
 	rest "k8s.io/client-go/rest"
 	testing "k8s.io/client-go/testing"
-	v1alpha1 "kube.ci/engine/client/clientset/versioned/typed/trigger/v1alpha1"
+	v1alpha1 "kube.ci/engine/client/clientset/versioned/typed/extension/v1alpha1"
 )
 
-type FakeTriggerV1alpha1 struct {
+type FakeExtensionV1alpha1 struct {
 	*testing.Fake
 }
 
-func (c *FakeTriggerV1alpha1) Triggers(namespace string) v1alpha1.TriggerInterface {
+func (c *FakeExtensionV1alpha1) Triggers(namespace string) v1alpha1.TriggerInterface {
 	return &FakeTriggers{c, namespace}
+}
+
+func (c *FakeExtensionV1alpha1) WorkplanLogs(namespace string) v1alpha1.WorkplanLogInterface {
+	return &FakeWorkplanLogs{c, namespace}
 }
 
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
-func (c *FakeTriggerV1alpha1) RESTClient() rest.Interface {
+func (c *FakeExtensionV1alpha1) RESTClient() rest.Interface {
 	var ret *rest.RESTClient
 	return ret
 }

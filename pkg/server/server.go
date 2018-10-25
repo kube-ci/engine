@@ -14,9 +14,9 @@ import (
 	"k8s.io/apimachinery/pkg/version"
 	"k8s.io/apiserver/pkg/registry/rest"
 	genericapiserver "k8s.io/apiserver/pkg/server"
-	"kube.ci/engine/apis/trigger"
-	"kube.ci/engine/apis/trigger/install"
-	"kube.ci/engine/apis/trigger/v1alpha1"
+	"kube.ci/engine/apis/extension"
+	"kube.ci/engine/apis/extension/install"
+	"kube.ci/engine/apis/extension/v1alpha1"
 	"kube.ci/engine/pkg/controller"
 )
 
@@ -24,6 +24,25 @@ var (
 	Scheme = runtime.NewScheme()
 	Codecs = serializer.NewCodecFactory(Scheme)
 )
+
+// scheme is the registry for the common types that adhere to the meta v1 API spec.
+var scheme = runtime.NewScheme()
+
+// ParameterCodec knows about query parameters used with the meta v1 API spec.
+var ParameterCodec = runtime.NewParameterCodec(scheme)
+
+func init() {
+	scheme.AddUnversionedTypes(metav1.SchemeGroupVersion,
+		&metav1.ListOptions{},
+		&metav1.ExportOptions{},
+		&metav1.GetOptions{},
+		&metav1.DeleteOptions{},
+		&v1alpha1.WorkplanLogOptions{},
+	)
+
+	// register manually. This usually goes through the SchemeBuilder, which we cannot use here.
+	metav1.RegisterDefaults(scheme)
+}
 
 func init() {
 	install.Install(Scheme)
@@ -156,9 +175,10 @@ func (c completedConfig) New() (*KubeciServer, error) {
 	}
 
 	{
-		apiGroupInfo := genericapiserver.NewDefaultAPIGroupInfo(trigger.GroupName, Scheme, metav1.ParameterCodec, Codecs)
+		apiGroupInfo := genericapiserver.NewDefaultAPIGroupInfo(extension.GroupName, Scheme, ParameterCodec, Codecs)
 		v1alpha1storage := map[string]rest.Storage{}
 		v1alpha1storage[v1alpha1.ResourceTriggers] = controller.NewTriggerREST(ctrl)
+		v1alpha1storage[v1alpha1.ResourceWorkplanLogs] = controller.NewLogsREST(ctrl)
 		apiGroupInfo.VersionedResourcesStorageMap["v1alpha1"] = v1alpha1storage
 		if err := s.GenericAPIServer.InstallAPIGroup(&apiGroupInfo); err != nil {
 			return nil, err

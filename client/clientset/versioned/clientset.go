@@ -23,7 +23,7 @@ import (
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"
 	enginev1alpha1 "kube.ci/engine/client/clientset/versioned/typed/engine/v1alpha1"
-	triggerv1alpha1 "kube.ci/engine/client/clientset/versioned/typed/trigger/v1alpha1"
+	extensionv1alpha1 "kube.ci/engine/client/clientset/versioned/typed/extension/v1alpha1"
 )
 
 type Interface interface {
@@ -31,17 +31,17 @@ type Interface interface {
 	EngineV1alpha1() enginev1alpha1.EngineV1alpha1Interface
 	// Deprecated: please explicitly pick a version if possible.
 	Engine() enginev1alpha1.EngineV1alpha1Interface
-	TriggerV1alpha1() triggerv1alpha1.TriggerV1alpha1Interface
+	ExtensionV1alpha1() extensionv1alpha1.ExtensionV1alpha1Interface
 	// Deprecated: please explicitly pick a version if possible.
-	Trigger() triggerv1alpha1.TriggerV1alpha1Interface
+	Extension() extensionv1alpha1.ExtensionV1alpha1Interface
 }
 
 // Clientset contains the clients for groups. Each group has exactly one
 // version included in a Clientset.
 type Clientset struct {
 	*discovery.DiscoveryClient
-	engineV1alpha1  *enginev1alpha1.EngineV1alpha1Client
-	triggerV1alpha1 *triggerv1alpha1.TriggerV1alpha1Client
+	engineV1alpha1    *enginev1alpha1.EngineV1alpha1Client
+	extensionV1alpha1 *extensionv1alpha1.ExtensionV1alpha1Client
 }
 
 // EngineV1alpha1 retrieves the EngineV1alpha1Client
@@ -55,15 +55,15 @@ func (c *Clientset) Engine() enginev1alpha1.EngineV1alpha1Interface {
 	return c.engineV1alpha1
 }
 
-// TriggerV1alpha1 retrieves the TriggerV1alpha1Client
-func (c *Clientset) TriggerV1alpha1() triggerv1alpha1.TriggerV1alpha1Interface {
-	return c.triggerV1alpha1
+// ExtensionV1alpha1 retrieves the ExtensionV1alpha1Client
+func (c *Clientset) ExtensionV1alpha1() extensionv1alpha1.ExtensionV1alpha1Interface {
+	return c.extensionV1alpha1
 }
 
-// Deprecated: Trigger retrieves the default version of TriggerClient.
+// Deprecated: Extension retrieves the default version of ExtensionClient.
 // Please explicitly pick a version.
-func (c *Clientset) Trigger() triggerv1alpha1.TriggerV1alpha1Interface {
-	return c.triggerV1alpha1
+func (c *Clientset) Extension() extensionv1alpha1.ExtensionV1alpha1Interface {
+	return c.extensionV1alpha1
 }
 
 // Discovery retrieves the DiscoveryClient
@@ -86,7 +86,7 @@ func NewForConfig(c *rest.Config) (*Clientset, error) {
 	if err != nil {
 		return nil, err
 	}
-	cs.triggerV1alpha1, err = triggerv1alpha1.NewForConfig(&configShallowCopy)
+	cs.extensionV1alpha1, err = extensionv1alpha1.NewForConfig(&configShallowCopy)
 	if err != nil {
 		return nil, err
 	}
@@ -103,7 +103,7 @@ func NewForConfig(c *rest.Config) (*Clientset, error) {
 func NewForConfigOrDie(c *rest.Config) *Clientset {
 	var cs Clientset
 	cs.engineV1alpha1 = enginev1alpha1.NewForConfigOrDie(c)
-	cs.triggerV1alpha1 = triggerv1alpha1.NewForConfigOrDie(c)
+	cs.extensionV1alpha1 = extensionv1alpha1.NewForConfigOrDie(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClientForConfigOrDie(c)
 	return &cs
@@ -113,7 +113,7 @@ func NewForConfigOrDie(c *rest.Config) *Clientset {
 func New(c rest.Interface) *Clientset {
 	var cs Clientset
 	cs.engineV1alpha1 = enginev1alpha1.New(c)
-	cs.triggerV1alpha1 = triggerv1alpha1.New(c)
+	cs.extensionV1alpha1 = extensionv1alpha1.New(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClient(c)
 	return &cs

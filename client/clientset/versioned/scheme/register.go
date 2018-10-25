@@ -25,7 +25,7 @@ import (
 	serializer "k8s.io/apimachinery/pkg/runtime/serializer"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	enginev1alpha1 "kube.ci/engine/apis/engine/v1alpha1"
-	triggerv1alpha1 "kube.ci/engine/apis/trigger/v1alpha1"
+	extensionv1alpha1 "kube.ci/engine/apis/extension/v1alpha1"
 )
 
 var Scheme = runtime.NewScheme()
@@ -33,7 +33,7 @@ var Codecs = serializer.NewCodecFactory(Scheme)
 var ParameterCodec = runtime.NewParameterCodec(Scheme)
 var localSchemeBuilder = runtime.SchemeBuilder{
 	enginev1alpha1.AddToScheme,
-	triggerv1alpha1.AddToScheme,
+	extensionv1alpha1.AddToScheme,
 }
 
 // AddToScheme adds all types of this clientset into the given scheme. This allows composition

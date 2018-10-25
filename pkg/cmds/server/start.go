@@ -69,7 +69,7 @@ func (o KubeciOptions) Config() (*server.KubeciServerConfig, error) {
 		"/swaggerapi",
 		"/apis/admission.engine.kube.ci/v1alpha1/workflows",
 		"/apis/admission.engine.kube.ci/v1alpha1/workplans",
-		"/apis/trigger.kube.ci/v1alpha1",
+		"/apis/extension.kube.ci/v1alpha1",
 	}
 
 	extraConfig := controller.NewConfig(serverConfig.ClientConfig)

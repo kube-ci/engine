@@ -27,8 +27,8 @@ import (
 	clientset "kube.ci/engine/client/clientset/versioned"
 	enginev1alpha1 "kube.ci/engine/client/clientset/versioned/typed/engine/v1alpha1"
 	fakeenginev1alpha1 "kube.ci/engine/client/clientset/versioned/typed/engine/v1alpha1/fake"
-	triggerv1alpha1 "kube.ci/engine/client/clientset/versioned/typed/trigger/v1alpha1"
-	faketriggerv1alpha1 "kube.ci/engine/client/clientset/versioned/typed/trigger/v1alpha1/fake"
+	extensionv1alpha1 "kube.ci/engine/client/clientset/versioned/typed/extension/v1alpha1"
+	fakeextensionv1alpha1 "kube.ci/engine/client/clientset/versioned/typed/extension/v1alpha1/fake"
 )
 
 // NewSimpleClientset returns a clientset that will respond with the provided objects.
@@ -83,12 +83,12 @@ func (c *Clientset) Engine() enginev1alpha1.EngineV1alpha1Interface {
 	return &fakeenginev1alpha1.FakeEngineV1alpha1{Fake: &c.Fake}
 }
 
-// TriggerV1alpha1 retrieves the TriggerV1alpha1Client
-func (c *Clientset) TriggerV1alpha1() triggerv1alpha1.TriggerV1alpha1Interface {
-	return &faketriggerv1alpha1.FakeTriggerV1alpha1{Fake: &c.Fake}
+// ExtensionV1alpha1 retrieves the ExtensionV1alpha1Client
+func (c *Clientset) ExtensionV1alpha1() extensionv1alpha1.ExtensionV1alpha1Interface {
+	return &fakeextensionv1alpha1.FakeExtensionV1alpha1{Fake: &c.Fake}
 }
 
-// Trigger retrieves the TriggerV1alpha1Client
-func (c *Clientset) Trigger() triggerv1alpha1.TriggerV1alpha1Interface {
-	return &faketriggerv1alpha1.FakeTriggerV1alpha1{Fake: &c.Fake}
+// Extension retrieves the ExtensionV1alpha1Client
+func (c *Clientset) Extension() extensionv1alpha1.ExtensionV1alpha1Interface {
+	return &fakeextensionv1alpha1.FakeExtensionV1alpha1{Fake: &c.Fake}
 }

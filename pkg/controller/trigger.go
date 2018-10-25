@@ -15,7 +15,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apiserver/pkg/registry/rest"
 	api "kube.ci/engine/apis/engine/v1alpha1"
-	"kube.ci/engine/apis/trigger/v1alpha1"
+	"kube.ci/engine/apis/extension/v1alpha1"
 	"kube.ci/engine/pkg/dependency"
 	"kube.ci/engine/pkg/eventer"
 )

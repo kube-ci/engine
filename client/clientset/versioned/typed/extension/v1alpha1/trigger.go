@@ -20,7 +20,7 @@ package v1alpha1
 
 import (
 	rest "k8s.io/client-go/rest"
-	v1alpha1 "kube.ci/engine/apis/trigger/v1alpha1"
+	v1alpha1 "kube.ci/engine/apis/extension/v1alpha1"
 )
 
 // TriggersGetter has a method to return a TriggerInterface.
@@ -42,7 +42,7 @@ type triggers struct {
 }
 
 // newTriggers returns a Triggers
-func newTriggers(c *TriggerV1alpha1Client, namespace string) *triggers {
+func newTriggers(c *ExtensionV1alpha1Client, namespace string) *triggers {
 	return &triggers{
 		client: c.RESTClient(),
 		ns:     namespace,
