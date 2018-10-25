@@ -322,7 +322,12 @@ func (c *Controller) createWorkplan(wf *api.Workflow, secretRef *core.SecretEnvS
 		volumes = append(volumes, secretVolumes...)
 	}
 
-	tasks, err := dependency.ResolveDependency(wf.Spec.Steps, preSteps, postSteps, wf.Spec.ExecutionOrder)
+	steps, err := c.resolveTemplate(wf)
+	if err != nil {
+		return nil, fmt.Errorf("can not resolve template for workflow %s, reason: %s", wf.Key(), err)
+	}
+
+	tasks, err := dependency.ResolveDependency(steps, preSteps, postSteps, wf.Spec.ExecutionOrder)
 	if err != nil {
 		return nil, err
 	}
