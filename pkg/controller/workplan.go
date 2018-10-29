@@ -9,6 +9,7 @@ import (
 	webhook "github.com/appscode/kubernetes-webhook-util/admission/v1beta1/generic"
 	"github.com/appscode/kutil/meta"
 	"github.com/appscode/kutil/tools/queue"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"kube.ci/engine/apis/engine"
@@ -49,7 +50,10 @@ func (c *Controller) initWorkplanWatcher() {
 	c.wpInformer = c.kubeciInformerFactory.Engine().V1alpha1().Workplans().Informer()
 	c.wpQueue = queue.New("Workplan", c.MaxNumRequeues, c.NumThreads, c.runWorkplanInjector)
 	c.wpInformer.AddEventHandler(queue.NewEventHandler(c.wpQueue.GetQueue(), func(oldObj, newObj interface{}) bool {
-		return false
+		wpOld := oldObj.(*api.Workplan).DeepCopy()
+		wpNew := newObj.(*api.Workplan).DeepCopy()
+		// handle update only for initial status update
+		return wpOld.Status.Phase == "" && wpNew.Status.Phase == api.WorkplanUninitialized
 	}))
 	c.wpLister = c.kubeciInformerFactory.Engine().V1alpha1().Workplans().Lister()
 }
@@ -105,6 +109,12 @@ func (c *Controller) executeWorkplan(wp *api.Workplan) {
 
 	if err = c.runTasks(wp); err != nil {
 		log.Errorf("Failed to execute workplan: %s, reason: %s", wp.Name, err.Error())
+		// get latest before status update, since workplan status is changed inside runTasks()
+		if wp, err = c.kubeciClient.EngineV1alpha1().Workplans(wp.Namespace).Get(wp.Name, metav1.GetOptions{}); err != nil {
+			log.Error(err)
+			return
+		}
+		// set failed status
 		if wp, err = util.UpdateWorkplanStatus(
 			c.kubeciClient.EngineV1alpha1(),
 			wp,
@@ -122,6 +132,12 @@ func (c *Controller) executeWorkplan(wp *api.Workplan) {
 	}
 
 	log.Infof("Workplan %s completed successfully", wp.Name)
+	// get latest before status update, since workplan status is changed inside runTasks()
+	if wp, err = c.kubeciClient.EngineV1alpha1().Workplans(wp.Namespace).Get(wp.Name, metav1.GetOptions{}); err != nil {
+		log.Error(err)
+		return
+	}
+	// set succeeded status
 	if wp, err = util.UpdateWorkplanStatus(
 		c.kubeciClient.EngineV1alpha1(),
 		wp,
