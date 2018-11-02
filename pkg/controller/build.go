@@ -41,11 +41,14 @@ var (
 	}}
 )
 
-func getImplicitEnvVars(namespace, wpName string) []core.EnvVar {
+func getImplicitEnvVars(wpName string) []core.EnvVar {
 	downwardEnvVars := []core.EnvVar{
 		{
-			Name:  "NAMESPACE",
-			Value: namespace,
+			ValueFrom: &core.EnvVarSource{
+				FieldRef: &core.ObjectFieldSelector{
+					FieldPath: "metadata.namespace",
+				},
+			},
 		},
 		{
 			Name:  "WORKPLAN",
