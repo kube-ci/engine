@@ -340,6 +340,9 @@ func (c *Controller) createWorkplan(wf *api.Workflow, secretRef *core.SecretEnvS
 					BlockOwnerDeletion: types.TrueP(),
 				},
 			},
+			Labels: map[string]string{
+				"workflow": wf.Name,
+			},
 		},
 		Spec: api.WorkplanSpec{
 			Workflow:     wf.Name,

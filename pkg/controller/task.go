@@ -76,6 +76,9 @@ func podSpecForTasks(wp *api.Workplan, task api.Task, index int) *core.Pod {
 			Name:            fmt.Sprintf("%s-%d", wp.Name, index),
 			Namespace:       wp.Namespace,
 			OwnerReferences: []metav1.OwnerReference{wp.Reference()},
+			Labels: map[string]string{
+				"workplan": wp.Name,
+			},
 		},
 		Spec: core.PodSpec{
 			RestartPolicy: core.RestartPolicyNever,
@@ -100,7 +103,7 @@ func containerForStep(wp *api.Workplan, step api.Step) core.Container {
 		Command:      step.Commands,
 		Args:         step.Args,
 		EnvFrom:      wp.Spec.EnvFrom,
-		Env:          core_util.UpsertEnvVars(wp.Spec.EnvVar, implicitEnvVars...),
+		Env:          core_util.UpsertEnvVars(wp.Spec.EnvVar, getImplicitEnvVars(wp.Name)...),
 		WorkingDir:   implicitWorkingDir,
 		VolumeMounts: core_util.UpsertVolumeMount(step.VolumeMounts, implicitVolumeMounts...),
 	}

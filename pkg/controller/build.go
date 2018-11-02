@@ -41,6 +41,23 @@ var (
 	}}
 )
 
+func getImplicitEnvVars(wpName string) []core.EnvVar {
+	downwardEnvVars := []core.EnvVar{
+		{
+			ValueFrom: &core.EnvVarSource{
+				FieldRef: &core.ObjectFieldSelector{
+					FieldPath: "metadata.namespace",
+				},
+			},
+		},
+		{
+			Name:  "WORKPLAN",
+			Value: wpName,
+		},
+	}
+	return append(implicitEnvVars, downwardEnvVars...)
+}
+
 func getImplicitVolumes(wpName string) []core.Volume {
 	hostPathType := core.HostPathDirectoryOrCreate
 	return []core.Volume{{
