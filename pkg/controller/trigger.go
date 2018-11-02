@@ -16,6 +16,7 @@ import (
 	"k8s.io/apiserver/pkg/registry/rest"
 	api "kube.ci/engine/apis/engine/v1alpha1"
 	"kube.ci/engine/apis/extension/v1alpha1"
+	"kube.ci/engine/client/clientset/versioned/typed/engine/v1alpha1/util"
 	"kube.ci/engine/pkg/dependency"
 	"kube.ci/engine/pkg/eventer"
 )
@@ -357,12 +358,6 @@ func (c *Controller) createWorkplan(wf *api.Workflow, secretRef *core.SecretEnvS
 			TriggeredFor: triggeredFor,
 			Volumes:      volumes,
 		},
-		// set initial status
-		// error for uninitialized: status.stepTree in body must be of type array: "null"
-		Status: api.WorkplanStatus{
-			Phase:    api.WorkplanUninitialized,
-			StepTree: InitWorkplanTree(tasks),
-		},
 	}
 
 	if secretRef != nil { // secret with json-path data
@@ -375,6 +370,21 @@ func (c *Controller) createWorkplan(wf *api.Workflow, secretRef *core.SecretEnvS
 	wp, err = c.kubeciClient.EngineV1alpha1().Workplans(wp.Namespace).Create(wp)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create workplan for workflow %s, reason: %s", wf.Name, err)
+	}
+
+	if wp, err = util.UpdateWorkplanStatus(
+		c.kubeciClient.EngineV1alpha1(),
+		wp,
+		func(r *api.WorkplanStatus) *api.WorkplanStatus {
+			// set initial status
+			// error for uninitialized: status.stepTree in body must be of type array: "null"
+			r.Phase = api.WorkplanUninitialized
+			r.StepTree = InitWorkplanTree(tasks)
+			return r
+		},
+		api.EnableStatusSubresource,
+	); err != nil {
+		return nil, fmt.Errorf("failed to update workplan status for workflow %s, reason: %s", wf.Name, err)
 	}
 
 	return wp, nil
