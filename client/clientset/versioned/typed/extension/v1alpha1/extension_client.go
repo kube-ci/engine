@@ -21,26 +21,31 @@ package v1alpha1
 import (
 	serializer "k8s.io/apimachinery/pkg/runtime/serializer"
 	rest "k8s.io/client-go/rest"
-	v1alpha1 "kube.ci/engine/apis/trigger/v1alpha1"
+	v1alpha1 "kube.ci/engine/apis/extension/v1alpha1"
 	"kube.ci/engine/client/clientset/versioned/scheme"
 )
 
-type TriggerV1alpha1Interface interface {
+type ExtensionV1alpha1Interface interface {
 	RESTClient() rest.Interface
 	TriggersGetter
+	WorkplanLogsGetter
 }
 
-// TriggerV1alpha1Client is used to interact with features provided by the trigger.kube.ci group.
-type TriggerV1alpha1Client struct {
+// ExtensionV1alpha1Client is used to interact with features provided by the extension.kube.ci group.
+type ExtensionV1alpha1Client struct {
 	restClient rest.Interface
 }
 
-func (c *TriggerV1alpha1Client) Triggers(namespace string) TriggerInterface {
+func (c *ExtensionV1alpha1Client) Triggers(namespace string) TriggerInterface {
 	return newTriggers(c, namespace)
 }
 
-// NewForConfig creates a new TriggerV1alpha1Client for the given config.
-func NewForConfig(c *rest.Config) (*TriggerV1alpha1Client, error) {
+func (c *ExtensionV1alpha1Client) WorkplanLogs(namespace string) WorkplanLogInterface {
+	return newWorkplanLogs(c, namespace)
+}
+
+// NewForConfig creates a new ExtensionV1alpha1Client for the given config.
+func NewForConfig(c *rest.Config) (*ExtensionV1alpha1Client, error) {
 	config := *c
 	if err := setConfigDefaults(&config); err != nil {
 		return nil, err
@@ -49,12 +54,12 @@ func NewForConfig(c *rest.Config) (*TriggerV1alpha1Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &TriggerV1alpha1Client{client}, nil
+	return &ExtensionV1alpha1Client{client}, nil
 }
 
-// NewForConfigOrDie creates a new TriggerV1alpha1Client for the given config and
+// NewForConfigOrDie creates a new ExtensionV1alpha1Client for the given config and
 // panics if there is an error in the config.
-func NewForConfigOrDie(c *rest.Config) *TriggerV1alpha1Client {
+func NewForConfigOrDie(c *rest.Config) *ExtensionV1alpha1Client {
 	client, err := NewForConfig(c)
 	if err != nil {
 		panic(err)
@@ -62,9 +67,9 @@ func NewForConfigOrDie(c *rest.Config) *TriggerV1alpha1Client {
 	return client
 }
 
-// New creates a new TriggerV1alpha1Client for the given RESTClient.
-func New(c rest.Interface) *TriggerV1alpha1Client {
-	return &TriggerV1alpha1Client{c}
+// New creates a new ExtensionV1alpha1Client for the given RESTClient.
+func New(c rest.Interface) *ExtensionV1alpha1Client {
+	return &ExtensionV1alpha1Client{c}
 }
 
 func setConfigDefaults(config *rest.Config) error {
@@ -82,7 +87,7 @@ func setConfigDefaults(config *rest.Config) error {
 
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
-func (c *TriggerV1alpha1Client) RESTClient() rest.Interface {
+func (c *ExtensionV1alpha1Client) RESTClient() rest.Interface {
 	if c == nil {
 		return nil
 	}

@@ -6,7 +6,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 
-const GroupName = "trigger.kube.ci"
+const GroupName = "extension.kube.ci"
 
 var SchemeGroupVersion = schema.GroupVersion{Group: GroupName, Version: "v1alpha1"}
 
@@ -34,6 +34,8 @@ func Resource(resource string) schema.GroupResource {
 func addKnownTypes(scheme *runtime.Scheme) error {
 	scheme.AddKnownTypes(SchemeGroupVersion,
 		&Trigger{},
+		&WorkplanLog{},
+		&WorkplanLogOptions{},
 	)
 
 	scheme.AddKnownTypes(SchemeGroupVersion,

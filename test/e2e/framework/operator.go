@@ -56,7 +56,7 @@ func (f *Framework) StartAPIServerAndOperator(kubeConfigPath string, extraOption
 func (f *Framework) EventuallyAPIServerReady() GomegaAsyncAssertion {
 	apiServices := []string{
 		"v1alpha1.admission.engine.kube.ci",
-		"v1alpha1.trigger.kube.ci",
+		"v1alpha1.extension.kube.ci",
 	}
 
 	return Eventually(

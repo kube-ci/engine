@@ -21,18 +21,18 @@ package fake
 import (
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	testing "k8s.io/client-go/testing"
-	v1alpha1 "kube.ci/engine/apis/trigger/v1alpha1"
+	v1alpha1 "kube.ci/engine/apis/extension/v1alpha1"
 )
 
 // FakeTriggers implements TriggerInterface
 type FakeTriggers struct {
-	Fake *FakeTriggerV1alpha1
+	Fake *FakeExtensionV1alpha1
 	ns   string
 }
 
-var triggersResource = schema.GroupVersionResource{Group: "trigger.kube.ci", Version: "v1alpha1", Resource: "triggers"}
+var triggersResource = schema.GroupVersionResource{Group: "extension.kube.ci", Version: "v1alpha1", Resource: "triggers"}
 
-var triggersKind = schema.GroupVersionKind{Group: "trigger.kube.ci", Version: "v1alpha1", Kind: "Trigger"}
+var triggersKind = schema.GroupVersionKind{Group: "extension.kube.ci", Version: "v1alpha1", Kind: "Trigger"}
 
 // Create takes the representation of a trigger and creates it.  Returns the server's representation of the trigger, and an error, if there is any.
 func (c *FakeTriggers) Create(trigger *v1alpha1.Trigger) (result *v1alpha1.Trigger, err error) {
