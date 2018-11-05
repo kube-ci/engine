@@ -110,12 +110,13 @@ func (c *Controller) executeWorkplan(wp *api.Workplan) {
 	if err = c.runTasks(wp); err != nil {
 		log.Errorf("Failed to execute workplan: %s, reason: %s", wp.Name, err.Error())
 		// get latest before status update, since workplan status is changed inside runTasks()
-		if wp, err = c.kubeciClient.EngineV1alpha1().Workplans(wp.Namespace).Get(wp.Name, metav1.GetOptions{}); err != nil {
+		wp, e2 := c.kubeciClient.EngineV1alpha1().Workplans(wp.Namespace).Get(wp.Name, metav1.GetOptions{})
+		if e2 != nil {
 			log.Error(err)
 			return
 		}
 		// set failed status
-		if wp, err = util.UpdateWorkplanStatus(
+		wp, e3 := util.UpdateWorkplanStatus(
 			c.kubeciClient.EngineV1alpha1(),
 			wp,
 			func(r *api.WorkplanStatus) *api.WorkplanStatus {
@@ -125,7 +126,8 @@ func (c *Controller) executeWorkplan(wp *api.Workplan) {
 				return r
 			},
 			api.EnableStatusSubresource,
-		); err != nil {
+		)
+		if e3 != nil {
 			log.Errorf(err.Error())
 		}
 		return
