@@ -34,16 +34,12 @@ var (
 	sshConfig   sshGitConfig
 )
 
-func flags(fs *flag.FlagSet) {
+func Flags(fs *flag.FlagSet) {
 	basicConfig = basicGitConfig{entries: make(map[string]basicEntry)}
 	fs.Var(&basicConfig, "basic-git", "List of secret=url pairs.")
 
 	sshConfig = sshGitConfig{entries: make(map[string]sshEntry)}
 	fs.Var(&sshConfig, "ssh-git", "List of secret=url pairs.")
-}
-
-func init() {
-	flags(flag.CommandLine)
 }
 
 type gitConfigBuilder struct{}

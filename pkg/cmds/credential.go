@@ -1,6 +1,7 @@
 package cmds
 
 import (
+	"flag"
 	"fmt"
 
 	"github.com/appscode/go/log"
@@ -27,6 +28,12 @@ func NewCmdCredential() *cobra.Command {
 			return nil
 		},
 	}
+
+	// add credential initializer flags
+	pfs := flag.NewFlagSet("credential", flag.ExitOnError)
+	dockercreds.Flags(pfs)
+	gitcreds.Flags(pfs)
+	cmd.Flags().AddGoFlagSet(pfs)
 
 	return cmd
 }
