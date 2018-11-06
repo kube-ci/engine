@@ -21,5 +21,5 @@ func NewCmdWorkplanViewer() *cobra.Command {
 }
 
 // engine workplan-viewer --kubeconfig ~/.kube/config
-// 127.0.0.1:9090/namespace/default/workplan/wf-pr-test-9dtw8
-// 127.0.0.1:9090/namespace/default/workplan/wf-pr-test-9dtw8/step/step-test
+// 127.0.0.1:9090/namespaces/default/workplans/wf-pr-test-9dtw8
+// 127.0.0.1:9090/namespaces/default/workplans/wf-pr-test-9dtw8/steps/step-test

@@ -9,9 +9,14 @@ import (
 	"net/http"
 
 	"github.com/appscode/go/log"
-	"github.com/bmizerany/pat"
+	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
 	"kube.ci/engine/apis/engine/v1alpha1"
+)
+
+const (
+	statusPath = "/namespaces/%s/workplans/%s"
+	logsPath   = "/namespaces/%s/workplans/%s/steps/%s"
 )
 
 func wsWriter(ws *websocket.Conn, reader io.Reader) {
@@ -50,10 +55,11 @@ func serveUpgrade(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *LogController) serveLog(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
 	query := Query{
-		Namespace: r.URL.Query().Get(":namespace"),
-		Workplan:  r.URL.Query().Get(":workplan"),
-		Step:      r.URL.Query().Get(":step"),
+		Namespace: vars["namespace"],
+		Workplan:  vars["workplan"],
+		Step:      vars["step"],
 	}
 
 	if !websocket.IsWebSocketUpgrade(r) { // TODO: remove
@@ -84,9 +90,10 @@ func (c *LogController) serveLog(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *LogController) serveWorkplan(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
 	query := Query{
-		Namespace: r.URL.Query().Get(":namespace"),
-		Workplan:  r.URL.Query().Get(":workplan"),
+		Namespace: vars["namespace"],
+		Workplan:  vars["workplan"],
 	}
 
 	var err error
@@ -108,7 +115,7 @@ func (c *LogController) serveWorkplan(w http.ResponseWriter, r *http.Request) {
 	for i, steps := range workplanStatus.StepTree {
 		for j, step := range steps {
 			if step.Status == v1alpha1.ContainerRunning || step.Status == v1alpha1.ContainerTerminated {
-				logPath := fmt.Sprintf("/namespace/%s/workplan/%s/step/%s", query.Namespace, query.Workplan, step.Name)
+				logPath := fmt.Sprintf(logsPath, query.Namespace, query.Workplan, step.Name)
 				statusWithLogLink := fmt.Sprintf(`%s <a href=%s>[Logs]</a>`, step.Status, logPath)
 				workplanStatus.StepTree[i][j].Status = v1alpha1.ContainerStatus(statusWithLogLink)
 			}
@@ -131,13 +138,12 @@ func Serve(kubeConfig string) error {
 		return fmt.Errorf("error initializing log-controller, reason: %s", err)
 	}
 
-	m := pat.New()
-	m.Get("/namespace/:namespace/workplan/:workplan", http.HandlerFunc(c.serveWorkplan))
-	m.Get("/namespace/:namespace/workplan/:workplan/step/:step", http.HandlerFunc(c.serveLog))
+	r := mux.NewRouter()
+	r.HandleFunc(fmt.Sprintf(statusPath, "{namespace}", "{workplan}"), c.serveWorkplan)
+	r.HandleFunc(fmt.Sprintf(logsPath, "{namespace}", "{workplan}", "{step}"), c.serveLog)
+	http.Handle("/", r)
 
-	http.Handle("/", m)
-
-	fmt.Println("Server starting...")
+	fmt.Println("Starting workplan-viewer...")
 	return http.ListenAndServe(":9090", nil)
 }
 
