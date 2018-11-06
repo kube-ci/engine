@@ -34,13 +34,9 @@ const annotationPrefix = "credential.kube.ci/docker-"
 
 var config dockerConfig
 
-func flags(fs *flag.FlagSet) {
+func Flags(fs *flag.FlagSet) {
 	config = dockerConfig{make(map[string]entry)}
 	fs.Var(&config, "basic-docker", "List of secret=url pairs.")
-}
-
-func init() {
-	flags(flag.CommandLine)
 }
 
 // As the flag is read, this status is populated.
