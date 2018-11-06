@@ -61,11 +61,11 @@ const (
 
 // status of a step containing enough info to collect logs
 type StepEntry struct {
-	Name      string // container name
-	Namespace string
-	PodName   string
-	Status    ContainerStatus // simplified container status
-	Reason    string          // container status
+	Name           string // container name
+	Namespace      string
+	PodName        string
+	Status         ContainerStatus // simplified container status
+	ContainerState corev1.ContainerState
 }
 
 type WorkplanStatus struct {
