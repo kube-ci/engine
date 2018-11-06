@@ -1,5 +1,5 @@
 hash: f947d6455f6eb25200c057166124021e3f92a0a29f832763e41617426fdf8302
-updated: 2018-10-25T12:19:09.597532309+06:00
+updated: 2018-11-06T14:33:28.985658744+06:00
 imports:
 - name: bitbucket.org/ww/goautoneg
   version: 75cd24fc2f2c2a2088577d12123ddee5f54e0675
@@ -9,7 +9,7 @@ imports:
   - compute/metadata
   - internal
 - name: github.com/appscode/go
-  version: 0499c350ad263174dc8c1e3006b2d3300ff398e6
+  version: a6d58457b39324ead2ffb1f24be7a0a638c9f112
   subpackages:
   - analytics
   - context
@@ -38,7 +38,7 @@ imports:
   - registry/admissionreview/v1beta1
   - runtime/serializer/versioning
 - name: github.com/appscode/kutil
-  version: 25382b15981e816818803a66b6e1a1270efa89ab
+  version: 3ea05651189cbff8994265360eb150d4c3513859
   subpackages:
   - admissionregistration/v1beta1
   - apiextensions/v1beta1
@@ -83,8 +83,6 @@ imports:
   version: 3ac7bf7a47d159a033b107610db8a1b6575507a4
   subpackages:
   - quantile
-- name: github.com/bmizerany/pat
-  version: 6226ea591a40176dd3ff9cd8eff81ed6ca721a00
 - name: github.com/cenkalti/backoff
   version: 2ea60e5f094469f9e65adb9cd103795b73ae743e
 - name: github.com/codegangsta/inject
@@ -250,7 +248,7 @@ imports:
 - name: github.com/google/btree
   version: 7d79101e329e5a3adf994758c578dab82b90c017
 - name: github.com/google/go-cmp
-  version: 875f8df8b7965f1eac1098d36d677f807ac0b49e
+  version: 745b8ec8378318d64f3f04949d010ee8d2fc71e2
   subpackages:
   - cmp
   - cmp/internal/diff
@@ -275,6 +273,10 @@ imports:
   - openstack/identity/v3/tokens
   - openstack/utils
   - pagination
+- name: github.com/gorilla/context
+  version: 215affda49addc4c8ef7e2534915df2c8c35c6cd
+- name: github.com/gorilla/mux
+  version: 8096f47503459bcc74d1f4c487b7e6e42e5746b5
 - name: github.com/gorilla/websocket
   version: 2d1e4548da234d9cb742cc3628556fef86aafbac
 - name: github.com/graymeta/stow
@@ -322,7 +324,7 @@ imports:
 - name: github.com/modern-go/reflect2
   version: 05fbef0ca5da472bbf96c9322b84a53edc03c9fd
 - name: github.com/ncw/swift
-  version: 6f907bcc698fc1d24fa918255b18c6c5668b8b2b
+  version: 6f342da371d063863f2f354f183e4ab0ef72d287
 - name: github.com/NYTimes/gziphandler
   version: 56545f4a5d46df9a6648819d1664c3a03a13ffdb
 - name: github.com/onsi/ginkgo
@@ -597,7 +599,7 @@ imports:
   - pkg/client/clientset/clientset/typed/apiextensions/v1beta1
   - pkg/features
 - name: k8s.io/apimachinery
-  version: 8d7a0c3d7f0948197f384288363dfe20cd1f00e4
+  version: 00edbc532482e56a75224c794deaa1366dd292cb
   repo: https://github.com/kmodules/apimachinery.git
   vcs: git
   subpackages:
