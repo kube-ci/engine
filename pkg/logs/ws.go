@@ -151,7 +151,7 @@ var wsTemplate = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>kubeci logs</title>
+    <title>Workplan Logs</title>
     <style>
         body {
             background-color: #272727;
@@ -182,6 +182,10 @@ var wsTemplate = `
 var statusTemplate = `
 <!DOCTYPE html>
 <html>
+<head>
+    <title>Workplan Status</title>
+    <meta http-equiv="refresh" content="30">
+</head>
 
 <body>
 <script>
