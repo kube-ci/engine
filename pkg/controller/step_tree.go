@@ -29,11 +29,11 @@ func UpdateWorkplanTreeForPod(stepTree [][]api.StepEntry, pod *v1.Pod) [][]api.S
 	for _, status := range statuses {
 		// status.Name = container-name
 		containerStatuses[status.Name] = api.StepEntry{
-			Name:      status.Name,
-			Namespace: pod.Namespace,
-			PodName:   pod.Name,
-			Status:    getContainerState(status.State),
-			Reason:    status.State.String(),
+			Name:           status.Name,
+			Namespace:      pod.Namespace,
+			PodName:        pod.Name,
+			Status:         getContainerState(status.State),
+			ContainerState: status.State,
 		}
 	}
 

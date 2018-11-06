@@ -12005,18 +12005,18 @@ func schema_engine_apis_engine_v1alpha1_StepEntry(ref common.ReferenceCallback) 
 							Format: "",
 						},
 					},
-					"Reason": {
+					"ContainerState": {
 						SchemaProps: spec.SchemaProps{
 							Description: "simplified container status",
-							Type:        []string{"string"},
-							Format:      "",
+							Ref:         ref("k8s.io/api/core/v1.ContainerState"),
 						},
 					},
 				},
-				Required: []string{"Name", "Namespace", "PodName", "Status", "Reason"},
+				Required: []string{"Name", "Namespace", "PodName", "Status", "ContainerState"},
 			},
 		},
-		Dependencies: []string{},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.ContainerState"},
 	}
 }
 
