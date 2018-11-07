@@ -46,7 +46,7 @@ func (r *LogsREST) GroupVersionKind(containingGV schema.GroupVersion) schema.Gro
 }
 
 func (r *LogsREST) Categories() []string {
-	return []string{"kubeci-engine", "ci", "appscode", "all"}
+	return []string{"kubeci", "ci", "appscode", "all"}
 }
 
 // Get retrieves a runtime.Object that will stream the contents of the pod log

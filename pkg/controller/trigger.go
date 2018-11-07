@@ -49,7 +49,7 @@ func (r *TriggerREST) GroupVersionKind(containingGV schema.GroupVersion) schema.
 }
 
 func (r *TriggerREST) Categories() []string {
-	return []string{"kubeci-engine", "ci", "appscode", "all"}
+	return []string{"kubeci", "ci", "appscode", "all"}
 }
 
 func (r *TriggerREST) Create(ctx context.Context, obj runtime.Object, createValidation rest.ValidateObjectFunc, _ *metav1.CreateOptions) (runtime.Object, error) {
