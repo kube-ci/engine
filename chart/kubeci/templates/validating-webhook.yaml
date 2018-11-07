@@ -2,50 +2,49 @@
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: ValidatingWebhookConfiguration
 metadata:
-  name: admission.stash.appscode.com
+  name: admission.engine.kube.ci
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "stash.name" . }}"
+    app: "{{ template "kubeci-engine.name" . }}"
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
   annotations:
     "helm.sh/hook": post-install,post-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation
 webhooks:
-- name: restic.admission.stash.appscode.com
+- name: workflow.admission.engine.kube.ci
   clientConfig:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/admission.stash.appscode.com/v1alpha1/restics
+      path: /apis/admission.engine.kube.ci/v1alpha1/workflows
     caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - operations:
     - CREATE
     - UPDATE
     apiGroups:
-    - stash.appscode.com
+    - engine.kube.ci
     apiVersions:
     - "*"
     resources:
-    - restics
+    - workflows
   failurePolicy: Fail
-- name: recovery.admission.stash.appscode.com
+- name: workplan.admission.engine.kube.ci
   clientConfig:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/admission.stash.appscode.com/v1alpha1/recoveries
+      path: /apis/admission.engine.kube.ci/v1alpha1/workplans
     caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - operations:
-    - CREATE
     - UPDATE
     apiGroups:
-    - stash.appscode.com
+    - engine.kube.ci
     apiVersions:
     - "*"
     resources:
-    - recoveries
+    - workplans
   failurePolicy: Fail
 {{ end }}

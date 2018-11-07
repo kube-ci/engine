@@ -2,7 +2,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "stash.name" -}}
+{{- define "kubeci-engine.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -10,7 +10,7 @@ Expand the name of the chart.
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "stash.fullname" -}}
+{{- define "kubeci-engine.fullname" -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
 {{- if contains $name .Release.Name -}}
 {{- .Release.Name | trunc 63 | trimSuffix "-" -}}
@@ -22,9 +22,9 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "stash.serviceAccountName" -}}
+{{- define "kubeci-engine.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-    {{ default (include "stash.fullname" .) .Values.serviceAccount.name }}
+    {{ default (include "kubeci-engine.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}

@@ -4,7 +4,7 @@ metadata:
   name: {{ .Release.Name }}-cleaner
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "stash.name" . }}"
+    app: "{{ template "kubeci-engine.name" . }}"
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
   annotations:
@@ -15,7 +15,7 @@ spec:
   activeDeadlineSeconds: 120
   template:
     spec:
-      serviceAccountName: {{ template "stash.serviceAccountName" . }}
+      serviceAccountName: {{ template "kubeci-engine.serviceAccountName" . }}
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
 {{ toYaml .Values.imagePullSecrets | indent 6 }}
@@ -26,6 +26,6 @@ spec:
         command:
           - sh
           - -c
-          - "sleep 2; kubectl delete validatingwebhookconfigurations admission.stash.appscode.com || true; kubectl delete mutatingwebhookconfiguration admission.stash.appscode.com || true"
+          - "sleep 2; kubectl delete validatingwebhookconfigurations admission.engine.kube.ci || true"
         imagePullPolicy: IfNotPresent
       restartPolicy: Never

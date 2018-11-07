@@ -4,11 +4,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "stash.fullname" . }}
+  name: {{ template "kubeci-engine.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "stash.name" . }}"
+    app: "{{ template "kubeci-engine.name" . }}"
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
 {{- if .Values.annotations }}
@@ -19,19 +19,19 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: "{{ template "stash.name" . }}"
+      app: "{{ template "kubeci-engine.name" . }}"
       release: "{{ .Release.Name }}"
   template:
     metadata:
       labels:
-        app: "{{ template "stash.name" . }}"
+        app: "{{ template "kubeci-engine.name" . }}"
         release: "{{ .Release.Name }}"
 {{- if and .Values.criticalAddon (eq .Release.Namespace "kube-system") }}
       annotations:
         scheduler.alpha.kubernetes.io/critical-pod: ''
 {{- end }}
     spec:
-      serviceAccountName: {{ template "stash.serviceAccountName" . }}
+      serviceAccountName: {{ template "kubeci-engine.serviceAccountName" . }}
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
 {{ toYaml .Values.imagePullSecrets | indent 6 }}
@@ -55,11 +55,6 @@ spec:
         - --enable-analytics={{ .Values.enableAnalytics }}
         ports:
         - containerPort: 8443
-        readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 8443
-            scheme: HTTPS
         resources:
           requests:
             cpu: "100m"
@@ -78,16 +73,26 @@ spec:
         - mountPath: /var/pv
           name: data-volume
         - mountPath: /tmp
-          name: stash-scratchdir
+          name: kubeci-engine-scratchdir
+      - name: web-ui
+        image: {{ .Values.operator.registry }}/{{ .Values.operator.repository }}:{{ .Values.operator.tag }}
+        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        args:
+        - workplan-viewer
+        ports:
+        - containerPort: 9090
+        resources:
+          requests:
+            cpu: "100m"
       volumes:
       - emptyDir: {}
         name: data-volume
       - emptyDir: {}
-        name: stash-scratchdir
+        name: kubeci-engine-scratchdir
       - name: serving-cert
         secret:
           defaultMode: 420
-          secretName: {{ template "stash.fullname" . }}-apiserver-cert
+          secretName: {{ template "kubeci-engine.fullname" . }}-apiserver-cert
 {{- if or .Values.tolerations (and .Values.criticalAddon (eq .Release.Namespace "kube-system")) }}
       tolerations:
 {{- if .Values.tolerations }}

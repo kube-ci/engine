@@ -1,27 +1,31 @@
-# Stash
-[Stash by AppsCode](https://github.com/appscode/stash) - Backup your Kubernetes Volumes
+# Kubeci-engine
+[Kubeci-engine by AppsCode](https://github.com/kube-ci/engine) - Kubernetes Native Workflow Engine
+
 ## TL;DR;
 
 ```console
 $ helm repo add appscode https://charts.appscode.com/stable/
 $ helm repo update
-$ helm install appscode/stash
+$ helm install appscode/kubeci-engine
 ```
 
 ## Introduction
 
-This chart bootstraps a [Stash controller](https://github.com/appscode/stash) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Kubeci-engine controller](https://github.com/kube-ci/engine) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 
 - Kubernetes 1.8+
 
 ## Installing the Chart
+
 To install the chart with the release name `my-release`:
+
 ```console
-$ helm install appscode/stash --name my-release
+$ helm install appscode/kubeci-engine --name my-release
 ```
-The command deploys Stash operator on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+
+The command deploys Kubeci-engine operator on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -37,23 +41,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Configuration
 
-The following table lists the configurable parameters of the Stash chart and their default values.
-
+The following table lists the configurable parameters of the Kubeci-engine chart and their default values.
 
 | Parameter                            | Description                                                       | Default            |
 | ------------------------------------ | ----------------------------------------------------------------- | ------------------ |
-| `replicaCount`                       | Number of stash operator replicas to create (only 1 is supported) | `1`                |
+| `replicaCount`                       | Number of kubeci-engine operator replicas to create (only 1 is supported) | `1`                |
 | `operator.registry`                  | Docker registry used to pull operator image                       | `appscode`         |
-| `operator.repository`                | operator container image                                          | `stash`            |
-| `operator.tag`                       | operator container image tag                                      | `0.7.0`            |
+| `operator.repository`                | Operator container image                                          | `kubeci-engine`            |
+| `operator.tag`                       | Operator container image tag                                      | `0.7.0`            |
 | `pushgateway.registry`               | Docker registry used to pull Prometheus pushgateway image         | `prom`             |
 | `pushgateway.repository`             | Prometheus pushgateway container image                            | `pushgateway`      |
 | `pushgateway.tag`                    | Prometheus pushgateway container image tag                        | `v0.5.2`           |
 | `cleaner.registry`                   | Docker registry used to pull Webhook cleaner image                | `appscode`         |
 | `cleaner.repository`                 | Webhook cleaner container image                                   | `kubectl`          |
 | `cleaner.tag`                        | Webhook cleaner container image tag                               | `v1.11`            |
-| `imagePullPolicy`                    | container image pull policy                                       | `IfNotPresent`     |
-| `criticalAddon`                      | If true, installs Stash operator as critical addon                | `false`            |
+| `imagePullPolicy`                    | Container image pull policy                                       | `IfNotPresent`     |
+| `criticalAddon`                      | If true, installs Kubeci-engine operator as critical addon                | `false`            |
 | `logLevel`                           | Log level for operator                                            | `3`                |
 | `affinity`                           | Affinity rules for pod assignment                                 | `{}`               |
 | `annotations`                        | Annotations applied to operator pod(s)                            | `{}`               |
@@ -64,7 +67,7 @@ The following table lists the configurable parameters of the Stash chart and the
 | `serviceAccount.name`                | Service account to be used. If not set and `serviceAccount.create` is `true`, a name is generated using the fullname template | `` |
 | `apiserver.groupPriorityMinimum`     | The minimum priority the group should have.                       | 10000              |
 | `apiserver.versionPriority`          | The ordering of this API inside of the group.                     | 15                 |
-| `apiserver.enableValidatingWebhook`  | Enable validating webhooks for Stash CRDs                         | true               |
+| `apiserver.enableValidatingWebhook`  | Enable validating webhooks for Kubeci-engine CRDs                         | true               |
 | `apiserver.enableMutatingWebhook`    | Enable mutating webhooks for Kubernetes workloads                 | true               |
 | `apiserver.ca`                       | CA certificate used by main Kubernetes api server                 | `not-ca-cert`      |
 | `apiserver.disableStatusSubresource` | If true, disables status sub resource for crds. Otherwise enables based on Kubernetes version | `false`            |
@@ -74,17 +77,18 @@ The following table lists the configurable parameters of the Stash chart and the
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example:
 
 ```console
-$ helm install --name my-release --set image.tag=v0.2.1 appscode/stash
+$ helm install --name my-release --set image.tag=v0.2.1 appscode/kubeci-engine
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while
 installing the chart. For example:
 
 ```console
-$ helm install --name my-release --values values.yaml appscode/stash
+$ helm install --name my-release --values values.yaml appscode/kubeci-engine
 ```
 
 ## RBAC
+
 By default the chart will not install the recommended RBAC roles and rolebindings.
 
 You need to have the flag `--authorization-mode=RBAC` on the api server. See the following document for how to enable [RBAC](https://kubernetes.io/docs/admin/authorization/rbac/).
@@ -102,5 +106,5 @@ If the output contains "beta", you may install the chart with RBAC enabled (see 
 To enable the creation of RBAC resources (On clusters with RBAC). Do the following:
 
 ```console
-$ helm install --name my-release appscode/stash --set rbac.create=true
+$ helm install --name my-release appscode/kubeci-engine --set rbac.create=true
 ```
