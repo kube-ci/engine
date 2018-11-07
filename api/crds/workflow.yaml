@@ -10,7 +10,7 @@ spec:
   group: engine.kube.ci
   names:
     categories:
-    - kubeci-engine
+    - kubeci
     - ci
     - appscode
     - all

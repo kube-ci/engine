@@ -15,7 +15,7 @@ This chart bootstraps a [Kubeci-engine controller](https://github.com/kube-ci/en
 
 ## Prerequisites
 
-- Kubernetes 1.8+
+- Kubernetes 1.9+
 
 ## Installing the Chart
 

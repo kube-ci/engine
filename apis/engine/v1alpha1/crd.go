@@ -18,7 +18,7 @@ func (c Workflow) CustomResourceDefinition() *apiextensions.CustomResourceDefini
 		Singular:      strings.ToLower(ResourceKindWorkflow),
 		Kind:          ResourceKindWorkflow,
 		ShortNames:    []string{"wf"},
-		Categories:    []string{"kubeci-engine", "ci", "appscode", "all"},
+		Categories:    []string{"kubeci", "ci", "appscode", "all"},
 		ResourceScope: string(apiextensions.NamespaceScoped),
 		Versions: []apiextensions.CustomResourceDefinitionVersion{
 			{
@@ -44,7 +44,7 @@ func (c Workplan) CustomResourceDefinition() *apiextensions.CustomResourceDefini
 		Singular:      strings.ToLower(ResourceKindWorkplan),
 		Kind:          ResourceKindWorkplan,
 		ShortNames:    []string{"wp"},
-		Categories:    []string{"kubeci-engine", "ci", "appscode", "all"},
+		Categories:    []string{"kubeci", "ci", "appscode", "all"},
 		ResourceScope: string(apiextensions.NamespaceScoped),
 		Versions: []apiextensions.CustomResourceDefinitionVersion{
 			{
@@ -70,7 +70,7 @@ func (c WorkflowTemplate) CustomResourceDefinition() *apiextensions.CustomResour
 		Singular:      strings.ToLower(ResourceKindWorkflowTemplate),
 		Kind:          ResourceKindWorkflowTemplate,
 		ShortNames:    []string{"wt"},
-		Categories:    []string{"kubeci-engine", "ci", "appscode", "all"},
+		Categories:    []string{"kubeci", "ci", "appscode", "all"},
 		ResourceScope: string(apiextensions.NamespaceScoped),
 		Versions: []apiextensions.CustomResourceDefinitionVersion{
 			{
