@@ -2,7 +2,7 @@ package docker
 
 const (
 	ACRegistry  = "kubeci"
-	ImageKubeci = "kubeci"
+	ImageKubeci = "kubeci-engine"
 )
 
 type Docker struct {

@@ -91,55 +91,55 @@ fi
 # ref: https://jonalmeida.com/posts/2013/05/26/different-ways-to-implement-flags-in-bash/
 # ref: http://tldp.org/LDP/abs/html/comparison-ops.html
 
-export KUBECI_NAMESPACE=kube-system
-export KUBECI_SERVICE_ACCOUNT=kubeci
-export KUBECI_ENABLE_RBAC=true
-export KUBECI_RUN_ON_MASTER=0
-export KUBECI_ENABLE_VALIDATING_WEBHOOK=false
-export KUBECI_ENABLE_MUTATING_WEBHOOK=false
-export KUBECI_DOCKER_REGISTRY=kubeci
-export KUBECI_IMAGE_TAG=0.1.0
-export KUBECI_IMAGE_PULL_SECRET=
-export KUBECI_IMAGE_PULL_POLICY=IfNotPresent
-export KUBECI_ENABLE_STATUS_SUBRESOURCE=false
-export KUBECI_ENABLE_ANALYTICS=true
-export KUBECI_UNINSTALL=0
-export KUBECI_PURGE=0
+export KUBECI_ENGINE_NAMESPACE=kube-system
+export KUBECI_ENGINE_SERVICE_ACCOUNT=kubeci-engine
+export KUBECI_ENGINE_ENABLE_RBAC=true
+export KUBECI_ENGINE_RUN_ON_MASTER=0
+export KUBECI_ENGINE_ENABLE_VALIDATING_WEBHOOK=false
+export KUBECI_ENGINE_ENABLE_MUTATING_WEBHOOK=false
+export KUBECI_ENGINE_DOCKER_REGISTRY=kubeci-engine
+export KUBECI_ENGINE_IMAGE_TAG=0.1.0
+export KUBECI_ENGINE_IMAGE_PULL_SECRET=
+export KUBECI_ENGINE_IMAGE_PULL_POLICY=IfNotPresent
+export KUBECI_ENGINE_ENABLE_STATUS_SUBRESOURCE=false
+export KUBECI_ENGINE_ENABLE_ANALYTICS=true
+export KUBECI_ENGINE_UNINSTALL=0
+export KUBECI_ENGINE_PURGE=0
 
 export APPSCODE_ENV=${APPSCODE_ENV:-prod}
-export SCRIPT_LOCATION="curl -fsSL https://raw.githubusercontent.com/appscode/kubeci/0.1.0/"
+export SCRIPT_LOCATION="curl -fsSL https://raw.githubusercontent.com/kubeci/engine/0.1.0/"
 if [ "$APPSCODE_ENV" = "dev" ]; then
   detect_tag
   export SCRIPT_LOCATION="cat "
-  export KUBECI_IMAGE_TAG=$TAG
-  export KUBECI_IMAGE_PULL_POLICY=Always
+  export KUBECI_ENGINE_IMAGE_TAG=$TAG
+  export KUBECI_ENGINE_IMAGE_PULL_POLICY=Always
 fi
 
 KUBE_APISERVER_VERSION=$(kubectl version -o=json | $ONESSL jsonpath '{.serverVersion.gitVersion}')
 $ONESSL semver --check='<1.9.0' $KUBE_APISERVER_VERSION || {
-  export KUBECI_ENABLE_VALIDATING_WEBHOOK=true
-  export KUBECI_ENABLE_MUTATING_WEBHOOK=true
+  export KUBECI_ENGINE_ENABLE_VALIDATING_WEBHOOK=true
+  export KUBECI_ENGINE_ENABLE_MUTATING_WEBHOOK=true
 }
-$ONESSL semver --check='<1.11.0' $KUBE_APISERVER_VERSION || { export KUBECI_ENABLE_STATUS_SUBRESOURCE=true; }
+$ONESSL semver --check='<1.11.0' $KUBE_APISERVER_VERSION || { export KUBECI_ENGINE_ENABLE_STATUS_SUBRESOURCE=true; }
 
 show_help() {
-  echo "kubeci.sh - install kubeci operator"
+  echo "kubeci-engine.sh - install kubeci-engine operator"
   echo " "
-  echo "kubeci.sh [options]"
+  echo "kubeci-engine.sh [options]"
   echo " "
   echo "options:"
   echo "-h, --help                         show brief help"
   echo "-n, --namespace=NAMESPACE          specify namespace (default: kube-system)"
   echo "    --rbac                         create RBAC roles and bindings (default: true)"
-  echo "    --docker-registry              docker registry used to pull kubeci images (default: appscode)"
-  echo "    --image-pull-secret            name of secret used to pull kubeci operator images"
-  echo "    --run-on-master                run kubeci operator on master"
-  echo "    --enable-validating-webhook    enable/disable validating webhooks for KUBECI crds"
+  echo "    --docker-registry              docker registry used to pull kubeci-engine images (default: kubeci)"
+  echo "    --image-pull-secret            name of secret used to pull kubeci-engine operator images"
+  echo "    --run-on-master                run kubeci-engine operator on master"
+  echo "    --enable-validating-webhook    enable/disable validating webhooks for kubeci-engine crds"
   echo "    --enable-mutating-webhook      enable/disable mutating webhooks for Kubernetes workloads"
   echo "    --enable-status-subresource    If enabled, uses status sub resource for crds"
   echo "    --enable-analytics             send usage events to Google Analytics (default: true)"
-  echo "    --uninstall                    uninstall kubeci"
-  echo "    --purge                        purges kubeci crd objects and crds"
+  echo "    --uninstall                    uninstall kubeci-engine"
+  echo "    --purge                        purges kubeci-engine crd objects and crds"
 }
 
 while test $# -gt 0; do
@@ -151,7 +151,7 @@ while test $# -gt 0; do
     -n)
       shift
       if test $# -gt 0; then
-        export KUBECI_NAMESPACE=$1
+        export KUBECI_ENGINE_NAMESPACE=$1
       else
         echo "no namespace specified"
         exit 1
@@ -159,64 +159,64 @@ while test $# -gt 0; do
       shift
       ;;
     --namespace*)
-      export KUBECI_NAMESPACE=$(echo $1 | sed -e 's/^[^=]*=//g')
+      export KUBECI_ENGINE_NAMESPACE=$(echo $1 | sed -e 's/^[^=]*=//g')
       shift
       ;;
     --docker-registry*)
-      export KUBECI_DOCKER_REGISTRY=$(echo $1 | sed -e 's/^[^=]*=//g')
+      export KUBECI_ENGINE_DOCKER_REGISTRY=$(echo $1 | sed -e 's/^[^=]*=//g')
       shift
       ;;
     --image-pull-secret*)
       secret=$(echo $1 | sed -e 's/^[^=]*=//g')
-      export KUBECI_IMAGE_PULL_SECRET="name: '$secret'"
+      export KUBECI_ENGINE_IMAGE_PULL_SECRET="name: '$secret'"
       shift
       ;;
     --enable-validating-webhook*)
       val=$(echo $1 | sed -e 's/^[^=]*=//g')
       if [ "$val" = "false" ]; then
-        export KUBECI_ENABLE_VALIDATING_WEBHOOK=false
+        export KUBECI_ENGINE_ENABLE_VALIDATING_WEBHOOK=false
       fi
       shift
       ;;
     --enable-mutating-webhook*)
       val=$(echo $1 | sed -e 's/^[^=]*=//g')
       if [ "$val" = "false" ]; then
-        export KUBECI_ENABLE_MUTATING_WEBHOOK=false
+        export KUBECI_ENGINE_ENABLE_MUTATING_WEBHOOK=false
       fi
       shift
       ;;
     --enable-status-subresource*)
       val=$(echo $1 | sed -e 's/^[^=]*=//g')
       if [ "$val" = "false" ]; then
-        export KUBECI_ENABLE_STATUS_SUBRESOURCE=false
+        export KUBECI_ENGINE_ENABLE_STATUS_SUBRESOURCE=false
       fi
       shift
       ;;
     --enable-analytics*)
       val=$(echo $1 | sed -e 's/^[^=]*=//g')
       if [ "$val" = "false" ]; then
-        export KUBECI_ENABLE_ANALYTICS=false
+        export KUBECI_ENGINE_ENABLE_ANALYTICS=false
       fi
       shift
       ;;
     --rbac*)
       val=$(echo $1 | sed -e 's/^[^=]*=//g')
       if [ "$val" = "false" ]; then
-        export KUBECI_SERVICE_ACCOUNT=default
-        export KUBECI_ENABLE_RBAC=false
+        export KUBECI_ENGINE_SERVICE_ACCOUNT=default
+        export KUBECI_ENGINE_ENABLE_RBAC=false
       fi
       shift
       ;;
     --run-on-master)
-      export KUBECI_RUN_ON_MASTER=1
+      export KUBECI_ENGINE_RUN_ON_MASTER=1
       shift
       ;;
     --uninstall)
-      export KUBECI_UNINSTALL=1
+      export KUBECI_ENGINE_UNINSTALL=1
       shift
       ;;
     --purge)
-      export KUBECI_PURGE=1
+      export KUBECI_ENGINE_PURGE=1
       shift
       ;;
     *)
@@ -226,25 +226,25 @@ while test $# -gt 0; do
   esac
 done
 
-if [ "$KUBECI_UNINSTALL" -eq 1 ]; then
+if [ "$KUBECI_ENGINE_UNINSTALL" -eq 1 ]; then
   # delete webhooks and apiservices
-  kubectl delete validatingwebhookconfiguration -l app=kubeci || true
-  kubectl delete mutatingwebhookconfiguration -l app=kubeci || true
-  kubectl delete apiservice -l app=kubeci
-  # delete kubeci operator
-  kubectl delete deployment -l app=kubeci --namespace $KUBECI_NAMESPACE
-  kubectl delete service -l app=kubeci --namespace $KUBECI_NAMESPACE
-  kubectl delete secret -l app=kubeci --namespace $KUBECI_NAMESPACE
+  kubectl delete validatingwebhookconfiguration -l app=kubeci-engine || true
+  kubectl delete mutatingwebhookconfiguration -l app=kubeci-engine || true
+  kubectl delete apiservice -l app=kubeci-engine
+  # delete kubeci-engine operator
+  kubectl delete deployment -l app=kubeci-engine --namespace $KUBECI_ENGINE_NAMESPACE
+  kubectl delete service -l app=kubeci-engine --namespace $KUBECI_ENGINE_NAMESPACE
+  kubectl delete secret -l app=kubeci-engine --namespace $KUBECI_ENGINE_NAMESPACE
   # delete RBAC objects, if --rbac flag was used.
-  kubectl delete serviceaccount -l app=kubeci --namespace $KUBECI_NAMESPACE
-  kubectl delete clusterrolebindings -l app=kubeci
-  kubectl delete clusterrole -l app=kubeci
-  kubectl delete rolebindings -l app=kubeci --namespace $KUBECI_NAMESPACE
-  kubectl delete role -l app=kubeci --namespace $KUBECI_NAMESPACE
+  kubectl delete serviceaccount -l app=kubeci-engine --namespace $KUBECI_ENGINE_NAMESPACE
+  kubectl delete clusterrolebindings -l app=kubeci-engine
+  kubectl delete clusterrole -l app=kubeci-engine
+  kubectl delete rolebindings -l app=kubeci-engine --namespace $KUBECI_ENGINE_NAMESPACE
+  kubectl delete role -l app=kubeci-engine --namespace $KUBECI_ENGINE_NAMESPACE
 
-  echo "waiting for kubeci operator pod to stop running"
+  echo "waiting for kubeci-engine operator pod to stop running"
   for (( ; ; )); do
-    pods=($(kubectl get pods --namespace $KUBECI_NAMESPACE -l app=kubeci -o jsonpath='{range .items[*]}{.metadata.name} {end}'))
+    pods=($(kubectl get pods --namespace $KUBECI_ENGINE_NAMESPACE -l app=kubeci-engine -o jsonpath='{range .items[*]}{.metadata.name} {end}'))
     total=${#pods[*]}
     if [ $total -eq 0 ]; then
       break
@@ -253,7 +253,7 @@ if [ "$KUBECI_UNINSTALL" -eq 1 ]; then
   done
 
   # https://github.com/kubernetes/kubernetes/issues/60538
-  if [ "$KUBECI_PURGE" -eq 1 ]; then
+  if [ "$KUBECI_ENGINE_PURGE" -eq 1 ]; then
     for crd in "${crds[@]}"; do
       pairs=($(kubectl get ${crd}.engine.kube.ci --all-namespaces -o jsonpath='{range .items[*]}{.metadata.name} {.metadata.namespace} {end}' || true))
       total=${#pairs[*]}
@@ -277,11 +277,11 @@ if [ "$KUBECI_UNINSTALL" -eq 1 ]; then
     done
 
     # delete user roles
-    kubectl delete clusterroles appscode:kubeci:edit appscode:kubeci:view
+    kubectl delete clusterroles appscode:kubeci-engine:edit appscode:kubeci-engine:view
   fi
 
   echo
-  echo "Successfully uninstalled KUBECI!"
+  echo "Successfully uninstalled KUBECI-ENGINE!"
   exit 0
 fi
 
@@ -293,15 +293,15 @@ $ONESSL has-keys configmap --namespace=kube-system --keys=requestheader-client-c
 echo ""
 
 export KUBE_CA=
-export KUBECI_ENABLE_APISERVER=false
-if [ "$KUBECI_ENABLE_VALIDATING_WEBHOOK" = true ] || [ "$KUBECI_ENABLE_MUTATING_WEBHOOK" = true ]; then
+export KUBECI_ENGINE_ENABLE_APISERVER=false
+if [ "$KUBECI_ENGINE_ENABLE_VALIDATING_WEBHOOK" = true ] || [ "$KUBECI_ENGINE_ENABLE_MUTATING_WEBHOOK" = true ]; then
   $ONESSL get kube-ca >/dev/null 2>&1 || {
     echo "Admission webhooks can't be used when kube apiserver is accesible without verifying its TLS certificate (insecure-skip-tls-verify : true)."
     echo
     exit 1
   }
   export KUBE_CA=$($ONESSL get kube-ca | $ONESSL base64)
-  export KUBECI_ENABLE_APISERVER=true
+  export KUBECI_ENGINE_ENABLE_APISERVER=true
 fi
 
 env | sort | grep KUBECI*
@@ -311,50 +311,50 @@ echo ""
 # - a local CA key and cert
 # - a webhook server key and cert signed by the local CA
 $ONESSL create ca-cert
-$ONESSL create server-cert server --domains=kubeci.$KUBECI_NAMESPACE.svc
+$ONESSL create server-cert server --domains=kubeci-engine.$KUBECI_ENGINE_NAMESPACE.svc
 export SERVICE_SERVING_CERT_CA=$(cat ca.crt | $ONESSL base64)
 export TLS_SERVING_CERT=$(cat server.crt | $ONESSL base64)
 export TLS_SERVING_KEY=$(cat server.key | $ONESSL base64)
 
 ${SCRIPT_LOCATION}hack/deploy/operator.yaml | $ONESSL envsubst | kubectl apply -f -
 
-if [ "$KUBECI_ENABLE_RBAC" = true ]; then
+if [ "$KUBECI_ENGINE_ENABLE_RBAC" = true ]; then
   ${SCRIPT_LOCATION}hack/deploy/service-account.yaml | $ONESSL envsubst | kubectl apply -f -
   ${SCRIPT_LOCATION}hack/deploy/rbac-list.yaml | $ONESSL envsubst | kubectl auth reconcile -f -
   ${SCRIPT_LOCATION}hack/deploy/user-roles.yaml | $ONESSL envsubst | kubectl auth reconcile -f -
 fi
 
-if [ "$KUBECI_RUN_ON_MASTER" -eq 1 ]; then
-  kubectl patch deploy kubeci -n $KUBECI_NAMESPACE \
+if [ "$KUBECI_ENGINE_RUN_ON_MASTER" -eq 1 ]; then
+  kubectl patch deploy kubeci-engine -n $KUBECI_ENGINE_NAMESPACE \
     --patch="$(${SCRIPT_LOCATION}hack/deploy/run-on-master.yaml)"
 fi
 
-if [ "$KUBECI_ENABLE_APISERVER" = true ]; then
+if [ "$KUBECI_ENGINE_ENABLE_APISERVER" = true ]; then
   ${SCRIPT_LOCATION}hack/deploy/apiservices.yaml | $ONESSL envsubst | kubectl apply -f -
 fi
-if [ "$KUBECI_ENABLE_VALIDATING_WEBHOOK" = true ]; then
+if [ "$KUBECI_ENGINE_ENABLE_VALIDATING_WEBHOOK" = true ]; then
   ${SCRIPT_LOCATION}hack/deploy/validating-webhook.yaml | $ONESSL envsubst | kubectl apply -f -
 fi
-# if [ "$KUBECI_ENABLE_MUTATING_WEBHOOK" = true ]; then
+# if [ "$KUBECI_ENGINE_ENABLE_MUTATING_WEBHOOK" = true ]; then
 #   ${SCRIPT_LOCATION}hack/deploy/mutating-webhook.yaml | $ONESSL envsubst | kubectl apply -f -
 # fi
 
 echo
-echo "waiting until kubeci operator deployment is ready"
-$ONESSL wait-until-ready deployment kubeci --namespace $KUBECI_NAMESPACE || {
-  echo "KUBECI operator deployment failed to be ready"
+echo "waiting until kubeci-engine operator deployment is ready"
+$ONESSL wait-until-ready deployment kubeci-engine --namespace $KUBECI_ENGINE_NAMESPACE || {
+  echo "KUBECI-ENGINE operator deployment failed to be ready"
   exit 1
 }
 
-if [ "$KUBECI_ENABLE_APISERVER" = true ]; then
-  echo "waiting until kubeci apiservice is available"
+if [ "$KUBECI_ENGINE_ENABLE_APISERVER" = true ]; then
+  echo "waiting until kubeci-engine apiservice is available"
   $ONESSL wait-until-ready apiservice v1alpha1.admission.engine.kube.ci || {
-    echo "KUBECI apiservice failed to be ready"
+    echo "KUBECI-ENGINE apiservice failed to be ready"
     exit 1
   }
 fi
 
-echo "waiting until kubeci crds are ready"
+echo "waiting until kubeci-engine crds are ready"
 for crd in "${crds[@]}"; do
   $ONESSL wait-until-ready crd ${crd}.engine.kube.ci || {
     echo "$crd crd failed to be ready"
@@ -363,4 +363,4 @@ for crd in "${crds[@]}"; do
 done
 
 echo
-echo "Successfully installed KUBECI in $KUBECI_NAMESPACE namespace!"
+echo "Successfully installed KUBECI-ENGINE in $KUBECI_ENGINE_NAMESPACE namespace!"

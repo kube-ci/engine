@@ -21,11 +21,11 @@ To install Kubeci-engine in your Kubernetes cluster, run the following command:
 $ curl -fsSL https://raw.githubusercontent.com/kube-ci/engine/0.1.0/hack/deploy/install.sh | bash
 ```
 
-After successful installation, you should have a `kubeci-***` pod running in the `kube-system` namespace.
+After successful installation, you should have a `kubeci-engine-***` pod running in the `kube-system` namespace.
 
 ```console
-$ kubectl get pods -n kube-system | grep kubeci
-kubeci-846d47f489-jrb58       1/1       Running   0          48s
+$ kubectl get pods -n kube-system | grep kubeci-engine
+kubeci-engine-846d47f489-jrb58       1/1       Running   0          48s
 ```
 
 #### Customizing Installer
@@ -34,9 +34,9 @@ The installer script and associated yaml files can be found in the [/hack/deploy
 
 ```console
 $ curl -fsSL https://raw.githubusercontent.com/kube-ci/engine/0.1.0/hack/deploy/install.sh | bash -s -- -h
-kubeci.sh - install kubeci operator
+kubeci-engine.sh - install kubeci-engine operator
 
-kubeci.sh [options]
+kubeci-engine.sh [options]
 
 options:
 -h, --help                         show brief help
@@ -60,22 +60,22 @@ $ curl -fsSL https://raw.githubusercontent.com/kube-ci/engine/0.1.0/hack/deploy/
     | bash -s -- --run-on-master [--rbac]
 ```
 
-Kubeci-engine operator will be installed in a `kube-system` namespace by default. If you would like to run Kubci operator pod in `kubeci` namespace, pass the `--namespace=kubeci` flag:
+Kubeci-engine operator will be installed in a `kube-system` namespace by default. If you would like to run Kubci operator pod in `kubeci-engine` namespace, pass the `--namespace=kubeci-engine` flag:
 
 ```console
-$ kubectl create namespace kubeci
+$ kubectl create namespace kubeci-engine
 $ curl -fsSL https://raw.githubusercontent.com/kube-ci/engine/0.1.0/hack/deploy/install.sh \
-    | bash -s -- --namespace=kubeci [--run-on-master] [--rbac]
+    | bash -s -- --namespace=kubeci-engine [--run-on-master] [--rbac]
 ```
 
 If you are using a private Docker registry, you need to pull the following image:
 
- - [kubeci/kubeci](https://hub.docker.com/r/kubeci/kubeci)
+ - [kubeci/kubeci-engine](https://hub.docker.com/r/kubeci/kubeci-engine)
 
 To pass the address of your private registry and optionally a image pull secret use flags `--docker-registry` and `--image-pull-secret` respectively.
 
 ```console
-$ kubectl create namespace kubeci
+$ kubectl create namespace kubeci-engine
 $ curl -fsSL https://raw.githubusercontent.com/kube-ci/engine/0.1.0/hack/deploy/install.sh \
     | bash -s -- --docker-registry=MY_REGISTRY [--image-pull-secret=SECRET_NAME] [--rbac]
 ```
@@ -98,14 +98,14 @@ Kubeci-engine can be installed via [Helm](https://helm.sh/) using the [chart](ht
 ```console
 $ helm repo add appscode https://charts.appscode.com/stable/
 $ helm repo update
-$ helm search appscode/kubeci
+$ helm search appscode/kubeci-engine
 NAME            CHART VERSION APP VERSION DESCRIPTION
-appscode/kubeci  0.1.0    0.1.0  Kubeci-engine by AppsCode - Kuberenetes native CI system
+appscode/kubeci-engine  0.1.0    0.1.0  Kubeci-engine by AppsCode - Kuberenetes native CI system
 
-$ helm install appscode/kubeci --name kubeci --version 0.1.0 --namespace kube-system
+$ helm install appscode/kubeci-engine --name kubeci-engine --version 0.1.0 --namespace kube-system
 ```
 
-To see the detailed configuration options, visit [here](https://github.com/kube-ci/engine/tree/master/chart/kubeci).
+To see the detailed configuration options, visit [here](https://github.com/kube-ci/engine/tree/master/chart/kubeci-engine).
 
 </div>
 
@@ -123,17 +123,17 @@ $ kubectl create clusterrolebinding "cluster-admin-$(whoami)" \
 ## Verify installation
 To check if Kubeci-engine operator pods have started, run the following command:
 ```console
-$ kubectl get pods --all-namespaces -l app=kubeci --watch
+$ kubectl get pods --all-namespaces -l app=kubeci-engine --watch
 
 NAMESPACE     NAME                              READY     STATUS    RESTARTS   AGE
-kube-system   kubeci-859d6bdb56-m9br5           2/2       Running   2          5s
+kube-system   kubeci-engine-859d6bdb56-m9br5           2/2       Running   2          5s
 ```
 
 Once the operator pods are running, you can cancel the above command by typing `Ctrl+C`.
 
 Now, to confirm CRD groups have been registered by the operator, run the following command:
 ```console
-$ kubectl get crd -l app=kubeci
+$ kubectl get crd -l app=kubeci-engine
 
 NAME                                 AGE
 workflows.engine.kube.ci             5s
@@ -147,10 +147,10 @@ Now, you are ready to [run your first workflow](/docs/guides/README.md) using Ku
 ## Configuring RBAC
 Kubeci-engine introduces resources, such as, `Workflow`, `Workplan`, `WorkflowTemplate`,  `Trigger` and `WorkplanLog`. Kubeci-engine installer will create 2 user facing cluster roles:
 
-| ClusterRole          | Aggregates To | Description                            |
-|----------------------|---------------|----------------------------------------|
-| appscode:kubeci:edit | admin, edit   | Allows edit access to Kubeci-engine CRDs, intended to be granted within a namespace using a RoleBinding. |
-| appscode:kubeci:view | view          | Allows read-only access to Kubeci-engine CRDs, intended to be granted within a namespace using a RoleBinding. |
+| ClusterRole                 | Aggregates To | Description                            |
+|-----------------------------|---------------|----------------------------------------|
+| appscode:kubeci-engine:edit | admin, edit   | Allows edit access to Kubeci-engine CRDs, intended to be granted within a namespace using a RoleBinding. |
+| appscode:kubeci-engine:view | view          | Allows read-only access to Kubeci-engine CRDs, intended to be granted within a namespace using a RoleBinding. |
 
 These user facing roles supports [ClusterRole Aggregation](https://kubernetes.io/docs/admin/authorization/rbac/#aggregated-clusterroles) feature in Kubernetes 1.9 or later clusters.
 
@@ -188,12 +188,12 @@ $ kubectl describe workplan -n <namespace> <name>
 
 
 ## Detect Kubeci-engine version
-To detect Kubeci-engine version, exec into the operator pod and run `kubeci version` command.
+To detect Kubeci-engine version, exec into the operator pod and run `kubeci-engine version` command.
 
 ```console
 $ POD_NAMESPACE=kube-system
-$ POD_NAME=$(kubectl get pods -n $POD_NAMESPACE -l app=kubeci -o jsonpath={.items[0].metadata.name})
-$ kubectl exec -it $POD_NAME -c operator -n $POD_NAMESPACE kubeci version
+$ POD_NAME=$(kubectl get pods -n $POD_NAMESPACE -l app=kubeci-engine -o jsonpath={.items[0].metadata.name})
+$ kubectl exec -it $POD_NAME -c operator -n $POD_NAMESPACE kubeci-engine version
 
 Version = 0.1.0
 VersionStrategy = tag

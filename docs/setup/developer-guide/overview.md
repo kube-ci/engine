@@ -30,12 +30,12 @@ $ ./hack/builddeps.sh
 #### Build Binary
 ```
 $ ./hack/make.py
-$ kubeci version
+$ kubeci-engine version
 ```
 
 #### Run Binary Locally
 ```console
-$ kubeci run \
+$ kubeci-engine run \
   --secure-port=8443 \
   --kubeconfig="$HOME/.kube/config" \
   --authorization-kubeconfig="$HOME/.kube/config" \
@@ -58,7 +58,7 @@ To build and push your custom Docker image, follow the steps below. To release a
 $ ./hack/docker/setup.sh; ./hack/docker/setup.sh push
 
 # Add docker tag for your repository
-$ docker tag kubeci/kubeci:<tag> <image>:<tag>
+$ docker tag kubeci/kubeci-engine:<tag> <image>:<tag>
 
 # Push Image
 $ docker push <image>:<tag>

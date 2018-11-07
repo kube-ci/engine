@@ -15,13 +15,13 @@ resources:
 - name: master
   type: git
   source:
-    uri: https://github.com/kube-ci/kubeci
+    uri: https://github.com/kube-ci/engine
     branch: master
 
 - name: repo-status
   type: github-status
   source:
-    repository: kube-ci/kubeci
+    repository: kube-ci/engine
     access_token: ((access_token))
     context: "concourse-ci"
 
@@ -29,7 +29,7 @@ resources:
   type: pull-request
   source:
     owner: kube-ci
-    repo: kubeci
+    repo: engine
     label: ok-to-test/gke
     access_token: ((access_token))
 
@@ -37,7 +37,7 @@ resources:
   type: pull-request
   source:
     owner: kube-ci
-    repo: kubeci
+    repo: engine
     label: ok-to-test/kops-aws
     access_token: ((access_token))
 
@@ -45,7 +45,7 @@ resources:
   type: pull-request
   source:
     owner: kube-ci
-    repo: kubeci
+    repo: engine
     label: ok-to-test/aks
     access_token: ((access_token))
 
@@ -53,7 +53,7 @@ resources:
   type: pull-request
   source:
     owner: kube-ci
-    repo: kubeci
+    repo: engine
     label: ok-to-test/acs
     access_token: ((access_token))
 
@@ -61,7 +61,7 @@ resources:
   type: pull-request
   source:
     owner: kube-ci
-    repo: kubeci
+    repo: engine
     label: ok-to-test/do
     access_token: ((access_token))
 
@@ -69,7 +69,7 @@ resources:
   type: pull-request
   source:
     owner: kube-ci
-    repo: kubeci
+    repo: engine
     label: ok-to-test/kubespray
     access_token: ((access_token))
 
@@ -97,7 +97,7 @@ jobs:
     privileged: true
     file: master/hack/concourse/task.yml
     input_mapping:
-      kubeci: master
+      kubeci-engine: master
     params:
       ClusterProvider: digitalocean
       DOCKER_USER: ((docker_user))
@@ -127,7 +127,7 @@ jobs:
     privileged: true
     file: gke/hack/concourse/task.yml
     input_mapping:
-      kubeci: gke
+      kubeci-engine: gke
     params:
       ClusterProvider: gke
       DOCKER_USER: ((docker_user))
@@ -153,7 +153,7 @@ jobs:
     privileged: true
     file: aws/hack/concourse/task.yml
     input_mapping:
-      kubeci: aws
+      kubeci-engine: aws
     params:
       KOPS_AWS_ACCESS_KEY_ID: ((kops_aws_access_key_id))
       KOPS_AWS_SECRET_ACCESS_KEY: ((kops_aws_secret_access_key))
@@ -181,7 +181,7 @@ jobs:
     privileged: true
     file: azure-aks/hack/concourse/task.yml
     input_mapping:
-      kubeci: azure-aks
+      kubeci-engine: azure-aks
     params:
       ClusterProvider: aks
       APP_ID: ((azure_app_id))
@@ -210,7 +210,7 @@ jobs:
     privileged: true
     file: azure-acs/hack/concourse/task.yml
     input_mapping:
-      kubeci: azure-acs
+      kubeci-engine: azure-acs
     params:
       ClusterProvider: acs
       APP_ID: ((azure_app_id))
@@ -239,7 +239,7 @@ jobs:
     privileged: true
     file: do/hack/concourse/task.yml
     input_mapping:
-      kubeci: do
+      kubeci-engine: do
     params:
       ClusterProvider: digitalocean
       DOCKER_USER: ((docker_user))
@@ -265,7 +265,7 @@ jobs:
     privileged: true
     file: kubespray/hack/concourse/task.yml
     input_mapping:
-      kubeci: kubespray
+      kubeci-engine: kubespray
     params:
       DOCKER_USER: ((docker_user))
       DOCKER_PASS: ((docker_pass))

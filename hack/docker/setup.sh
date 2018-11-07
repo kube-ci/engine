@@ -11,10 +11,10 @@ ROOT=$GOPATH
 REPO_ROOT=$GOPATH/src/kube.ci/engine
 
 source "$REPO_ROOT/hack/libbuild/common/lib.sh"
-source "$REPO_ROOT/hack/libbuild/common/kubeci_image.sh"
+source "$REPO_ROOT/hack/libbuild/common/kubeci_engine_image.sh"
 
 APPSCODE_ENV=${APPSCODE_ENV:-dev}
-IMG=kubeci
+IMG=kubeci-engine
 
 DIST=$GOPATH/src/kube.ci/engine/dist
 mkdir -p $DIST
@@ -24,22 +24,22 @@ fi
 
 clean() {
   pushd $GOPATH/src/kube.ci/engine/hack/docker
-  rm kubeci Dockerfile
+  rm kubeci-engine Dockerfile
   popd
 }
 
 build_binary() {
   pushd $GOPATH/src/kube.ci/engine
   ./hack/builddeps.sh
-  ./hack/make.py build kubeci
+  ./hack/make.py build kubeci-engine
   detect_tag $DIST/.tag
   popd
 }
 
 build_docker() {
   pushd $GOPATH/src/kube.ci/engine/hack/docker
-  cp $DIST/kubeci/kubeci-alpine-amd64 kubeci
-  chmod 755 kubeci
+  cp $DIST/kubeci-engine/kubeci-engine-alpine-amd64 kubeci-engine
+  chmod 755 kubeci-engine
 
   cat >Dockerfile <<EOL
 FROM alpine
@@ -47,14 +47,14 @@ FROM alpine
 RUN set -x \
   && apk add --update --no-cache ca-certificates
 
-COPY kubeci /usr/bin/kubeci
+COPY kubeci-engine /usr/bin/kubeci-engine
 
-ENTRYPOINT ["kubeci"]
+ENTRYPOINT ["kubeci-engine"]
 EOL
   local cmd="docker build -t $DOCKER_REGISTRY/$IMG:$TAG ."
   echo $cmd; $cmd
 
-  rm kubeci Dockerfile
+  rm kubeci-engine Dockerfile
   popd
 }
 

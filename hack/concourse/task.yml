@@ -7,8 +7,8 @@ image_resource:
     tag: latest
 
 inputs:
-- name: kubeci
+- name: kubeci-engine
 - name: creds
 
 run:
-  path: kubeci/hack/concourse/test.sh
+  path: engine/hack/concourse/test.sh

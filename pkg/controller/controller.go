@@ -83,7 +83,7 @@ func (c *Controller) Run(stopCh <-chan struct{}) {
 func (c *Controller) RunInformers(stopCh <-chan struct{}) {
 	defer runtime.HandleCrash()
 
-	log.Info("Starting kubeci controller")
+	log.Info("Starting kubeci-engine controller")
 	c.kubeInformerFactory.Start(stopCh)
 	c.kubeciInformerFactory.Start(stopCh)
 
@@ -126,5 +126,5 @@ func (c *Controller) RunInformers(stopCh <-chan struct{}) {
 	c.runInformerGC(stopCh)
 
 	<-stopCh
-	log.Infoln("Stopping KubeCI controller")
+	log.Infoln("Stopping kubeci-engine controller")
 }

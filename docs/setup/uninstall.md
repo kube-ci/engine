@@ -10,18 +10,18 @@ validatingwebhookconfiguration.admissionregistration.k8s.io "admission.engine.ku
 No resources found
 apiservice.apiregistration.k8s.io "v1alpha1.admission.engine.kube.ci" deleted
 apiservice.apiregistration.k8s.io "v1alpha1.extension.kube.ci" deleted
-deployment.extensions "kubeci" deleted
-service "kubeci" deleted
-secret "kubeci-apiserver-cert" deleted
-serviceaccount "kubeci" deleted
-clusterrolebinding.rbac.authorization.k8s.io "kubeci" deleted
-clusterrolebinding.rbac.authorization.k8s.io "kubeci-apiserver-auth-delegator" deleted
-clusterrole.rbac.authorization.k8s.io "kubeci" deleted
-rolebinding.rbac.authorization.k8s.io "kubeci-apiserver-extension-server-authentication-reader" deleted
+deployment.extensions "kubeci-engine" deleted
+service "kubeci-engine" deleted
+secret "kubeci-engine-apiserver-cert" deleted
+serviceaccount "kubeci-engine" deleted
+clusterrolebinding.rbac.authorization.k8s.io "kubeci-engine" deleted
+clusterrolebinding.rbac.authorization.k8s.io "kubeci-engine-apiserver-auth-delegator" deleted
+clusterrole.rbac.authorization.k8s.io "kubeci-engine" deleted
+rolebinding.rbac.authorization.k8s.io "kubeci-engine-apiserver-extension-server-authentication-reader" deleted
 No resources found
-waiting for kubeci operator pod to stop running
+waiting for kubeci-engine operator pod to stop running
 
-Successfully uninstalled KUBECI!
+Successfully uninstalled KUBECI-ENGINE!
 ```
 
 The above command will leave the Kubeci-engine crd objects as-is. If you wish to **nuke** all Kubeci-engine crd objects, also pass the `--purge` flag. This will keep a copy of Kubeci-engine crd objects in your current directory.

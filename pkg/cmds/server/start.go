@@ -63,7 +63,7 @@ func (o KubeciOptions) Config() (*server.KubeciServerConfig, error) {
 		return nil, err
 	}
 	serverConfig.OpenAPIConfig = genericapiserver.DefaultOpenAPIConfig(v1alpha1.GetOpenAPIDefinitions, openapinamer.NewDefinitionNamer(server.Scheme))
-	serverConfig.OpenAPIConfig.Info.Title = "kubeci"
+	serverConfig.OpenAPIConfig.Info.Title = "kubeci-engine"
 	serverConfig.OpenAPIConfig.Info.Version = v1alpha1.SchemeGroupVersion.Version
 	serverConfig.OpenAPIConfig.IgnorePrefixes = []string{
 		"/swaggerapi",

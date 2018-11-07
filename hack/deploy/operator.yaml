@@ -1,39 +1,39 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: kubeci
-  namespace: ${KUBECI_NAMESPACE}
+  name: kubeci-engine
+  namespace: ${KUBECI_ENGINE_NAMESPACE}
   labels:
-    app: kubeci
+    app: kubeci-engine
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: kubeci
+      app: kubeci-engine
   template:
     metadata:
       labels:
-        app: kubeci
+        app: kubeci-engine
       annotations:
         scheduler.alpha.kubernetes.io/critical-pod: ''
     spec:
-      serviceAccountName: ${KUBECI_SERVICE_ACCOUNT}
-      imagePullSecrets: [${KUBECI_IMAGE_PULL_SECRET}]
+      serviceAccountName: ${KUBECI_ENGINE_SERVICE_ACCOUNT}
+      imagePullSecrets: [${KUBECI_ENGINE_IMAGE_PULL_SECRET}]
       containers:
       - name: operator
-        image: ${KUBECI_DOCKER_REGISTRY}/kubeci:${KUBECI_IMAGE_TAG}
-        imagePullPolicy: ${KUBECI_IMAGE_PULL_POLICY}
+        image: ${KUBECI_ENGINE_DOCKER_REGISTRY}/kubeci-engine:${KUBECI_ENGINE_IMAGE_TAG}
+        imagePullPolicy: ${KUBECI_ENGINE_IMAGE_PULL_POLICY}
         args:
         - run
         - --v=3
-        - --rbac=${KUBECI_ENABLE_RBAC}
-        - --docker-registry=${KUBECI_DOCKER_REGISTRY}
+        - --rbac=${KUBECI_ENGINE_ENABLE_RBAC}
+        - --docker-registry=${KUBECI_ENGINE_DOCKER_REGISTRY}
         - --secure-port=8443
         - --audit-log-path=-
         - --tls-cert-file=/var/serving-cert/tls.crt
         - --tls-private-key-file=/var/serving-cert/tls.key
-        - --enable-status-subresource=${KUBECI_ENABLE_STATUS_SUBRESOURCE}
-        - --enable-analytics=${KUBECI_ENABLE_ANALYTICS}
+        - --enable-status-subresource=${KUBECI_ENGINE_ENABLE_STATUS_SUBRESOURCE}
+        - --enable-analytics=${KUBECI_ENGINE_ENABLE_ANALYTICS}
         ports:
         - containerPort: 8443
         resources:
@@ -55,10 +55,10 @@ spec:
         - mountPath: /var/pv
           name: data-volume
         - mountPath: /tmp
-          name: kubeci-scratchdir
+          name: kubeci-engine-scratchdir
       - name: web-ui
-        image: ${KUBECI_DOCKER_REGISTRY}/kubeci:${KUBECI_IMAGE_TAG}
-        imagePullPolicy: ${KUBECI_IMAGE_PULL_POLICY}
+        image: ${KUBECI_ENGINE_DOCKER_REGISTRY}/kubeci-engine:${KUBECI_ENGINE_IMAGE_TAG}
+        imagePullPolicy: ${KUBECI_ENGINE_IMAGE_PULL_POLICY}
         args:
         - workplan-viewer
         ports:
@@ -70,11 +70,11 @@ spec:
       - emptyDir: {}
         name: data-volume
       - emptyDir: {}
-        name: kubeci-scratchdir
+        name: kubeci-engine-scratchdir
       - name: serving-cert
         secret:
           defaultMode: 420
-          secretName: kubeci-apiserver-cert
+          secretName: kubeci-engine-apiserver-cert
       tolerations:
       - key: CriticalAddonsOnly
         operator: Exists
@@ -83,10 +83,10 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: kubeci-apiserver-cert
-  namespace: ${KUBECI_NAMESPACE}
+  name: kubeci-engine-apiserver-cert
+  namespace: ${KUBECI_ENGINE_NAMESPACE}
   labels:
-    app: kubeci
+    app: kubeci-engine
 type: kubernetes.io/tls
 data:
   tls.crt: ${TLS_SERVING_CERT}
@@ -96,10 +96,10 @@ data:
 apiVersion: v1
 kind: Service
 metadata:
-  name: kubeci
-  namespace: ${KUBECI_NAMESPACE}
+  name: kubeci-engine
+  namespace: ${KUBECI_ENGINE_NAMESPACE}
   labels:
-    app: kubeci
+    app: kubeci-engine
 spec:
   ports:
   - name: admission
@@ -109,5 +109,5 @@ spec:
     port: 56789
     targetPort: 56789
   selector:
-    app: kubeci
+    app: kubeci-engine
 

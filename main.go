@@ -21,8 +21,8 @@ func main() {
 	}
 
 	if err := cmds.NewRootCmd().Execute(); err != nil {
-		log.Fatalln("Error in kubeci Main:", err)
+		log.Fatalln("Error in kubeci-engine Main:", err)
 	}
-	log.Infoln("Exiting kubeci Main")
+	log.Infoln("Exiting kubeci-engine Main")
 	os.Exit(0)
 }

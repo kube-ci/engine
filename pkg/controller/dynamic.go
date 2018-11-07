@@ -53,7 +53,7 @@ func (res ResourceIdentifier) GetData(paths map[string]string) map[string]string
 }
 
 func jsonPathData(path string, data interface{}) string {
-	j := jsonpath.New("kubeci")
+	j := jsonpath.New("kubeci-engine")
 	j.AllowMissingKeys(true) // TODO: true or false ? ignore errors ?
 
 	if err := j.Parse(path); err != nil {

@@ -38,7 +38,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   namespace: kube-system
-  name: kubeci
+  name: kubeci-engine
 roleRef:
   kind: ClusterRole
   name: workflow-rbac-role

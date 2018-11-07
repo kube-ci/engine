@@ -16,38 +16,38 @@ import (
 )
 
 const (
-	version = "0.7.0"
+	version = "0.1.0"
 )
 
 var (
 	tplFrontMatter = template.Must(template.New("index").Parse(`---
 title: Reference
-description: Kubeci CLI Reference
+description: Kubeci-engine CLI Reference
 menu:
-  product_kubeci_{{ .Version }}:
+  product_kubeci_engine_{{ .Version }}:
     identifier: reference
     name: Reference
     weight: 1000
-menu_name: product_kubeci_{{ .Version }}
+menu_name: product_kubeci_engine_{{ .Version }}
 ---
 `))
 
 	_ = template.Must(tplFrontMatter.New("cmd").Parse(`---
 title: {{ .Name }}
 menu:
-  product_kubeci_{{ .Version }}:
+  product_kubeci_engine_{{ .Version }}:
     identifier: {{ .ID }}
     name: {{ .Name }}
     parent: reference
 {{- if .RootCmd }}
     weight: 0
 {{ end }}
-product_name: kubeci
-menu_name: product_kubeci_{{ .Version }}
+product_name: kubeci-engine
+menu_name: product_kubeci_engine_{{ .Version }}
 section_menu_id: reference
 {{- if .RootCmd }}
 aliases:
-  - products/kubeci/{{ .Version }}/reference/
+  - products/kubeci-engine/{{ .Version }}/reference/
 {{ end }}
 ---
 `))

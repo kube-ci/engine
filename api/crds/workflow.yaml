@@ -4,13 +4,13 @@ kind: CustomResourceDefinition
 metadata:
   creationTimestamp: null
   labels:
-    app: kubeci
+    app: kubeci-engine
   name: workflows.engine.kube.ci
 spec:
   group: engine.kube.ci
   names:
     categories:
-    - kubeci
+    - kubeci-engine
     - ci
     - appscode
     - all

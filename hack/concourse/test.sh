@@ -3,8 +3,8 @@
 set -eoux pipefail
 
 ORG_NAME=kube-ci
-REPO_NAME=kubeci
-APP_LABEL=kubeci #required for `kubectl describe deploy -n kube-system -l app=$APP_LABEL`
+REPO_NAME=engine
+APP_LABEL=kubeci-engine #required for `kubectl describe deploy -n kube-system -l app=$APP_LABEL`
 REPO_ROOT=$GOPATH/src/kube.ci/$REPO_NAME
 
 export APPSCODE_ENV=dev

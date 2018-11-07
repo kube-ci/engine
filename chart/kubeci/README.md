@@ -46,7 +46,7 @@ The following table lists the configurable parameters of the Kubeci-engine chart
 | Parameter                            | Description                                                       | Default            |
 | ------------------------------------ | ----------------------------------------------------------------- | ------------------ |
 | `replicaCount`                       | Number of kubeci-engine operator replicas to create (only 1 is supported) | `1`                |
-| `operator.registry`                  | Docker registry used to pull operator image                       | `appscode`         |
+| `operator.registry`                  | Docker registry used to pull operator image                       | `kubeci`         |
 | `operator.repository`                | Operator container image                                          | `kubeci-engine`            |
 | `operator.tag`                       | Operator container image tag                                      | `0.7.0`            |
 | `pushgateway.registry`               | Docker registry used to pull Prometheus pushgateway image         | `prom`             |
