@@ -35,7 +35,7 @@ func New(kubeClient kubernetes.Interface, extClient cs.Interface, kaClient ka.In
 		KubeClient:         kubeClient,
 		KubeciClient:       extClient,
 		KAClient:           kaClient,
-		namespace:          rand.WithUniqSuffix("test-kubeci"),
+		namespace:          rand.WithUniqSuffix("test-kubeci-engine"),
 		CertStore:          store,
 		WebhookEnabled:     webhookEnabled,
 		SelfHostedOperator: selfHostedOperator,

@@ -1,10 +1,10 @@
 ---
 title: Reference
-description: Kubeci CLI Reference
+description: Kubeci-engine CLI Reference
 menu:
-  product_kubeci_0.7.0:
+  product_kubeci_engine_0.1.0:
     identifier: reference
     name: Reference
     weight: 1000
-menu_name: product_kubeci_0.7.0
+menu_name: product_kubeci_engine_0.1.0
 ---

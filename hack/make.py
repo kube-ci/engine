@@ -38,7 +38,7 @@ from os.path import expandvars, join, dirname
 libbuild.REPO_ROOT = libbuild.GOPATH + '/src/kube.ci/engine'
 BUILD_METADATA = libbuild.metadata(libbuild.REPO_ROOT)
 libbuild.BIN_MATRIX = {
-    'kubeci': {
+    'kubeci-engine': {
         'type': 'go',
         'go_version': True,
         'use_cgo': False,

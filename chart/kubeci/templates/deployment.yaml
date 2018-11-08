@@ -1,0 +1,99 @@
+# GKE returns Major:"1", Minor:"10+"
+{{- $major := default "0" .Capabilities.KubeVersion.Major | trimSuffix "+" | int64 }}
+{{- $minor := default "0" .Capabilities.KubeVersion.Minor | trimSuffix "+" | int64 }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "kubeci-engine.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubeci-engine.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+{{- if .Values.annotations }}
+  annotations:
+{{ toYaml .Values.annotations | indent 4 }}
+{{- end }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: "{{ template "kubeci-engine.name" . }}"
+      release: "{{ .Release.Name }}"
+  template:
+    metadata:
+      labels:
+        app: "{{ template "kubeci-engine.name" . }}"
+        release: "{{ .Release.Name }}"
+{{- if and .Values.criticalAddon (eq .Release.Namespace "kube-system") }}
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: ''
+{{- end }}
+    spec:
+      serviceAccountName: {{ template "kubeci-engine.serviceAccountName" . }}
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+{{ toYaml .Values.imagePullSecrets | indent 6 }}
+      {{- end }}
+      containers:
+      - name: operator
+        image: {{ .Values.operator.registry }}/{{ .Values.operator.repository }}:{{ .Values.operator.tag }}
+        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        args:
+        - run
+        - --v={{ .Values.logLevel }}
+        - --rbac={{ .Values.rbac.create }}
+        - --docker-registry={{ .Values.operator.registry }}
+        - --secure-port=8443
+        - --audit-log-path=-
+        - --tls-cert-file=/var/serving-cert/tls.crt
+        - --tls-private-key-file=/var/serving-cert/tls.key
+{{- if and (not .Values.apiserver.disableStatusSubresource) (ge $major 1) (ge $minor 11) }}
+        - --enable-status-subresource=true
+{{- end }}
+        - --enable-analytics={{ .Values.enableAnalytics }}
+        ports:
+        - containerPort: 8443
+        resources:
+          requests:
+            cpu: "100m"
+        volumeMounts:
+        - mountPath: /var/serving-cert
+          name: serving-cert
+      - name: web-ui
+        image: {{ .Values.operator.registry }}/{{ .Values.operator.repository }}:{{ .Values.operator.tag }}
+        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        args:
+        - workplan-viewer
+        ports:
+        - containerPort: 9090
+        resources:
+          requests:
+            cpu: "100m"
+      volumes:
+      - name: serving-cert
+        secret:
+          defaultMode: 420
+          secretName: {{ template "kubeci-engine.fullname" . }}-apiserver-cert
+{{- if or .Values.tolerations (and .Values.criticalAddon (eq .Release.Namespace "kube-system")) }}
+      tolerations:
+{{- if .Values.tolerations }}
+{{ toYaml .Values.tolerations | indent 8 }}
+{{- end -}}
+{{- if and .Values.criticalAddon (eq .Release.Namespace "kube-system") }}
+      - key: CriticalAddonsOnly
+        operator: Exists
+{{- end -}}
+{{- end -}}
+{{- if .Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity | indent 8 }}
+{{- end -}}
+{{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+{{- end -}}
+{{- if and .Values.criticalAddon (eq .Release.Namespace "kube-system") }}
+      priorityClassName: system-cluster-critical
+{{- end -}}

@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: kubeci-dev-apiserver
-  namespace: ${KUBECI_NAMESPACE}
+  name: kubeci-engine-dev-apiserver
+  namespace: ${KUBECI_ENGINE_NAMESPACE}
   labels:
-    app: kubeci-dev-apiserver
+    app: kubeci-engine-dev-apiserver
 spec:
   ports:
   - name: api
@@ -19,10 +19,10 @@ spec:
 apiVersion: v1
 kind: Endpoints
 metadata:
-  name: kubeci-dev-apiserver
-  namespace: ${KUBECI_NAMESPACE}
+  name: kubeci-engine-dev-apiserver
+  namespace: ${KUBECI_ENGINE_NAMESPACE}
   labels:
-    app: kubeci-dev-apiserver
+    app: kubeci-engine-dev-apiserver
 subsets:
 - addresses:
   # list all external ips for this service
@@ -38,15 +38,15 @@ kind: APIService
 metadata:
   name: v1alpha1.admission.engine.kube.ci
   labels:
-    app: kubeci-dev-apiserver
+    app: kubeci-engine-dev-apiserver
 spec:
   insecureSkipTLSVerify: true
   group: admission.engine.kube.ci
   groupPriorityMinimum: 1000
   versionPriority: 15
   service:
-    name: kubeci-dev-apiserver
-    namespace: ${KUBECI_NAMESPACE}
+    name: kubeci-engine-dev-apiserver
+    namespace: ${KUBECI_ENGINE_NAMESPACE}
   version: v1alpha1
 ---
 # register as aggregated apiserver
@@ -55,13 +55,13 @@ kind: APIService
 metadata:
   name: v1alpha1.extension.kube.ci
   labels:
-    app: kubeci-dev-apiserver
+    app: kubeci-engine-dev-apiserver
 spec:
   insecureSkipTLSVerify: true
   group: extension.kube.ci
   groupPriorityMinimum: 1000
   versionPriority: 15
   service:
-    name: kubeci-dev-apiserver
-    namespace: ${KUBECI_NAMESPACE}
+    name: kubeci-engine-dev-apiserver
+    namespace: ${KUBECI_ENGINE_NAMESPACE}
   version: v1alpha1

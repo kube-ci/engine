@@ -4,7 +4,7 @@ kind: CustomResourceDefinition
 metadata:
   creationTimestamp: null
   labels:
-    app: kubeci
+    app: kubeci-engine
   name: workplans.engine.kube.ci
 spec:
   group: engine.kube.ci

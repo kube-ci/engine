@@ -41,17 +41,17 @@ else
   esac
 fi
 
-export KUBECI_NAMESPACE=default
+export KUBECI_ENGINE_NAMESPACE=default
 export KUBE_CA=$($ONESSL get kube-ca | $ONESSL base64)
-export KUBECI_ENABLE_WEBHOOK=true
-export KUBECI_E2E_TEST=false
+export KUBECI_ENGINE_ENABLE_WEBHOOK=true
+export KUBECI_ENGINE_E2E_TEST=false
 
 while test $# -gt 0; do
   case "$1" in
     -n)
       shift
       if test $# -gt 0; then
-        export KUBECI_NAMESPACE=$1
+        export KUBECI_ENGINE_NAMESPACE=$1
       else
         echo "no namespace specified"
         exit 1
@@ -61,7 +61,7 @@ while test $# -gt 0; do
     --namespace*)
       shift
       if test $# -gt 0; then
-        export KUBECI_NAMESPACE=$1
+        export KUBECI_ENGINE_NAMESPACE=$1
       else
         echo "no namespace specified"
         exit 1
@@ -71,14 +71,14 @@ while test $# -gt 0; do
     --enable-webhook*)
       val=$(echo $1 | sed -e 's/^[^=]*=//g')
       if [ "$val" = "false" ]; then
-        export KUBECI_ENABLE_WEBHOOK=false
+        export KUBECI_ENGINE_ENABLE_WEBHOOK=false
       fi
       shift
       ;;
     --test*)
       val=$(echo $1 | sed -e 's/^[^=]*=//g')
       if [ "$val" = "true" ]; then
-        export KUBECI_E2E_TEST=true
+        export KUBECI_ENGINE_E2E_TEST=true
       fi
       shift
       ;;
@@ -94,14 +94,14 @@ kubectl create clusterrolebinding serviceaccounts-cluster-admin --clusterrole=cl
 
 cat $REPO_ROOT/hack/dev/apiregistration.yaml | envsubst | kubectl apply -f -
 
-if [ "$KUBECI_ENABLE_WEBHOOK" = true ]; then
+if [ "$KUBECI_ENGINE_ENABLE_WEBHOOK" = true ]; then
   cat $REPO_ROOT/hack/deploy/validating-webhook.yaml | envsubst | kubectl apply -f -
 fi
 
 $REPO_ROOT/hack/make.py
 
-if [ "$KUBECI_E2E_TEST" = false ]; then # don't run operator while run this script from test
-kubeci run \
+if [ "$KUBECI_ENGINE_E2E_TEST" = false ]; then # don't run operator while run this script from test
+kubeci-engine run \
     --secure-port=6443 \
     --kubeconfig="$HOME/.kube/config" \
     --authorization-kubeconfig="$HOME/.kube/config" \

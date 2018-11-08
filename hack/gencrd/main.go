@@ -55,7 +55,7 @@ func generateSwaggerJson() {
 		Scheme: Scheme,
 		Codecs: Codecs,
 		Info: spec.InfoProps{
-			Title:   "Kubeci",
+			Title:   "Kubeci-engine",
 			Version: "v0.1.0",
 			Contact: &spec.ContactInfo{
 				Name:  "AppsCode Inc.",

@@ -3,7 +3,7 @@ kind: ValidatingWebhookConfiguration
 metadata:
   name: admission.engine.kube.ci
   labels:
-    app: kubeci
+    app: kubeci-engine
 webhooks:
 - name: workflow.admission.engine.kube.ci
   clientConfig:

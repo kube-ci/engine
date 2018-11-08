@@ -14,8 +14,8 @@ func NewCmdRun(out, errOut io.Writer, stopCh <-chan struct{}) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:               "run",
-		Short:             "Launch kubeci",
-		Long:              "Launch kubeci",
+		Short:             "Launch kubeci-engine",
+		Long:              "Launch kubeci-engine",
 		DisableAutoGenTag: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			log.Infof("Starting server version %s+%s ...", v.Version.Version, v.Version.CommitHash)

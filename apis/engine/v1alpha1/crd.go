@@ -28,7 +28,7 @@ func (c Workflow) CustomResourceDefinition() *apiextensions.CustomResourceDefini
 			},
 		},
 		Labels: crdutils.Labels{
-			LabelsMap: map[string]string{"app": "kubeci"},
+			LabelsMap: map[string]string{"app": "kubeci-engine"},
 		},
 		SpecDefinitionName:      "kube.ci/engine/apis/engine/v1alpha1.Workflow",
 		EnableValidation:        true,
@@ -54,7 +54,7 @@ func (c Workplan) CustomResourceDefinition() *apiextensions.CustomResourceDefini
 			},
 		},
 		Labels: crdutils.Labels{
-			LabelsMap: map[string]string{"app": "kubeci"},
+			LabelsMap: map[string]string{"app": "kubeci-engine"},
 		},
 		SpecDefinitionName:      "kube.ci/engine/apis/engine/v1alpha1.Workplan",
 		EnableValidation:        true,
@@ -80,7 +80,7 @@ func (c WorkflowTemplate) CustomResourceDefinition() *apiextensions.CustomResour
 			},
 		},
 		Labels: crdutils.Labels{
-			LabelsMap: map[string]string{"app": "kubeci"},
+			LabelsMap: map[string]string{"app": "kubeci-engine"},
 		},
 		SpecDefinitionName:      "kube.ci/engine/apis/engine/v1alpha1.WorkflowTemplate",
 		EnableValidation:        true,

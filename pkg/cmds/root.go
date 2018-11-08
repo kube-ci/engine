@@ -25,8 +25,8 @@ const (
 
 func NewRootCmd() *cobra.Command {
 	var rootCmd = &cobra.Command{
-		Use:               "kubeci",
-		Short:             `Kubeci by AppsCode`,
+		Use:               "kubeci-engine",
+		Short:             `Kubeci-engine by AppsCode`,
 		DisableAutoGenTag: true,
 		PersistentPreRun: func(c *cobra.Command, args []string) {
 			c.Flags().VisitAll(func(flag *pflag.Flag) {

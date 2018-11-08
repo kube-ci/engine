@@ -1,0 +1,50 @@
+{{- if .Values.apiserver.enableValidatingWebhook }}
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: admission.engine.kube.ci
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app: "{{ template "kubeci-engine.name" . }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+webhooks:
+- name: workflow.admission.engine.kube.ci
+  clientConfig:
+    service:
+      namespace: default
+      name: kubernetes
+      path: /apis/admission.engine.kube.ci/v1alpha1/workflows
+    caBundle: {{ b64enc .Values.apiserver.ca }}
+  rules:
+  - operations:
+    - CREATE
+    - UPDATE
+    apiGroups:
+    - engine.kube.ci
+    apiVersions:
+    - "*"
+    resources:
+    - workflows
+  failurePolicy: Fail
+- name: workplan.admission.engine.kube.ci
+  clientConfig:
+    service:
+      namespace: default
+      name: kubernetes
+      path: /apis/admission.engine.kube.ci/v1alpha1/workplans
+    caBundle: {{ b64enc .Values.apiserver.ca }}
+  rules:
+  - operations:
+    - UPDATE
+    apiGroups:
+    - engine.kube.ci
+    apiVersions:
+    - "*"
+    resources:
+    - workplans
+  failurePolicy: Fail
+{{ end }}

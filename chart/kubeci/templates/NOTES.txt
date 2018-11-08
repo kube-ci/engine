@@ -1,0 +1,3 @@
+To verify that kubeci-engine has started, run:
+
+  kubectl --namespace={{ .Release.Namespace }} get deployments -l "release={{ .Release.Name }}, app={{ template "kubeci-engine.name" . }}"
