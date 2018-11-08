@@ -7,7 +7,7 @@ The following steps must be done from a Linux x64 bit machine.
 - Push all the changes to remote repo.
 - Build and push kubeci-engine docker image:
 ```console
-$ cd $(go env GOPATH)/src/kube.ci/engine
+$ cd $(go env GOPATH)/src/github.com/kube-ci/engine
 $ ./hack/docker/setup.sh; env APPSCODE_ENV=prod ./hack/docker/setup.sh release
 ```
 

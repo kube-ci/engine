@@ -19,16 +19,16 @@ limitations under the License.
 package fake
 
 import (
+	clientset "github.com/kube-ci/engine/client/clientset/versioned"
+	enginev1alpha1 "github.com/kube-ci/engine/client/clientset/versioned/typed/engine/v1alpha1"
+	fakeenginev1alpha1 "github.com/kube-ci/engine/client/clientset/versioned/typed/engine/v1alpha1/fake"
+	extensionv1alpha1 "github.com/kube-ci/engine/client/clientset/versioned/typed/extension/v1alpha1"
+	fakeextensionv1alpha1 "github.com/kube-ci/engine/client/clientset/versioned/typed/extension/v1alpha1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"
 	fakediscovery "k8s.io/client-go/discovery/fake"
 	"k8s.io/client-go/testing"
-	clientset "kube.ci/engine/client/clientset/versioned"
-	enginev1alpha1 "kube.ci/engine/client/clientset/versioned/typed/engine/v1alpha1"
-	fakeenginev1alpha1 "kube.ci/engine/client/clientset/versioned/typed/engine/v1alpha1/fake"
-	extensionv1alpha1 "kube.ci/engine/client/clientset/versioned/typed/extension/v1alpha1"
-	fakeextensionv1alpha1 "kube.ci/engine/client/clientset/versioned/typed/extension/v1alpha1/fake"
 )
 
 // NewSimpleClientset returns a clientset that will respond with the provided objects.

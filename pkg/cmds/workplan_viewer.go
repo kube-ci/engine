@@ -1,8 +1,8 @@
 package cmds
 
 import (
+	"github.com/kube-ci/engine/pkg/logs"
 	"github.com/spf13/cobra"
-	"kube.ci/engine/pkg/logs"
 )
 
 func NewCmdWorkplanViewer() *cobra.Command {

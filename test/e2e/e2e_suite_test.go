@@ -10,6 +10,12 @@ import (
 	discovery_util "github.com/appscode/kutil/discovery"
 	"github.com/appscode/kutil/meta"
 	"github.com/appscode/kutil/tools/clientcmd"
+	api "github.com/kube-ci/engine/apis/engine/v1alpha1"
+	"github.com/kube-ci/engine/client/clientset/versioned/scheme"
+	_ "github.com/kube-ci/engine/client/clientset/versioned/scheme"
+	"github.com/kube-ci/engine/pkg/controller"
+	"github.com/kube-ci/engine/pkg/util"
+	"github.com/kube-ci/engine/test/e2e/framework"
 	. "github.com/onsi/ginkgo"
 	"github.com/onsi/ginkgo/reporters"
 	. "github.com/onsi/gomega"
@@ -18,12 +24,6 @@ import (
 	clientsetscheme "k8s.io/client-go/kubernetes/scheme"
 	ka "k8s.io/kube-aggregator/pkg/client/clientset_generated/clientset"
 	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	api "kube.ci/engine/apis/engine/v1alpha1"
-	"kube.ci/engine/client/clientset/versioned/scheme"
-	_ "kube.ci/engine/client/clientset/versioned/scheme"
-	"kube.ci/engine/pkg/controller"
-	"kube.ci/engine/pkg/util"
-	"kube.ci/engine/test/e2e/framework"
 )
 
 const (

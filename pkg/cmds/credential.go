@@ -5,10 +5,10 @@ import (
 	"fmt"
 
 	"github.com/appscode/go/log"
+	"github.com/kube-ci/engine/pkg/credentials"
+	"github.com/kube-ci/engine/pkg/credentials/dockercreds"
+	"github.com/kube-ci/engine/pkg/credentials/gitcreds"
 	"github.com/spf13/cobra"
-	"kube.ci/engine/pkg/credentials"
-	"kube.ci/engine/pkg/credentials/dockercreds"
-	"kube.ci/engine/pkg/credentials/gitcreds"
 )
 
 func NewCmdCredential() *cobra.Command {

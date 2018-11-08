@@ -8,12 +8,12 @@ import (
 	"time"
 
 	shell "github.com/codeskyblue/go-sh"
+	srvr "github.com/kube-ci/engine/pkg/cmds/server"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	genericapiserver "k8s.io/apiserver/pkg/server"
 	kapi "k8s.io/kube-aggregator/pkg/apis/apiregistration/v1beta1"
-	srvr "kube.ci/engine/pkg/cmds/server"
 )
 
 func (f *Framework) NewTestKubeciOptions(kubeConfigPath string, controllerOptions *srvr.ExtraOptions) *srvr.KubeciOptions {

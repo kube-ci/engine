@@ -3,8 +3,8 @@ package dependency
 import (
 	"fmt"
 
+	"github.com/kube-ci/engine/apis/engine/v1alpha1"
 	"github.com/philopon/go-toposort"
-	"kube.ci/engine/apis/engine/v1alpha1"
 )
 
 // TODO: check in validation webhook

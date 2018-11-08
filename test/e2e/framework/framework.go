@@ -5,12 +5,12 @@ import (
 
 	"github.com/appscode/go/crypto/rand"
 	"github.com/appscode/kutil/tools/certstore"
+	cs "github.com/kube-ci/engine/client/clientset/versioned"
 	. "github.com/onsi/gomega"
 	"github.com/spf13/afero"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	ka "k8s.io/kube-aggregator/pkg/client/clientset_generated/clientset"
-	cs "kube.ci/engine/client/clientset/versioned"
 )
 
 type Framework struct {

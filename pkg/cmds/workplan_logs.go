@@ -4,9 +4,9 @@ import (
 	"path/filepath"
 
 	"github.com/appscode/go/log"
+	"github.com/kube-ci/engine/pkg/logs"
 	"github.com/spf13/cobra"
 	"k8s.io/client-go/util/homedir"
-	"kube.ci/engine/pkg/logs"
 )
 
 func NewCmdWorkplanLogs() *cobra.Command {

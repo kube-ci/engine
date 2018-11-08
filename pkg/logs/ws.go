@@ -11,7 +11,7 @@ import (
 	"github.com/appscode/go/log"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
-	"kube.ci/engine/apis/engine/v1alpha1"
+	"github.com/kube-ci/engine/apis/engine/v1alpha1"
 )
 
 const (

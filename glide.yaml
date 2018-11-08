@@ -1,4 +1,4 @@
-package: kube.ci/kubeci
+package: github.com/kube-ci/engine
 import:
 - package: github.com/appscode/go
   version: master

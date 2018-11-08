@@ -20,8 +20,8 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/kube-ci/engine/pkg/credentials"
 	corev1 "k8s.io/api/core/v1"
-	"kube.ci/engine/pkg/credentials"
 )
 
 func TestFlagHandling(t *testing.T) {

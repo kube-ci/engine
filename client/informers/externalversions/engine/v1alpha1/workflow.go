@@ -21,14 +21,14 @@ package v1alpha1
 import (
 	time "time"
 
+	enginev1alpha1 "github.com/kube-ci/engine/apis/engine/v1alpha1"
+	versioned "github.com/kube-ci/engine/client/clientset/versioned"
+	internalinterfaces "github.com/kube-ci/engine/client/informers/externalversions/internalinterfaces"
+	v1alpha1 "github.com/kube-ci/engine/client/listers/engine/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	watch "k8s.io/apimachinery/pkg/watch"
 	cache "k8s.io/client-go/tools/cache"
-	enginev1alpha1 "kube.ci/engine/apis/engine/v1alpha1"
-	versioned "kube.ci/engine/client/clientset/versioned"
-	internalinterfaces "kube.ci/engine/client/informers/externalversions/internalinterfaces"
-	v1alpha1 "kube.ci/engine/client/listers/engine/v1alpha1"
 )
 
 // WorkflowInformer provides access to a shared informer and lister for

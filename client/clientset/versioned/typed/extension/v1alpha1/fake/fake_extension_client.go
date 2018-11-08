@@ -19,9 +19,9 @@ limitations under the License.
 package fake
 
 import (
+	v1alpha1 "github.com/kube-ci/engine/client/clientset/versioned/typed/extension/v1alpha1"
 	rest "k8s.io/client-go/rest"
 	testing "k8s.io/client-go/testing"
-	v1alpha1 "kube.ci/engine/client/clientset/versioned/typed/extension/v1alpha1"
 )
 
 type FakeExtensionV1alpha1 struct {

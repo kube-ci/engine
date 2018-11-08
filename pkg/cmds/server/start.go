@@ -5,14 +5,14 @@ import (
 	"io"
 	"net"
 
+	"github.com/kube-ci/engine/apis/engine/v1alpha1"
+	"github.com/kube-ci/engine/pkg/controller"
+	"github.com/kube-ci/engine/pkg/server"
 	"github.com/spf13/pflag"
 	admissionv1beta1 "k8s.io/api/admission/v1beta1"
 	openapinamer "k8s.io/apiserver/pkg/endpoints/openapi"
 	genericapiserver "k8s.io/apiserver/pkg/server"
 	genericoptions "k8s.io/apiserver/pkg/server/options"
-	"kube.ci/engine/apis/engine/v1alpha1"
-	"kube.ci/engine/pkg/controller"
-	"kube.ci/engine/pkg/server"
 )
 
 const defaultEtcdPathPrefix = "/registry/engine.kube.ci"
