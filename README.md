@@ -1,13 +1,13 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/kube-ci/engine)](https://goreportcard.com/report/github.com/kube-ci/engine)
 [![Build Status](https://travis-ci.org/kube-ci/engine.svg?branch=master)](https://travis-ci.org/kube-ci/engine)
 [![codecov](https://codecov.io/gh/kube-ci/engine/branch/master/graph/badge.svg)](https://codecov.io/gh/kube-ci/engine)
-[![Docker Pulls](https://img.shields.io/docker/pulls/kube-ci/engine.svg)](https://hub.docker.com/r/kubeci/kubeci-engine/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/kube-ci/kubeci-engine.svg)](https://hub.docker.com/r/kubeci/kubeci-engine/)
 [![Slack](https://slack.appscode.com/badge.svg)](https://slack.appscode.com)
-[![Twitter](https://img.shields.io/twitter/follow/appscodehq.svg?style=social&logo=twitter&label=Follow)](https://twitter.com/intent/follow?screen_name=AppsCodeHQ)
+[![Twitter](https://img.shields.io/twitter/follow/thekubeci.svg?style=social&logo=twitter&label=Follow)](https://twitter.com/intent/follow?screen_name=TheKubeCi)
 
 # KubeCI Engine
 
-Kubeci-engine by AppsCode is a Kubernetes operator for container-native workflow engine.
+KubeCI engine by AppsCode is a Kubernetes native workflow engine.
 
 ## Features
 
@@ -21,33 +21,33 @@ Kubeci-engine by AppsCode is a Kubernetes operator for container-native workflow
 
 ## Supported Versions
 
-Please pick a version of Kubeci-engine that matches your Kubernetes installation.
+Please pick a version of KubeCI engine that matches your Kubernetes installation.
 
-| Kubeci-engine Version                                                                      | Docs                                                            | Kubernetes Version |
+| KubeCI engine Version                                                                      | Docs                                                            | Kubernetes Version |
 |------------------------------------------------------------------------------------|-----------------------------------------------------------------|--------------------|
-| [0.1.0](https://github.com/kube-ci/engine/releases/tag/0.1.0) (uses CRD) | [User Guide](https://appscode.com/products/kubeci-engine/0.1.0)    | 1.8.x+             |
+| [0.1.0](https://github.com/kube-ci/engine/releases/tag/0.1.0) (uses CRD) | [User Guide](https://kube.ci/products/engine/0.1.0)    | 1.9.x+             |
 
 ## Installation
 
-To install Kubeci-engine, please follow the guide [here](https://appscode.com/products/kubeci-engine/0.1.0/setup/install).
+To install KubeCI engine, please follow the guide [here](https://kube.ci/products/engine/0.1.0/setup/install).
 
-## Using Kubeci-engine
+## Using KubeCI engine
 
-Want to learn how to use Kubeci-engine? Please start [here](https://appscode.com/products/kubeci-engine/0.1.0).
+Want to learn how to use KubeCI engine? Please start [here](https://kube.ci/products/engine/0.1.0).
 
-## Kubeci-engine API Clients
+## KubeCI engine API Clients
 
-You can use Kubeci-engine api clients to programmatically access its objects. Here are the supported clients:
+You can use KubeCI engine api clients to programmatically access its objects. Here are the supported clients:
 
 - Go: [https://github.com/kube-ci/engine](/client/clientset/versioned)
 
 ## Contribution guidelines
 
-Want to help improve Kubeci-engine? Please start [here](https://appscode.com/products/kubeci-engine/0.1.0/welcome/contributing).
+Want to help improve KubeCI engine? Please start [here](https://kube.ci/products/engine/0.1.0/welcome/contributing).
 
 ---
 
-**Kubeci-engine binaries collects anonymous usage statistics to help us learn how the software is being used and how we can improve it. To disable stats collection, run the operator with the flag** `--enable-analytics=false`.
+**KubeCI binaries collects anonymous usage statistics to help us learn how the software is being used and how we can improve it. To disable stats collection, run the operator with the flag** `--enable-analytics=false`.
 
 ---
 
@@ -57,6 +57,6 @@ Want to help improve Kubeci-engine? Please start [here](https://appscode.com/pro
 
 ## Support
 
-We use Slack for public discussions. To chit chat with us or the rest of the community, join us in the [AppsCode Slack team](https://appscode.slack.com/messages/C8NCX6N23/details/) channel `#general`. To sign up, use our [Slack inviter](https://slack.appscode.com/).
+We use Slack for public discussions. To chit chat with us or the rest of the community, join us in the [AppsCode Slack team](https://appscode.slack.com/messages/C8NCX6N23/details/) channel `#kubeci`. To sign up, use our [Slack inviter](https://slack.appscode.com/).
 
-If you have found a bug with Kubeci-engine or want to request for new features, please [file an issue](https://github.com/kube-ci/project/issues/new).
+If you have found a bug with KubeCI engine or want to request for new features, please [file an issue](https://github.com/kube-ci/project/issues/new).

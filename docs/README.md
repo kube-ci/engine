@@ -1,13 +1,13 @@
 # KubeCI
-Kubeci-engine by AppsCode is a Kubernetes operator for container-native CI system.
+KubeCI engine by AppsCode is a Kubernetes operator for container-native CI system.
 
-From here you can learn all about Kubeci-engine's architecture and how to deploy and use Kubeci.
+From here you can learn all about KubeCI engine's architecture and how to deploy and use Kubeci.
 
-- [Concepts](/docs/concepts/). Concepts explain some significant aspect of Kubeci-engine. This is where you can learn about what Kubeci-engine does and how it does it.
+- [Concepts](/docs/concepts/). Concepts explain some significant aspect of KubeCI engine. This is where you can learn about what KubeCI engine does and how it does it.
 
-- [Setup](/docs/setup/). Setup contains instructions for installing the Kubeci-engine in various cloud providers.
+- [Setup](/docs/setup/). Setup contains instructions for installing the KubeCI engine in various cloud providers.
 
-- [Guides](/docs/guides/). Guides show you how to perform tasks with Kubeci-engine.
+- [Guides](/docs/guides/). Guides show you how to perform tasks with KubeCI engine.
 
 - [Reference](/docs/reference/). Detailed exhaustive lists of command-line options, configuration options, API definitions, and procedures.
 
@@ -16,6 +16,6 @@ make our docs better.
 
 ---
 
-**Kubeci-engine binaries collects anonymous usage statistics to help us learn how the software is being used and how we can improve it. To disable stats collection, run the operator with the flag** `--enable-analytics=false`.
+**KubeCI engine binaries collects anonymous usage statistics to help us learn how the software is being used and how we can improve it. To disable stats collection, run the operator with the flag** `--enable-analytics=false`.
 
 ---

@@ -1,5 +1,5 @@
 # Contribution Guidelines
-Want to hack on Kubeci-engine?
+Want to hack on KubeCI engine?
 
 AppsCode projects are [Apache 2.0 licensed](https://github.com/kube-ci/engine/blob/master/LICENSE) and accept contributions via
 GitHub pull requests.  This document outlines some of the conventions on
@@ -16,16 +16,16 @@ contribution. See the [DCO](https://github.com/kube-ci/engine/blob/master/DCO) f
 ## Developer Guide
 
 We have a [Developer Guide](/docs/setup/developer-guide/overview.md) that outlines everything you need to know from setting up your
-dev environment to how to build and test kubeci-engine. If you find something undocumented or incorrect along the way,
+dev environment to how to build and test KubeCI engine. If you find something undocumented or incorrect along the way,
 please feel free to send a Pull Request.
 
 ## Getting Help
 
-If you have a question about Kubeci-engine or having problem using it, you can contact us on the [AppsCode Slack team](https://appscode.slack.com/messages/C8NCX6N23/details/) channel `#general`. Follow [this link](https://slack.appscode.com) to get invitation to our Slack channel.
+If you have a question about KubeCI engine or having problem using it, you can contact us on the [AppsCode Slack team](https://appscode.slack.com/messages/C8NCX6N23/details/) channel `#kubeci`. Follow [this link](https://slack.appscode.com) to get invitation to our Slack channel.
 
 ## Bugs/Feature request
 
-If you have found a bug with Kubeci-engine or want to request for new features, please [file an issue](https://github.com/kube-ci/project/issues/new).
+If you have found a bug with KubeCI engine or want to request for new features, please [file an issue](https://github.com/kube-ci/project/issues/new).
 
 ## Submit PR
 
@@ -41,4 +41,4 @@ Thanks for your contributions!
 
 ## Spread the word
 
-If you have written blog post or tutorial on Kubeci-engine, please share it with us on [Twitter](https://twitter.com/AppsCodeHQ) or [Slack](https://slack.appscode.com).
+If you have written blog post or tutorial on KubeCI engine, please share it with us on [Twitter](https://twitter.com/AppsCodeHQ) or [Slack](https://slack.appscode.com).

@@ -1,9 +1,9 @@
 # Concepts
 
-Concepts help you learn about the different parts of the Kubeci-engine and the abstractions it uses.
+Concepts help you learn about the different parts of the KubeCI engine and the abstractions it uses.
 
-- What is Kubeci-engine?
-  - [Overview](/docs/concepts/what-is-kubeci-engine/overview.md). Provides a conceptual introduction to Kubeci-engine, including the problems it solves and its high-level architecture.
+- What is KubeCI engine?
+  - [Overview](/docs/concepts/what-is-kubeci-engine/overview.md). Provides a conceptual introduction to KubeCI engine, including the problems it solves and its high-level architecture.
 - Custom Resource Definitions
   - [Workflow](/docs/concepts/crds/workflow.md). Introduces the concept of `Workflow` for configuring a set of tasks in a Kubernetes native way.
   - [Workflow Template](/docs/concepts/crds/workflow_template.md). Introduces the concept of `WorkflowTemplate` to invoke a template with arguments for different workflows.

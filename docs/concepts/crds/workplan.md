@@ -1,7 +1,7 @@
 # Workplan
 
 ## What is Workplan
-A `Workplan` is a Kubernetes `CustomResourceDefinition` (CRD). It is created by the kubeci-engine when a workflow is triggered. It provides the final sate of the workflow after resolving template and dependencies. Once created, users can not update it.
+A `Workplan` is a Kubernetes `CustomResourceDefinition` (CRD). It is created by the KubeCI engine when a workflow is triggered. It provides the final sate of the workflow after resolving template and dependencies. Once created, users can not update it.
 
 ## Workplan Spec
 As with all other Kubernetes objects, a Workplan has `apiVersion`, `kind`, and `metadata` fields. It also has a `.spec` section. Below is an example Workflow object:
