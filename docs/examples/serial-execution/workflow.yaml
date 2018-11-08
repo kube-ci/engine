@@ -1,0 +1,29 @@
+apiVersion: engine.kube.ci/v1alpha1
+kind: Workflow
+metadata:
+  name: sample-workflow
+  namespace: default
+spec:
+  triggers:
+  - apiVersion: v1
+    kind: ConfigMap
+    resource: configmaps
+    namespace: default
+    name: sample-config
+    onCreateOrUpdate: true
+    onDelete: false
+  serviceAccount: wf-sa
+  executionOrder: Serial
+  steps:
+  - name: step-echo
+    image: alpine
+    commands:
+    - echo
+    args:
+    - hello world
+  - name: step-wait
+    image: alpine
+    commands:
+    - sleep
+    args:
+    - 10s

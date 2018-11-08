@@ -1,0 +1,72 @@
+apiVersion: engine.kube.ci/v1alpha1
+kind: Workflow
+metadata:
+  name: sample-workflow
+  namespace: default
+spec:
+  triggers:
+  - apiVersion: v1
+    kind: ConfigMap
+    resource: configmaps
+    namespace: default
+    name: sample-config
+    onCreateOrUpdate: true
+    onDelete: false
+  serviceAccount: wf-sa
+  executionOrder: DAG
+  allowForceTrigger: true
+  steps:
+  - name: step-01
+    image: alpine
+    commands:
+    - sh
+    args:
+    - -c
+    - date; sleep 5s; date
+  - name: step-02
+    image: alpine
+    commands:
+    - sh
+    args:
+    - -c
+    - date; sleep 5s; date
+    dependency:
+    - step-01
+  - name: step-03
+    image: alpine
+    commands:
+    - sh
+    args:
+    - -c
+    - date; sleep 5s; date
+    dependency:
+    - step-01
+  - name: step-04
+    image: alpine
+    commands:
+    - sh
+    args:
+    - -c
+    - date; sleep 5s; date
+    dependency:
+    - step-03
+  - name: step-05
+    image: alpine
+    commands:
+    - sh
+    args:
+    - -c
+    - date; sleep 5s; date
+    dependency:
+    - step-04
+  - name: step-06
+    image: alpine
+    commands:
+    - sh
+    args:
+    - -c
+    - date; sleep 5s; date
+    dependency:
+    - step-04
+
+# dependency: 01 | 02 03 | 04 | 05 06

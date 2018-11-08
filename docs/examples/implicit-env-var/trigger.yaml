@@ -1,0 +1,16 @@
+apiVersion: extension.kube.ci/v1alpha1
+kind: Trigger
+metadata:
+  name: sample-trigger
+  namespace: default
+workflows:
+- sample-workflow
+request:
+  apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: sample-config
+    namespace: default
+  data:
+    example.property.1: hello
+    example.property.2: world
