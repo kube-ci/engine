@@ -5,7 +5,7 @@ import (
 
 	"github.com/appscode/go/encoding/json/types"
 	"github.com/appscode/kutil/meta"
-	api "kube.ci/engine/apis/engine/v1alpha1"
+	api "github.com/kube-ci/engine/apis/engine/v1alpha1"
 )
 
 type observedWorkflows struct {

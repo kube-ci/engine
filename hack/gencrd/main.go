@@ -14,15 +14,15 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/serializer"
 	"k8s.io/kube-openapi/pkg/common"
-	api_install "kube.ci/engine/apis/engine/install"
-	v1alpha1 "kube.ci/engine/apis/engine/v1alpha1"
+	api_install "github.com/kube-ci/engine/apis/engine/install"
+	v1alpha1 "github.com/kube-ci/engine/apis/engine/v1alpha1"
 )
 
 func generateCRDDefinitions() {
-	filename := gort.GOPath() + "/src/kube.ci/engine/apis/engine/v1alpha1/crds.yaml"
+	filename := gort.GOPath() + "/src/github.com/kube-ci/engine/apis/engine/v1alpha1/crds.yaml"
 	os.Remove(filename)
 
-	err := os.MkdirAll(filepath.Join(gort.GOPath(), "/src/kube.ci/engine/api/crds"), 0755)
+	err := os.MkdirAll(filepath.Join(gort.GOPath(), "/src/github.com/kube-ci/engine/api/crds"), 0755)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func generateCRDDefinitions() {
 		v1alpha1.WorkflowTemplate{}.CustomResourceDefinition(),
 	}
 	for _, crd := range crds {
-		filename := filepath.Join(gort.GOPath(), "/src/kube.ci/engine/api/crds", crd.Spec.Names.Singular+".yaml")
+		filename := filepath.Join(gort.GOPath(), "/src/github.com/kube-ci/engine/api/crds", crd.Spec.Names.Singular+".yaml")
 		f, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 		if err != nil {
 			log.Fatal(err)
@@ -80,7 +80,7 @@ func generateSwaggerJson() {
 		log.Fatal(err)
 	}
 
-	filename := gort.GOPath() + "/src/kube.ci/engine/api/openapi-spec/swagger.json"
+	filename := gort.GOPath() + "/src/github.com/kube-ci/engine/api/openapi-spec/swagger.json"
 	err = os.MkdirAll(filepath.Dir(filename), 0755)
 	if err != nil {
 		log.Fatal(err)

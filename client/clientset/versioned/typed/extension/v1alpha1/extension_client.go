@@ -19,10 +19,10 @@ limitations under the License.
 package v1alpha1
 
 import (
+	v1alpha1 "github.com/kube-ci/engine/apis/extension/v1alpha1"
+	"github.com/kube-ci/engine/client/clientset/versioned/scheme"
 	serializer "k8s.io/apimachinery/pkg/runtime/serializer"
 	rest "k8s.io/client-go/rest"
-	v1alpha1 "kube.ci/engine/apis/extension/v1alpha1"
-	"kube.ci/engine/client/clientset/versioned/scheme"
 )
 
 type ExtensionV1alpha1Interface interface {

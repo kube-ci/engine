@@ -19,9 +19,9 @@ limitations under the License.
 package fake
 
 import (
+	v1alpha1 "github.com/kube-ci/engine/apis/extension/v1alpha1"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	testing "k8s.io/client-go/testing"
-	v1alpha1 "kube.ci/engine/apis/extension/v1alpha1"
 )
 
 // FakeTriggers implements TriggerInterface

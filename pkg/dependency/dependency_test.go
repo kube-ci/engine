@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"github.com/appscode/kutil/meta"
+	"github.com/kube-ci/engine/apis/engine/v1alpha1"
 	"github.com/tamalsaha/go-oneliners"
-	"kube.ci/engine/apis/engine/v1alpha1"
 )
 
 var preSteps = []v1alpha1.Step{

@@ -4,12 +4,12 @@ import (
 	"io"
 
 	"github.com/appscode/kutil/tools/clientcmd"
+	api "github.com/kube-ci/engine/apis/engine/v1alpha1"
+	"github.com/kube-ci/engine/apis/extension/v1alpha1"
+	cs "github.com/kube-ci/engine/client/clientset/versioned"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/kubernetes/scheme"
-	api "kube.ci/engine/apis/engine/v1alpha1"
-	"kube.ci/engine/apis/extension/v1alpha1"
-	cs "kube.ci/engine/client/clientset/versioned"
 )
 
 type LogController struct {

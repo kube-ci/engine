@@ -24,8 +24,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/kube-ci/engine/pkg/credentials"
 	corev1 "k8s.io/api/core/v1"
-	"kube.ci/engine/pkg/credentials"
 )
 
 // As the flag is read, this status is populated.

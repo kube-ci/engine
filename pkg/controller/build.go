@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"path"
 
+	api "github.com/kube-ci/engine/apis/engine/v1alpha1"
+	"github.com/kube-ci/engine/pkg/credentials"
+	"github.com/kube-ci/engine/pkg/credentials/dockercreds"
+	"github.com/kube-ci/engine/pkg/credentials/gitcreds"
+	"github.com/kube-ci/engine/pkg/docker"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kubernetes/plugin/pkg/admission/serviceaccount"
-	api "kube.ci/engine/apis/engine/v1alpha1"
-	"kube.ci/engine/pkg/credentials"
-	"kube.ci/engine/pkg/credentials/dockercreds"
-	"kube.ci/engine/pkg/credentials/gitcreds"
-	"kube.ci/engine/pkg/docker"
 )
 
 const (

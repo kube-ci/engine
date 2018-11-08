@@ -26,8 +26,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/kube-ci/engine/pkg/credentials"
 	corev1 "k8s.io/api/core/v1"
-	"kube.ci/engine/pkg/credentials"
 )
 
 const annotationPrefix = "credential.kube.ci/docker-"

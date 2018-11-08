@@ -10,13 +10,13 @@ import (
 	v "github.com/appscode/go/version"
 	"github.com/appscode/kutil/tools/analytics"
 	"github.com/jpillora/go-ogle-analytics"
+	"github.com/kube-ci/engine/client/clientset/versioned/scheme"
+	"github.com/kube-ci/engine/pkg/util"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	genericapiserver "k8s.io/apiserver/pkg/server"
 	clientsetscheme "k8s.io/client-go/kubernetes/scheme"
 	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"kube.ci/engine/client/clientset/versioned/scheme"
-	"kube.ci/engine/pkg/util"
 )
 
 const (

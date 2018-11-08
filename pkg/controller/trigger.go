@@ -7,6 +7,11 @@ import (
 	"github.com/appscode/go/log"
 	"github.com/appscode/go/types"
 	"github.com/drone/envsubst"
+	api "github.com/kube-ci/engine/apis/engine/v1alpha1"
+	"github.com/kube-ci/engine/apis/extension/v1alpha1"
+	"github.com/kube-ci/engine/client/clientset/versioned/typed/engine/v1alpha1/util"
+	"github.com/kube-ci/engine/pkg/dependency"
+	"github.com/kube-ci/engine/pkg/eventer"
 	authorizationapi "k8s.io/api/authorization/v1"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -14,11 +19,6 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apiserver/pkg/registry/rest"
-	api "kube.ci/engine/apis/engine/v1alpha1"
-	"kube.ci/engine/apis/extension/v1alpha1"
-	"kube.ci/engine/client/clientset/versioned/typed/engine/v1alpha1/util"
-	"kube.ci/engine/pkg/dependency"
-	"kube.ci/engine/pkg/eventer"
 )
 
 type TriggerREST struct {

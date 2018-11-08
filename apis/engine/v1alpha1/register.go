@@ -1,10 +1,10 @@
 package v1alpha1
 
 import (
+	"github.com/kube-ci/engine/apis/engine"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
-	"kube.ci/engine/apis/engine"
 )
 
 var SchemeGroupVersion = schema.GroupVersion{Group: kubeci.GroupName, Version: "v1alpha1"}

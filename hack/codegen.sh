@@ -3,7 +3,7 @@
 set -x
 
 GOPATH=$(go env GOPATH)
-PACKAGE_NAME=kube.ci/engine
+PACKAGE_NAME=github.com/kube-ci/engine
 REPO_ROOT="$GOPATH/src/$PACKAGE_NAME"
 DOCKER_REPO_ROOT="/go/src/$PACKAGE_NAME"
 DOCKER_CODEGEN_PKG="/go/src/k8s.io/code-generator"
@@ -19,9 +19,9 @@ docker run --rm -ti -u $(id -u):$(id -g) \
   -v "$REPO_ROOT":"$DOCKER_REPO_ROOT" \
   -w "$DOCKER_REPO_ROOT" \
   appscode/gengo:release-1.12 "$DOCKER_CODEGEN_PKG"/generate-internal-groups.sh "deepcopy,defaulter,conversion" \
-  kube.ci/engine/client \
-  kube.ci/engine/apis \
-  kube.ci/engine/apis \
+  github.com/kube-ci/engine/client \
+  github.com/kube-ci/engine/apis \
+  github.com/kube-ci/engine/apis \
   extension:v1alpha1 \
   --go-header-file "$DOCKER_REPO_ROOT/hack/gengo/boilerplate.go.txt"
 
@@ -30,8 +30,8 @@ docker run --rm -ti -u $(id -u):$(id -g) \
   -v "$REPO_ROOT":"$DOCKER_REPO_ROOT" \
   -w "$DOCKER_REPO_ROOT" \
   appscode/gengo:release-1.12 "$DOCKER_CODEGEN_PKG"/generate-groups.sh all \
-  kube.ci/engine/client \
-  kube.ci/engine/apis \
+  github.com/kube-ci/engine/client \
+  github.com/kube-ci/engine/apis \
   "engine:v1alpha1 extension:v1alpha1" \
   --go-header-file "$DOCKER_REPO_ROOT/hack/gengo/boilerplate.go.txt"
 

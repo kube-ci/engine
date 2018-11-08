@@ -19,11 +19,11 @@ limitations under the License.
 package versioned
 
 import (
+	enginev1alpha1 "github.com/kube-ci/engine/client/clientset/versioned/typed/engine/v1alpha1"
+	extensionv1alpha1 "github.com/kube-ci/engine/client/clientset/versioned/typed/extension/v1alpha1"
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"
-	enginev1alpha1 "kube.ci/engine/client/clientset/versioned/typed/engine/v1alpha1"
-	extensionv1alpha1 "kube.ci/engine/client/clientset/versioned/typed/extension/v1alpha1"
 )
 
 type Interface interface {

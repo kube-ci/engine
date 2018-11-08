@@ -186,7 +186,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowList"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.WorkflowList"
             }
           }
         },
@@ -220,7 +220,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workflow"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Workflow"
             }
           }
         ],
@@ -228,19 +228,19 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workflow"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Workflow"
             }
           },
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workflow"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Workflow"
             }
           },
           "202": {
             "description": "Accepted",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workflow"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Workflow"
             }
           }
         },
@@ -381,7 +381,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workflow"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Workflow"
             }
           }
         },
@@ -415,7 +415,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workflow"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Workflow"
             }
           }
         ],
@@ -423,13 +423,13 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workflow"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Workflow"
             }
           },
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workflow"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Workflow"
             }
           }
         },
@@ -549,7 +549,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workflow"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Workflow"
             }
           }
         },
@@ -668,7 +668,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplateList"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.WorkflowTemplateList"
             }
           }
         },
@@ -702,7 +702,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplate"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.WorkflowTemplate"
             }
           }
         ],
@@ -710,19 +710,19 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplate"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.WorkflowTemplate"
             }
           },
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplate"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.WorkflowTemplate"
             }
           },
           "202": {
             "description": "Accepted",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplate"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.WorkflowTemplate"
             }
           }
         },
@@ -863,7 +863,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplate"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.WorkflowTemplate"
             }
           }
         },
@@ -897,7 +897,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplate"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.WorkflowTemplate"
             }
           }
         ],
@@ -905,13 +905,13 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplate"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.WorkflowTemplate"
             }
           },
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplate"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.WorkflowTemplate"
             }
           }
         },
@@ -1031,7 +1031,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplate"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.WorkflowTemplate"
             }
           }
         },
@@ -1150,7 +1150,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkplanList"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.WorkplanList"
             }
           }
         },
@@ -1184,7 +1184,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workplan"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Workplan"
             }
           }
         ],
@@ -1192,19 +1192,19 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workplan"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Workplan"
             }
           },
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workplan"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Workplan"
             }
           },
           "202": {
             "description": "Accepted",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workplan"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Workplan"
             }
           }
         },
@@ -1345,7 +1345,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workplan"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Workplan"
             }
           }
         },
@@ -1379,7 +1379,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workplan"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Workplan"
             }
           }
         ],
@@ -1387,13 +1387,13 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workplan"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Workplan"
             }
           },
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workplan"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Workplan"
             }
           }
         },
@@ -1513,7 +1513,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workplan"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Workplan"
             }
           }
         },
@@ -2555,7 +2555,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowList"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.WorkflowList"
             }
           }
         },
@@ -2656,7 +2656,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplateList"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.WorkflowTemplateList"
             }
           }
         },
@@ -2757,7 +2757,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkplanList"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.WorkplanList"
             }
           }
         },
@@ -2836,7 +2836,11 @@
     }
   },
   "definitions": {
-    "ci.kube.engine.apis.engine.v1alpha1.ObjectReference": {
+    "com.github.appscode.go.encoding.json.types.IntHash": {
+      "description": "IntHash represents as int64 Generation and string Hash. It is json serialized into \u003cint64\u003e$\u003chash_string\u003e.",
+      "type": "string"
+    },
+    "com.github.kube-ci.engine.apis.engine.v1alpha1.ObjectReference": {
       "properties": {
         "apiVersion": {
           "type": "string"
@@ -2852,7 +2856,7 @@
         }
       }
     },
-    "ci.kube.engine.apis.engine.v1alpha1.Step": {
+    "com.github.kube-ci.engine.apis.engine.v1alpha1.Step": {
       "properties": {
         "args": {
           "type": "array",
@@ -2886,7 +2890,7 @@
         }
       }
     },
-    "ci.kube.engine.apis.engine.v1alpha1.StepEntry": {
+    "com.github.kube-ci.engine.apis.engine.v1alpha1.StepEntry": {
       "description": "status of a step containing enough info to collect logs",
       "required": [
         "Name",
@@ -2915,7 +2919,7 @@
         }
       }
     },
-    "ci.kube.engine.apis.engine.v1alpha1.Task": {
+    "com.github.kube-ci.engine.apis.engine.v1alpha1.Task": {
       "required": [
         "SerialSteps",
         "ParallelSteps"
@@ -2925,19 +2929,19 @@
           "description": "analogous to init-containers",
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Step"
+            "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Step"
           }
         },
         "SerialSteps": {
           "description": "analogous to a single pod",
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Step"
+            "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Step"
           }
         }
       }
     },
-    "ci.kube.engine.apis.engine.v1alpha1.Template": {
+    "com.github.kube-ci.engine.apis.engine.v1alpha1.Template": {
       "properties": {
         "arguments": {
           "type": "object",
@@ -2950,7 +2954,7 @@
         }
       }
     },
-    "ci.kube.engine.apis.engine.v1alpha1.Trigger": {
+    "com.github.kube-ci.engine.apis.engine.v1alpha1.Trigger": {
       "properties": {
         "apiVersion": {
           "type": "string"
@@ -2985,17 +2989,17 @@
         }
       }
     },
-    "ci.kube.engine.apis.engine.v1alpha1.TriggeredFor": {
+    "com.github.kube-ci.engine.apis.engine.v1alpha1.TriggeredFor": {
       "properties": {
         "objectReference": {
-          "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.ObjectReference"
+          "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.ObjectReference"
         },
         "resourceGeneration": {
           "$ref": "#/definitions/com.github.appscode.go.encoding.json.types.IntHash"
         }
       }
     },
-    "ci.kube.engine.apis.engine.v1alpha1.Workflow": {
+    "com.github.kube-ci.engine.apis.engine.v1alpha1.Workflow": {
       "properties": {
         "apiVersion": {
           "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources",
@@ -3009,7 +3013,7 @@
           "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta"
         },
         "spec": {
-          "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowSpec"
+          "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.WorkflowSpec"
         }
       },
       "x-kubernetes-group-version-kind": [
@@ -3020,7 +3024,7 @@
         }
       ]
     },
-    "ci.kube.engine.apis.engine.v1alpha1.WorkflowList": {
+    "com.github.kube-ci.engine.apis.engine.v1alpha1.WorkflowList": {
       "required": [
         "metadata",
         "items"
@@ -3033,7 +3037,7 @@
         "items": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workflow"
+            "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Workflow"
           }
         },
         "kind": {
@@ -3052,7 +3056,7 @@
         }
       ]
     },
-    "ci.kube.engine.apis.engine.v1alpha1.WorkflowSpec": {
+    "com.github.kube-ci.engine.apis.engine.v1alpha1.WorkflowSpec": {
       "properties": {
         "allowForceTrigger": {
           "type": "boolean"
@@ -3081,16 +3085,16 @@
         "steps": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Step"
+            "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Step"
           }
         },
         "template": {
-          "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Template"
+          "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Template"
         },
         "triggers": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Trigger"
+            "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Trigger"
           }
         },
         "volumes": {
@@ -3101,7 +3105,7 @@
         }
       }
     },
-    "ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplate": {
+    "com.github.kube-ci.engine.apis.engine.v1alpha1.WorkflowTemplate": {
       "properties": {
         "apiVersion": {
           "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources",
@@ -3115,7 +3119,7 @@
           "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta"
         },
         "spec": {
-          "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplateSpec"
+          "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.WorkflowTemplateSpec"
         }
       },
       "x-kubernetes-group-version-kind": [
@@ -3126,7 +3130,7 @@
         }
       ]
     },
-    "ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplateList": {
+    "com.github.kube-ci.engine.apis.engine.v1alpha1.WorkflowTemplateList": {
       "required": [
         "metadata",
         "items"
@@ -3139,7 +3143,7 @@
         "items": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplate"
+            "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.WorkflowTemplate"
           }
         },
         "kind": {
@@ -3158,17 +3162,17 @@
         }
       ]
     },
-    "ci.kube.engine.apis.engine.v1alpha1.WorkflowTemplateSpec": {
+    "com.github.kube-ci.engine.apis.engine.v1alpha1.WorkflowTemplateSpec": {
       "properties": {
         "steps": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Step"
+            "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Step"
           }
         }
       }
     },
-    "ci.kube.engine.apis.engine.v1alpha1.Workplan": {
+    "com.github.kube-ci.engine.apis.engine.v1alpha1.Workplan": {
       "properties": {
         "apiVersion": {
           "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources",
@@ -3182,10 +3186,10 @@
           "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta"
         },
         "spec": {
-          "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkplanSpec"
+          "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.WorkplanSpec"
         },
         "status": {
-          "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.WorkplanStatus"
+          "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.WorkplanStatus"
         }
       },
       "x-kubernetes-group-version-kind": [
@@ -3196,7 +3200,7 @@
         }
       ]
     },
-    "ci.kube.engine.apis.engine.v1alpha1.WorkplanList": {
+    "com.github.kube-ci.engine.apis.engine.v1alpha1.WorkplanList": {
       "required": [
         "metadata",
         "items"
@@ -3209,7 +3213,7 @@
         "items": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Workplan"
+            "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Workplan"
           }
         },
         "kind": {
@@ -3228,7 +3232,7 @@
         }
       ]
     },
-    "ci.kube.engine.apis.engine.v1alpha1.WorkplanSpec": {
+    "com.github.kube-ci.engine.apis.engine.v1alpha1.WorkplanSpec": {
       "required": [
         "triggeredFor"
       ],
@@ -3250,11 +3254,11 @@
         "tasks": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.Task"
+            "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Task"
           }
         },
         "triggeredFor": {
-          "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.TriggeredFor"
+          "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.TriggeredFor"
         },
         "volumes": {
           "type": "array",
@@ -3267,7 +3271,7 @@
         }
       }
     },
-    "ci.kube.engine.apis.engine.v1alpha1.WorkplanStatus": {
+    "com.github.kube-ci.engine.apis.engine.v1alpha1.WorkplanStatus": {
       "required": [
         "phase",
         "reason",
@@ -3286,7 +3290,7 @@
           "items": {
             "type": "array",
             "items": {
-              "$ref": "#/definitions/ci.kube.engine.apis.engine.v1alpha1.StepEntry"
+              "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.StepEntry"
             }
           }
         },
@@ -3295,10 +3299,6 @@
           "format": "int32"
         }
       }
-    },
-    "com.github.appscode.go.encoding.json.types.IntHash": {
-      "description": "IntHash represents as int64 Generation and string Hash. It is json serialized into \u003cint64\u003e$\u003chash_string\u003e.",
-      "type": "string"
     },
     "io.k8s.api.core.v1.AWSElasticBlockStoreVolumeSource": {
       "description": "Represents a Persistent Disk resource in AWS.\n\nAn AWS EBS disk must exist before mounting to a container. The disk must also be in the same AWS zone as the kubelet. An AWS EBS disk can only be mounted as read/write once. AWS EBS volumes support ownership management and SELinux relabeling.",

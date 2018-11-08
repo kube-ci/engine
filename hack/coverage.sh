@@ -2,7 +2,7 @@
 set -eou pipefail
 
 GOPATH=$(go env GOPATH)
-REPO_ROOT="$GOPATH/src/kube.ci/engine"
+REPO_ROOT="$GOPATH/src/github.com/kube-ci/engine"
 
 pushd $REPO_ROOT
 

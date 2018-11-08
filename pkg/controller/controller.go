@@ -10,6 +10,10 @@ import (
 	dynamicclientset "github.com/appscode/kutil/dynamic/clientset"
 	dynamicinformer "github.com/appscode/kutil/dynamic/informer"
 	"github.com/appscode/kutil/tools/queue"
+	api "github.com/kube-ci/engine/apis/engine/v1alpha1"
+	cs "github.com/kube-ci/engine/client/clientset/versioned"
+	api_informers "github.com/kube-ci/engine/client/informers/externalversions"
+	api_listers "github.com/kube-ci/engine/client/listers/engine/v1alpha1"
 	crd_api "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	crd_cs "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset/typed/apiextensions/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -20,10 +24,6 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/tools/record"
-	api "kube.ci/engine/apis/engine/v1alpha1"
-	cs "kube.ci/engine/client/clientset/versioned"
-	api_informers "kube.ci/engine/client/informers/externalversions"
-	api_listers "kube.ci/engine/client/listers/engine/v1alpha1"
 )
 
 type Controller struct {

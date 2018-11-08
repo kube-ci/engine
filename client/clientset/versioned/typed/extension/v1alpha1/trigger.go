@@ -19,8 +19,8 @@ limitations under the License.
 package v1alpha1
 
 import (
+	v1alpha1 "github.com/kube-ci/engine/apis/extension/v1alpha1"
 	rest "k8s.io/client-go/rest"
-	v1alpha1 "kube.ci/engine/apis/extension/v1alpha1"
 )
 
 // TriggersGetter has a method to return a TriggerInterface.

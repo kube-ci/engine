@@ -19,8 +19,8 @@ limitations under the License.
 package engine
 
 import (
-	v1alpha1 "kube.ci/engine/client/informers/externalversions/engine/v1alpha1"
-	internalinterfaces "kube.ci/engine/client/informers/externalversions/internalinterfaces"
+	v1alpha1 "github.com/kube-ci/engine/client/informers/externalversions/engine/v1alpha1"
+	internalinterfaces "github.com/kube-ci/engine/client/informers/externalversions/internalinterfaces"
 )
 
 // Interface provides access to each of this group's versions.
