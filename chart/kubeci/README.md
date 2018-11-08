@@ -49,9 +49,6 @@ The following table lists the configurable parameters of the Kubeci-engine chart
 | `operator.registry`                  | Docker registry used to pull operator image                       | `kubeci`         |
 | `operator.repository`                | Operator container image                                          | `kubeci-engine`            |
 | `operator.tag`                       | Operator container image tag                                      | `0.7.0`            |
-| `pushgateway.registry`               | Docker registry used to pull Prometheus pushgateway image         | `prom`             |
-| `pushgateway.repository`             | Prometheus pushgateway container image                            | `pushgateway`      |
-| `pushgateway.tag`                    | Prometheus pushgateway container image tag                        | `v0.5.2`           |
 | `cleaner.registry`                   | Docker registry used to pull Webhook cleaner image                | `appscode`         |
 | `cleaner.repository`                 | Webhook cleaner container image                                   | `kubectl`          |
 | `cleaner.tag`                        | Webhook cleaner container image tag                               | `v1.11`            |

@@ -7,10 +7,6 @@ operator:
   registry: kubeci
   repository: kubeci-engine
   tag: 0.1.0
-pushgateway:
-  registry: prom
-  repository: pushgateway
-  tag: v0.5.2
 cleaner:
   registry: appscode
   repository: kubectl

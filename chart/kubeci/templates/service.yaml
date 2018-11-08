@@ -14,11 +14,6 @@ spec:
   - name: admission
     port: 443
     targetPort: 8443
-  # Port used to expose Prometheus pushgateway
-  - name: pushgateway
-    port: 56789
-    protocol: TCP
-    targetPort: 56789
   selector:
     app: "{{ template "kubeci-engine.name" . }}"
     release: "{{ .Release.Name }}"

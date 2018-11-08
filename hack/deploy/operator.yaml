@@ -42,20 +42,6 @@ spec:
         volumeMounts:
         - mountPath: /var/serving-cert
           name: serving-cert
-      - name: pushgateway
-        args:
-        - --web.listen-address=:56789
-        - --persistence.file=/var/pv/pushgateway.dat
-        image: prom/pushgateway:v0.5.2
-        ports:
-        - containerPort: 56789
-          name: pushgateway
-          protocol: TCP
-        volumeMounts:
-        - mountPath: /var/pv
-          name: data-volume
-        - mountPath: /tmp
-          name: kubeci-engine-scratchdir
       - name: web-ui
         image: ${KUBECI_ENGINE_DOCKER_REGISTRY}/kubeci-engine:${KUBECI_ENGINE_IMAGE_TAG}
         imagePullPolicy: ${KUBECI_ENGINE_IMAGE_PULL_POLICY}
@@ -67,10 +53,6 @@ spec:
           requests:
             cpu: "100m"
       volumes:
-      - emptyDir: {}
-        name: data-volume
-      - emptyDir: {}
-        name: kubeci-engine-scratchdir
       - name: serving-cert
         secret:
           defaultMode: 420
@@ -105,9 +87,6 @@ spec:
   - name: admission
     port: 443
     targetPort: 8443
-  - name: pushgateway
-    port: 56789
-    targetPort: 56789
   selector:
     app: kubeci-engine
 
