@@ -1,0 +1,36 @@
+apiVersion: engine.kube.ci/v1alpha1
+kind: Workflow
+metadata:
+  name: sample-workflow
+  namespace: default
+spec:
+  triggers:
+  - apiVersion: v1
+    kind: ConfigMap
+    resource: configmaps
+    namespace: default
+    name: sample-config
+    onCreateOrUpdate: true
+    onDelete: false
+  serviceAccount: wf-sa
+  allowForceTrigger: true
+  steps:
+  - name: step-one
+    image: alpine
+    commands:
+    - sh
+    args:
+    - -c
+    - echo ENV_ONE=$ENV_ONE; echo ENV_TWO=$ENV_TWO; echo KEY_ONE=$KEY_ONE; echo KEY_TWO=$KEY_TWO
+  envVar:
+  - name: ENV_ONE
+    value: one
+  - name: ENV_TWO
+    valueFrom:
+      secretKeyRef:
+        name: sample-secret
+        key: KEY_TWO
+  envFrom:
+  - secretRef:
+      name: sample-secret
+

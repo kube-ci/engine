@@ -1,0 +1,41 @@
+apiVersion: engine.kube.ci/v1alpha1
+kind: Workflow
+metadata:
+  name: sample-workflow
+  namespace: default
+spec:
+  triggers:
+  - apiVersion: v1
+    kind: ConfigMap
+    resource: configmaps
+    namespace: default
+    name: sample-config
+    onCreateOrUpdate: true
+    onDelete: false
+  serviceAccount: wf-sa
+  executionOrder: Serial
+  allowForceTrigger: true
+  steps:
+  - name: step-one
+    image: alpine
+    commands:
+    - touch
+    args:
+    - /path-one/file-01
+    volumeMounts: # explicit volume mounts
+    - name: sample-volume
+      mountPath: /path-one
+  - name: step-two
+    image: alpine
+    commands:
+    - ls
+    args:
+    - /path-two
+    volumeMounts: # explicit volume mounts
+    - name: sample-volume
+      mountPath: /path-two
+  volumes: # explicit volumes
+  - name: sample-volume
+    hostPath:
+      path: /tmp/sample-volume
+      type: DirectoryOrCreate

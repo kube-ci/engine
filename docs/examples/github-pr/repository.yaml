@@ -1,0 +1,10 @@
+apiVersion: git.kube.ci/v1alpha1
+kind: Repository
+metadata:
+  name: kubeci-gpig
+  namespace: default
+spec:
+  host: github
+  owner: diptadas
+  repo: kubeci-gpig
+  cloneUrl: https://github.com/diptadas/kubeci-gpig.git

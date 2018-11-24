@@ -1,0 +1,16 @@
+apiVersion: engine.kube.ci/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: sample-template
+  namespace: default
+spec:
+  steps:
+  - name: step-echo
+    image: ${image=busybox}
+    commands:
+    - ${shell=sh}
+    args:
+    - -c
+    - ${cmd}
+
+# https://github.com/drone/envsubst/blob/master/eval_test.go

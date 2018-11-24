@@ -1,0 +1,22 @@
+apiVersion: engine.kube.ci/v1alpha1
+kind: Workflow
+metadata:
+  name: sample-workflow
+  namespace: default
+spec:
+  triggers:
+  - apiVersion: v1
+    kind: ConfigMap
+    resource: configmaps
+    namespace: default
+    name: sample-config
+    onCreateOrUpdate: true
+    onDelete: false
+  serviceAccount: wf-sa
+  executionOrder: Serial
+  allowForceTrigger: true
+  template:
+    name: sample-template
+    arguments:
+      image: alpine
+      cmd: echo hello world

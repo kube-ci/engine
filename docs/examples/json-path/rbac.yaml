@@ -1,0 +1,47 @@
+# service-account for workflow
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: wf-sa
+  namespace: default
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: default
+  name: wf-role
+rules:
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: ["list", "get", "watch"]
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["create", "get"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: wf-role-binding
+  namespace: default
+subjects:
+- kind: ServiceAccount
+  name: wf-sa
+  namespace: default
+roleRef:
+  kind: ClusterRole
+  name: wf-role
+  apiGroup: rbac.authorization.k8s.io
+---
+# operator needs same permissions but for all namespaces
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: operator-role-binding
+subjects:
+- kind: ServiceAccount
+  namespace: kube-system
+  name: kubeci-engine
+roleRef:
+  kind: ClusterRole
+  name: wf-role
+  apiGroup: rbac.authorization.k8s.io

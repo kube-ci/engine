@@ -1,0 +1,25 @@
+apiVersion: engine.kube.ci/v1alpha1
+kind: Workflow
+metadata:
+  name: sample-workflow
+  namespace: default
+spec:
+  triggers:
+  - apiVersion: v1
+    kind: ConfigMap
+    resource: configmaps
+    namespace: default
+    name: sample-config
+    onCreateOrUpdate: true
+    onDelete: false
+  serviceAccount: wf-sa
+  executionOrder: Serial
+  allowForceTrigger: true
+  steps:
+  - name: step-ls-home
+    image: alpine
+    commands:
+    - sh
+    args:
+    - -c
+    - ls -laR $HOME
