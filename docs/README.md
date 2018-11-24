@@ -1,7 +1,7 @@
 # KubeCI
-KubeCI engine by AppsCode is a Kubernetes operator for container-native CI system.
+KubeCI engine by AppsCode is a Kubernetes native workflow engine.
 
-From here you can learn all about KubeCI engine's architecture and how to deploy and use Kubeci.
+From here you can learn all about KubeCI engine's architecture and how to deploy and use KubeCI.
 
 - [Concepts](/docs/concepts/). Concepts explain some significant aspect of KubeCI engine. This is where you can learn about what KubeCI engine does and how it does it.
 

@@ -1,9 +1,11 @@
 # Workflow
 
 ## What is Workflow
-A `Workflow` is a Kubernetes `CustomResourceDefinition` (CRD). It provides configuration for a set of sequential or, parallel tasks and conditions for triggering them.
+
+A `Workflow` is a Kubernetes `CustomResourceDefinition` (CRD). It provides configuration for a set of sequential and/or parallel tasks and conditions for triggering them.
 
 ## Workflow Spec
+
 As with all other Kubernetes objects, a Workflow needs `apiVersion`, `kind`, and `metadata` fields. It also needs a `.spec` section. Below is an example Workflow object:
 
 ```yaml
@@ -39,19 +41,19 @@ The `.spec` section has following parts:
 
 ### spec.triggers
 
-Specifies a set of kubernetes resources along with their events (create/delete/update). The workflow will be triggered for any of those events. A trigger can have following fields to specify resources and filter events:
+Specifies a set of Kubernetes resources along with their events (create/delete/update). The workflow will be triggered for any of those events. A trigger can have following fields to specify resources and filter events:
 
 - `apiVersion` (required): API version of the resource. For example: v1alpha1, v1beta2, etc.
 - `kind` (required): Kind of the resource. For example: ConfigMap, Secret, etc.
 - `resource` (required): For example: configmaps, secrets, etc.
-- `name`: If specified, only resources with this name will be considered. 
+- `name`: If specified, only resources with this name will be considered.
 - `namespace`: If specified, only resources in this namespace will be considered. Otherwise, all namespaces will be qualified.
 - `selector`: If specified, resources with matching label selectors will be considered. Otherwise, any labels will be qualified.
 - `onCreateOrUpdate`: If true workflow will be triggered when specified resource is created or, updated.
 - `onDelete`: If true workflow will be triggered when specified resource is deleted. Note that, you should set at least one of `onCreateOrUpdate` and `onDelete` to true.
 - `envFromPath`: Task containers might need some information about the resource for which the workflow was triggered. Those can be make available to task containers by means of environment variables. Using `envFromPath` you can specify a set of key value pairs indicating which json-path data to be mapped to which environment variable.
 
-For example, let say your workflow has triggered for following configmap:
+For example, let's say your workflow is triggered for following configmap:
 
 ```yaml
 kind: ConfigMap
@@ -84,11 +86,10 @@ Specifies a set of tasks which will be executed in serial or, parallel order. A 
 - `dependency`: Set of step-names which required to be completed before running this step. It should only be specified when `spec.executionOrder` is `DAG`.
 - `volumeMounts`: Workflow volumes (specified in `workflow.spec.volumes`) to mount into the container's filesystem. For more details see [here](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#volumemount-v1-core).
 
-
 ### spec.template
 
 - `name`: Name of the workflow template to be invoked.
-- `arguments`: Set of key value pairs to be used as arguments to substitute template placeholders. For more details on substitution see [here](http://docs.drone.io/substitution/).
+- `arguments`: Set of key value pairs to be used as arguments to substitute template placeholders. For more details on substitution see [here](https://github.com/drone/docs/blob/v0.8.0/content/usage/config/substitution.md).
 
 Note that, you can not specify `spec.steps` while using template.
 
@@ -96,7 +97,7 @@ Note that, you can not specify `spec.steps` while using template.
 
 Specifies the order in which the steps will be executed. Possible values are:
 
-- `Serial`: Steps will be executed one by one in the given order. 
+- `Serial`: Steps will be executed one by one in the given order.
 - `Parallel`: All the steps will be executed simultaneously.
 - `DAG`: Steps will be executed sequentially or, simultaneously based on dependency of each steps.
 

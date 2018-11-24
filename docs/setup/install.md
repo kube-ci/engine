@@ -100,7 +100,7 @@ $ helm repo add appscode https://charts.appscode.com/stable/
 $ helm repo update
 $ helm search appscode/kubeci-engine
 NAME            CHART VERSION APP VERSION DESCRIPTION
-appscode/kubeci-engine  0.1.0    0.1.0  Kubeci-engine by AppsCode - Kuberenetes native CI system
+appscode/kubeci-engine  0.1.0    0.1.0  KubeCI engine by AppsCode - Kuberenetes native CI system
 
 $ helm install appscode/kubeci-engine --name kubeci-engine --version 0.1.0 --namespace kube-system
 ```
@@ -141,16 +141,16 @@ workplans.engine.kube.ci             5s
 workflowtemplates.engine.kube.ci     5s
 ```
 
-Now, you are ready to [run your first workflow](/docs/guides/README.md) using Kubeci-engine.
+Now, you are ready to [run your first workflow](/docs/guides/README.md) using KubeCI engine.
 
 
 ## Configuring RBAC
-Kubeci-engine introduces resources, such as, `Workflow`, `Workplan`, `WorkflowTemplate`,  `Trigger` and `WorkplanLog`. Kubeci-engine installer will create 2 user facing cluster roles:
+KubeCI engine introduces resources, such as, `Workflow`, `Workplan`, `WorkflowTemplate`,  `Trigger` and `WorkplanLog`. KubeCI engine installer will create 2 user facing cluster roles:
 
 | ClusterRole                 | Aggregates To | Description                            |
 |-----------------------------|---------------|----------------------------------------|
-| appscode:kubeci-engine:edit | admin, edit   | Allows edit access to Kubeci-engine CRDs, intended to be granted within a namespace using a RoleBinding. |
-| appscode:kubeci-engine:view | view          | Allows read-only access to Kubeci-engine CRDs, intended to be granted within a namespace using a RoleBinding. |
+| appscode:kubeci-engine:edit | admin, edit   | Allows edit access to KubeCI engine CRDs, intended to be granted within a namespace using a RoleBinding. |
+| appscode:kubeci-engine:view | view          | Allows read-only access to KubeCI engine CRDs, intended to be granted within a namespace using a RoleBinding. |
 
 These user facing roles supports [ClusterRole Aggregation](https://kubernetes.io/docs/admin/authorization/rbac/#aggregated-clusterroles) feature in Kubernetes 1.9 or later clusters.
 
@@ -187,8 +187,8 @@ $ kubectl describe workplan -n <namespace> <name>
 ```
 
 
-## Detect Kubeci-engine version
-To detect Kubeci-engine version, exec into the operator pod and run `kubeci-engine version` command.
+## Detect KubeCI engine version
+To detect KubeCI engine version, exec into the operator pod and run `kubeci-engine version` command.
 
 ```console
 $ POD_NAMESPACE=kube-system

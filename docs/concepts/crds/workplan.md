@@ -1,9 +1,11 @@
 # Workplan
 
 ## What is Workplan
+
 A `Workplan` is a Kubernetes `CustomResourceDefinition` (CRD). It is created by the KubeCI engine when a workflow is triggered. It provides the final sate of the workflow after resolving template and dependencies. Once created, users can not update it.
 
 ## Workplan Spec
+
 As with all other Kubernetes objects, a Workplan has `apiVersion`, `kind`, and `metadata` fields. It also has a `.spec` section. Below is an example Workflow object:
 
 ```yaml
@@ -112,7 +114,7 @@ Name of the Workflow for which the Workplan was created.
 
 ### spec.tasks
 
-It is populated from `workflow.spec.steps` by resolving dependencies. A task represents a single kubernetes pod where serial steps are converted into init-containers and parallel steps are converted into containers.
+It is populated from `workflow.spec.steps` by resolving dependencies. A task represents a single Kubernetes pod where serial steps are converted into init-containers and parallel steps are converted into containers.
 
 ### spec.triggeredFor
 
@@ -149,7 +151,7 @@ Describes the reason behind the current phase of the workplan.
 
 Indicates the zero-based index of the task which is currently running. In case of `Pending`, `Succeeded` and `Failed`, it is set to `-1`.
 
-### status.stepTree:
+### status.stepTree
 
 Collection of step-entries organized in a two-dimensional array based on dependency. A single step-entry describes the step-container in which the step is scheduled:
 
@@ -158,4 +160,3 @@ Collection of step-entries organized in a two-dimensional array based on depende
 - PodName: Name of the pod where step-container is scheduled.
 - Status: Current status of the container. Possible values are: `Uninitialized` (pod not exists), `Waiting`, `Running` and `Terminated`.
 - ContainerState: Value of [ContainerState](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.10/#containerstate-v1-core) from pod-status.
-        

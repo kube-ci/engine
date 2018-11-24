@@ -1,10 +1,12 @@
 # Workflow Template
 
 ## What is Workflow Template
+
 A `WorkflowTemplate` is a Kubernetes `CustomResourceDefinition` (CRD) which can be invoked by other Workflows in the same namespace.
 
 ## Workflow Template Spec
-As with all other Kubernetes objects, a Workflow Template needs `apiVersion`, `kind`, and `metadata` fields. It also needs a `.spec.steps` section which contains a set of steps similar to [workflow-steps](workflow.md#specsteps). But here you can use placeholders which will be substituted by arguments during invocation. For more details on substitution see [here](http://docs.drone.io/substitution/).
+
+As with all other Kubernetes objects, a Workflow Template needs `apiVersion`, `kind`, and `metadata` fields. It also needs a `.spec.steps` section which contains a set of steps similar to [workflow-steps](workflow.md#specsteps). But here you can use placeholders which will be substituted by arguments during invocation. For more details on substitution see [here](https://github.com/drone/docs/blob/v0.8.0/content/usage/config/substitution.md).
 
 Below is an example Workflow Template object:
 

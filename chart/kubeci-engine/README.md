@@ -45,15 +45,15 @@ The following table lists the configurable parameters of the KubeCI engine chart
 
 | Parameter                            | Description                                                       | Default            |
 | ------------------------------------ | ----------------------------------------------------------------- | ------------------ |
-| `replicaCount`                       | Number of KubeCI engine operator replicas to create (only 1 is supported) | `1`                |
-| `operator.registry`                  | Docker registry used to pull operator image                       | `kubeci`         |
-| `operator.repository`                | Operator container image                                          | `kubeci-engine`            |
+| `replicaCount`                       | Number of KubeCI engine replicas to create (only 1 is supported)  | `1`                |
+| `operator.registry`                  | Docker registry used to pull operator image                       | `kubeci`           |
+| `operator.repository`                | Operator container image                                          | `kubeci-engine`    |
 | `operator.tag`                       | Operator container image tag                                      | `0.7.0`            |
 | `cleaner.registry`                   | Docker registry used to pull Webhook cleaner image                | `appscode`         |
 | `cleaner.repository`                 | Webhook cleaner container image                                   | `kubectl`          |
 | `cleaner.tag`                        | Webhook cleaner container image tag                               | `v1.11`            |
 | `imagePullPolicy`                    | Container image pull policy                                       | `IfNotPresent`     |
-| `criticalAddon`                      | If true, installs KubeCI engine operator as critical addon                | `false`            |
+| `criticalAddon`                      | If true, installs KubeCI engine operator as critical addon        | `false`            |
 | `logLevel`                           | Log level for operator                                            | `3`                |
 | `affinity`                           | Affinity rules for pod assignment                                 | `{}`               |
 | `annotations`                        | Annotations applied to operator pod(s)                            | `{}`               |
@@ -64,7 +64,7 @@ The following table lists the configurable parameters of the KubeCI engine chart
 | `serviceAccount.name`                | Service account to be used. If not set and `serviceAccount.create` is `true`, a name is generated using the fullname template | `` |
 | `apiserver.groupPriorityMinimum`     | The minimum priority the group should have.                       | 10000              |
 | `apiserver.versionPriority`          | The ordering of this API inside of the group.                     | 15                 |
-| `apiserver.enableValidatingWebhook`  | Enable validating webhooks for KubeCI engine CRDs                         | true               |
+| `apiserver.enableValidatingWebhook`  | Enable validating webhooks for KubeCI engine CRDs                 | true               |
 | `apiserver.enableMutatingWebhook`    | Enable mutating webhooks for Kubernetes workloads                 | true               |
 | `apiserver.ca`                       | CA certificate used by main Kubernetes api server                 | `not-ca-cert`      |
 | `apiserver.disableStatusSubresource` | If true, disables status sub resource for crds. Otherwise enables based on Kubernetes version | `false`            |
