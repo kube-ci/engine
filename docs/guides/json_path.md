@@ -2,13 +2,13 @@
 
 # JSON Path Data
 
-Your steps might need some information about the resource for which the workflow was triggered. This tutorial will show you how to populate explicit environment variables from json-path data of the triggering resource. When `envFromPath` is used for triggering resource, a secret is created with json-path data and this secret is used for populating environment variables. 
+Your steps might need some information about the resource for which the workflow was triggered. This tutorial will show you how to populate explicit environment variables from json-path data of the triggering resource. When `envFromPath` is used for triggering resource, a secret is created with json-path data and this secret is used for populating environment variables.
 
 Before we start, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube). Now, install KubeCI engine in your cluster following the steps [here](/docs/setup/install.md).
 
 ## Configure RBAC
 
-First, create a service-account for the workflow. Then, create a cluster-role with ConfigMap get, list and watch permissions. We also need secret create and get permissions. Now, bind the cluster-role with service-accounts of both workflow and operator.
+First, create a service-account for the workflow. Then, create a cluster-role with ConfigMap get, `list` and `watch` permissions. We also need secret create and get permissions. Now, bind the cluster-role with service-accounts of both workflow and operator.
 
 ```console
 $ kubectl apply -f ./docs/examples/json-path/rbac.yaml

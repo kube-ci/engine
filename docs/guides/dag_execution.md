@@ -2,13 +2,13 @@
 
 # DAG Dependency
 
-This tutorial will show you how to use KubeCI engine to configure a Workflow consisting of a set of tasks with DAG dependency. 
+This tutorial will show you how to use KubeCI engine to configure a Workflow consisting of a set of tasks with DAG dependency.
 
 Before we start, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube). Now, install KubeCI engine in your cluster following the steps [here](/docs/setup/install.md).
 
 ## Configure RBAC
 
-First, create a service-account for the workflow. Then, create a cluster-role with ConfigMap list and watch permissions. Now, bind it with service-accounts of both workflow and operator.
+First, create a service-account for the workflow. Then, create a cluster-role with ConfigMap `list` and `watch` permissions. Now, bind it with service-accounts of both workflow and operator.
 
 ```console
 $ kubectl apply -f ./docs/examples/dag-execution/rbac.yaml
@@ -21,7 +21,7 @@ clusterrolebinding.rbac.authorization.k8s.io/operator-role-binding created
 ## Create Workflow
 
 ```console
-$ kubectl apply -f ./docs/examples/dag-execution/workflow.yaml 
+$ kubectl apply -f ./docs/examples/dag-execution/workflow.yaml
 workflow.engine.kube.ci/sample-workflow created
 ```
 

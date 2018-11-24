@@ -2,13 +2,13 @@
 
 # Workflow Template
 
-This tutorial will show you how to create a workflow-template and invoke it from a workflow. You can invoke same template from multiple workflows in the same namespace. 
+This tutorial will show you how to create a workflow-template and invoke it from a workflow. You can invoke same template from multiple workflows in the same namespace.
 
 Before we start, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube). Now, install KubeCI engine in your cluster following the steps [here](/docs/setup/install.md).
 
 ## Configure RBAC
 
-First, create a service-account for the workflow. Then, create a cluster-role with ConfigMap list and watch permissions. Now, bind it with service-accounts of both workflow and operator.
+First, create a service-account for the workflow. Then, create a cluster-role with ConfigMap `list` and `watch` permissions. Now, bind it with service-accounts of both workflow and operator.
 
 ```console
 $ kubectl apply -f ./docs/examples/template/rbac.yaml

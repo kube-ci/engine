@@ -2,13 +2,13 @@
 
 # Serial Execution
 
-This tutorial will show you how to use KubeCI engine to configure a Workflow consisting of a set of serial tasks and trigger it by creating a ConfigMap. 
+This tutorial will show you how to use KubeCI engine to configure a Workflow consisting of a set of serial tasks and trigger it by creating a ConfigMap.
 
 Before we start, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube). Now, install KubeCI engine in your cluster following the steps [here](/docs/setup/install.md).
 
 ## Configure RBAC
 
-First, create a service-account for the workflow. Then, create a cluster-role with ConfigMap list and watch permissions. Now, bind it with service-accounts of both workflow and operator.
+First, create a service-account for the workflow. Then, create a cluster-role with ConfigMap `list` and `watch` permissions. Now, bind it with service-accounts of both workflow and operator.
 
 ```console
 $ kubectl apply -f ./docs/examples/serial-execution/rbac.yaml
@@ -21,7 +21,7 @@ clusterrolebinding.rbac.authorization.k8s.io/operator-role-binding created
 ## Create Workflow
 
 ```console
-$ kubectl apply -f ./docs/examples/serial-execution/workflow.yaml 
+$ kubectl apply -f ./docs/examples/serial-execution/workflow.yaml
 workflow.engine.kube.ci/sample-workflow created
 ```
 
@@ -194,7 +194,7 @@ status:
 To get/stream logs of a particular step of a workplan, you need to call the `Get` API of `WorkplanLog` custom resource.
 
 ```console
-$ kubectl get --raw '/apis/extension.kube.ci/v1alpha1/namespaces/default/workplanlogs/sample-workflow-sg9h4?step=step-echo' 
+$ kubectl get --raw '/apis/extension.kube.ci/v1alpha1/namespaces/default/workplanlogs/sample-workflow-sg9h4?step=step-echo'
 hello world
 ```
 

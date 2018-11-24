@@ -8,7 +8,7 @@ Before we start, you need to have a Kubernetes cluster, and the kubectl command-
 
 ## Configure RBAC
 
-First, create a service-account for the workflow. Then, create a cluster-role with ConfigMap list and watch permissions. Now, bind it with service-accounts of both workflow and operator.
+First, create a service-account for the workflow. Then, create a cluster-role with ConfigMap `list` and `watch` permissions. Now, bind it with service-accounts of both workflow and operator.
 
 ```console
 $ kubectl apply -f ./docs/examples/force-trigger/rbac.yaml
@@ -21,7 +21,7 @@ clusterrolebinding.rbac.authorization.k8s.io/operator-role-binding created
 ## Create Workflow
 
 ```console
-$ kubectl apply -f ./docs/examples/force-trigger/workflow.yaml 
+$ kubectl apply -f ./docs/examples/force-trigger/workflow.yaml
 workflow.engine.kube.ci/sample-workflow created
 ```
 

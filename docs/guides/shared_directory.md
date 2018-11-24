@@ -2,13 +2,13 @@
 
 # Shared Directories
 
-The home directory and current working directory are shared among all step-containers. The shared working-directory helps to share input/output files among step-containers. For example, two step-containers might need same input files, again outputs of one step might be inputs of next step. The shared HOME directory helps to put common configuration files (like docker and git config) in a shared HOME directory.
+The home directory and current working directory are shared among all step-containers. The shared working-directory helps to share input/output files among step-containers. For example, two step-containers might need same input files, again outputs of one step might be inputs of next step. The shared `HOME` directory helps to put common configuration files (like docker and git config) in a shared `HOME` directory.
 
 Before we start, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube). Now, install KubeCI engine in your cluster following the steps [here](/docs/setup/install.md).
 
 ## Configure RBAC
 
-First, create a service-account for the workflow. Then, create a cluster-role with ConfigMap list and watch permissions. Now, bind it with service-accounts of both workflow and operator.
+First, create a service-account for the workflow. Then, create a cluster-role with ConfigMap `list` and `watch` permissions. Now, bind it with service-accounts of both workflow and operator.
 
 ```console
 $ kubectl apply -f ./docs/examples/shared-directory/rbac.yaml
@@ -92,7 +92,7 @@ sample-workflow-cxg4k-0   0/1     Completed   0          25s
 
 ## Check Logs
 
-The `step-print-dir` prints the path of HOME directory and current working directory. The working directory is set to `/kubeci/workspace` and HOME directory is set to `/kubeci/home` for all step-containers.
+The `step-print-dir` prints the path of `HOME` directory and current working directory. The working directory is set to `/kubeci/workspace` and `HOME` directory is set to `/kubeci/home` for all step-containers.
 
 ```console
 $ kubectl get --raw '/apis/extension.kube.ci/v1alpha1/namespaces/default/workplanlogs/sample-workflow-cxg4k?step=step-print-dir'
@@ -100,7 +100,7 @@ working-dir /kubeci/workspace
 home-dir /kubeci/home
 ```
 
-The `step-create` creates `file-01` in working directory and `file-02` HOME directory. And the `step-list-files` lists the contents of working directory and HOME directory.
+The `step-create` creates `file-01` in working directory and `file-02` `HOME` directory. And the `step-list-files` lists the contents of working directory and `HOME` directory.
 
 ```console
 $ kubectl get --raw '/apis/extension.kube.ci/v1alpha1/namespaces/default/workplanlogs/sample-workflow-cxg4k?step=step-list-files'

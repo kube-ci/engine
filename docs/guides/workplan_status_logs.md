@@ -2,7 +2,7 @@
 
 # Workplan Status and Logs
 
-This tutorial will show you how to use interactive `workplan-logs` CLI to collect logs of different steps. Also, how to use `workplan-viewer` web-ui to view workplan-status and logs. 
+This tutorial will show you how to use interactive `workplan-logs` CLI to collect logs of different steps and `workplan-viewer` web-ui to view workplan-status and logs.
 
 Before we start, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube). Now, install KubeCI engine in your cluster following the steps [here](/docs/setup/install.md).
 
@@ -95,7 +95,7 @@ Forwarding from [::1]:9090 -> 9090
 
 Go to following URL to get current of status workplan `sample-workflow-v8skm`:
 
-`http://127.0.0.1:9090/namespaces/default/workplans/sample-workflow-v8skm` 
+`http://127.0.0.1:9090/namespaces/default/workplans/sample-workflow-v8skm`
 
 Go to following URL to get logs of step `step-test`:
 

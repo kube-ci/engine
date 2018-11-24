@@ -2,7 +2,7 @@
 
 # Credential Initializer
 
-This tutorial will show you how to initialize docker and git credentials using service-account secrets. This credential-initializer step runs before any other steps and puts necessary configuration files for Docker and Git into shared HOME directory. For this, the service-account secrets should have annotations with prefix `credential.kube.ci/`.
+This tutorial will show you how to initialize docker and git credentials using service-account secrets. This credential-initializer step runs before any other steps and puts necessary configuration files for Docker and Git into shared `HOME` directory. For this, the service-account secrets should have annotations with prefix `credential.kube.ci/`.
 
 Before we start, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube). Now, install KubeCI engine in your cluster following the steps [here](/docs/setup/install.md).
 
@@ -50,7 +50,7 @@ data:
 
 ## Configure RBAC
 
-Create a service-account for the workflow and specify previously created secrets. Then, create a cluster-role with ConfigMap list and watch permissions. Now, bind it with service-accounts of both workflow and operator.
+Create a service-account for the workflow and specify previously created secrets. Then, create a cluster-role with ConfigMap `list` and `watch` permissions. Now, bind it with service-accounts of both workflow and operator.
 
 ```console
 $ kubectl apply -f ./docs/examples/credential-initializer/rbac.yaml
@@ -63,7 +63,7 @@ clusterrolebinding.rbac.authorization.k8s.io/operator-role-binding created
 ## Create Workflow
 
 ```console
-$ kubectl apply -f ./docs/examples/credential-initializer/workflow.yaml 
+$ kubectl apply -f ./docs/examples/credential-initializer/workflow.yaml
 workflow.engine.kube.ci/sample-workflow created
 ```
 
@@ -120,7 +120,7 @@ sample-workflow-xj9gl-0   0/1     Completed   0          29s
 
 ## Check Logs
 
-The `step-ls-home` prints the contents of HOME directory.
+The `step-ls-home` prints the contents of `HOME` directory.
 
 ```console
 $ kubectl get --raw '/apis/extension.kube.ci/v1alpha1/namespaces/default/workplanlogs/sample-workflow-xj9gl?step=step-ls-home'
@@ -147,7 +147,7 @@ drwxr-xr-x    4 root     root           120 Oct 30 04:53 ..
 -rw-------    1 root     root           392 Oct 30 04:53 known_hosts
 ```
 
-Here, we can see that, HOME directory is populated with docker and git configs. Since HOME directory is shared among all step-containers, all steps can access the same docker/git credentials. 
+Here, we can see that, `HOME` directory is populated with docker and git configs. Since `HOME` directory is shared among all step-containers, all steps can access the same docker/git credentials.
 
 ## Cleanup
 

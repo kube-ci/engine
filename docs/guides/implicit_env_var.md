@@ -2,13 +2,13 @@
 
 # Implicit Environment Variables
 
-By default `HOME`(shared HOME directory), `NAMESPACE` (namespace of workflow/workplan/pod) and `WORKPLAN` (name of the workplan) environment variables are set to all step-containers. If user specify environment variables with same name using `workflow.spec.envVar`, they will be replaced by default values.
+By default `HOME`(shared `HOME` directory), `NAMESPACE` (namespace of workflow/workplan/pod) and `WORKPLAN` (name of the workplan) environment variables are set to all step-containers. If user specify environment variables with same name using `workflow.spec.envVar`, they will be replaced by default values.
 
 Before we start, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube). Now, install KubeCI engine in your cluster following the steps [here](/docs/setup/install.md).
 
 ## Configure RBAC
 
-First, create a service-account for the workflow. Then, create a cluster-role with ConfigMap list and watch permissions. Now, bind it with service-accounts of both workflow and operator.
+First, create a service-account for the workflow. Then, create a cluster-role with ConfigMap `list` and `watch` permissions. Now, bind it with service-accounts of both workflow and operator.
 
 ```console
 $ kubectl apply -f ./docs/examples/implicit-env-var/rbac.yaml

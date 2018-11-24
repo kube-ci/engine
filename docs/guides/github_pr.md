@@ -2,13 +2,13 @@
 
 # Github Pull Request
 
-This tutorial will show you how to use KubeCI engine and [Git API server](https://github.com/kube-ci/git-apiserver) to run tests and update commit status based on labels of a Github pull-request. 
+This tutorial will show you how to use KubeCI engine and [Git API server](https://github.com/kube-ci/git-apiserver) to run tests and update commit status based on labels of a Github pull-request.
 
 Before we start, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube). Now, install KubeCI engine in your cluster following the steps [here](/docs/setup/install.md). Also, install git-apiserver following the steps [here](https://github.com/kube-ci/git-apiserver).
 
 ## Configure Github Webhook
 
-First, configure github webhook to send POST request of events to your kubernetes apiserver. Also enable events for pull-requests and disable SSL verification.
+First, configure github webhook to send POST request of events to your Kubernetes apiserver. Also enable events for pull-requests and disable SSL verification.
 
 Payload URL: `https://{master-ip}/apis/webhook.git.kube.ci/v1alpha1/githubevents`
 
@@ -45,10 +45,10 @@ secret github-credential created
 
 ## Configure RBAC
 
-Create a service-account for the workflow. Then, create a cluster-role with `PullRequest` list and watch permissions. Also need Secret Create and Get permissions for environment from json-path and github-secret. Now, bind the cluster-role with service-accounts of both workflow and operator.
+Create a service-account for the workflow. Then, create a cluster-role with `PullRequest` `list` and `watch` permissions. Also need Secret Create and Get permissions for environment from json-path and github-secret. Now, bind the cluster-role with service-accounts of both workflow and operator.
 
 ```console
-$ kubectl apply -f ./docs/examples/github-pr/rbac.yaml 
+$ kubectl apply -f ./docs/examples/github-pr/rbac.yaml
 serviceaccount/wf-sa created
 clusterrole.rbac.authorization.k8s.io/wf-role created
 rolebinding.rbac.authorization.k8s.io/wf-role-binding created
@@ -58,7 +58,7 @@ clusterrolebinding.rbac.authorization.k8s.io/operator-role-binding created
 ## Create Workflow
 
 ```console
-$ kubectl apply -f ./docs/examples/github-pr/workflow.yaml 
+$ kubectl apply -f ./docs/examples/github-pr/workflow.yaml
 workflow.engine.kube.ci/sample-workflow created
 ```
 
@@ -117,4 +117,4 @@ Forwarding from [::1]:9090 -> 9090
 
 ## Trigger Workflow
 
-To trigger the workflow, create a pull request in your repository and set `ok-to-test` label on it. This will send a POST request to kubernetes apiserver. Git-apiserver controller will respond to it and create a `PullRequest` CRD with with `repository`, `state` and `ok-to-test` labels, which will then trigger the workflow.
+To trigger the workflow, create a pull request in your repository and set `ok-to-test` label on it. This will send a POST request to Kubernetes apiserver. Git-apiserver controller will respond to it and create a `PullRequest` CRD with with `repository`, `state` and `ok-to-test` labels, which will then trigger the workflow.
