@@ -1,16 +1,16 @@
 ## Development Guide
-This document is intended to be the canonical source of truth for things like supported toolchain versions for building Kubeci-engine.
+This document is intended to be the canonical source of truth for things like supported toolchain versions for building KubeCI engine.
 If you find a requirement that this doc does not capture, please submit an issue on github.
 
 This document is intended to be relative to the branch in which it is found. It is guaranteed that requirements will change over time
-for the development branch, but release branches of Kubeci-engine should not change.
+for the development branch, but release branches of KubeCI engine should not change.
 
-### Build Kubeci-engine
-Some of the Kubeci-engine development helper scripts rely on a fairly up-to-date GNU tools environment, so most recent Linux distros should
+### Build KubeCI engine
+Some of the KubeCI engine development helper scripts rely on a fairly up-to-date GNU tools environment, so most recent Linux distros should
 work just fine out-of-the-box.
 
 #### Setup GO
-Kubeci-engine is written in Google's GO programming language. Currently, Kubeci-engine is developed and tested on **go 1.10**. If you haven't set up a GO
+KubeCI engine is written in Google's GO programming language. Currently, KubeCI engine is developed and tested on **go 1.10**. If you haven't set up a GO
 development environment, please follow [these instructions](https://golang.org/doc/code.html) to install GO.
 
 #### Download Source
@@ -22,7 +22,7 @@ $ cd engine
 ```
 
 #### Install Dev tools
-To install various dev tools for Kubeci-engine, run the following command:
+To install various dev tools for KubeCI engine, run the following command:
 ```console
 $ ./hack/builddeps.sh
 ```
@@ -44,14 +44,14 @@ $ kubeci-engine run \
 ```
 
 #### Dependency management
-Kubeci-engine uses [Glide](https://github.com/Masterminds/glide) to manage dependencies. Dependencies are already checked in the `vendor` folder.
+KubeCI engine uses [Glide](https://github.com/Masterminds/glide) to manage dependencies. Dependencies are already checked in the `vendor` folder.
 If you want to update/add dependencies, run:
 ```console
 $ glide slow
 ```
 
 #### Build Docker images
-To build and push your custom Docker image, follow the steps below. To release a new version of Kubeci-engine, please follow the [release guide](/docs/setup/developer-guide/release.md).
+To build and push your custom Docker image, follow the steps below. To release a new version of KubeCI engine, please follow the [release guide](/docs/setup/developer-guide/release.md).
 
 ```console
 # Build Docker image
@@ -69,14 +69,14 @@ $ docker push <image>:<tag>
 $ ./hack/gendocs/make.sh
 ```
 
-### Testing Kubeci-engine
+### Testing KubeCI engine
 #### Unit tests
 ```console
 $ ./hack/make.py test unit
 ```
 
 #### Run e2e tests
-Kubeci-engine uses [Ginkgo](http://onsi.github.io/ginkgo/) to run e2e tests.
+KubeCI engine uses [Ginkgo](http://onsi.github.io/ginkgo/) to run e2e tests.
 ```console
 $ ./hack/make.py test e2e
 ```

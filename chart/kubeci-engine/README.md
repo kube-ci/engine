@@ -1,5 +1,5 @@
-# Kubeci-engine
-[Kubeci-engine by AppsCode](https://github.com/kube-ci/engine) - Kubernetes Native Workflow Engine
+# KubeCI engine
+[KubeCI engine by AppsCode](https://github.com/kube-ci/engine) - Kubernetes Native Workflow Engine
 
 ## TL;DR;
 
@@ -11,7 +11,7 @@ $ helm install appscode/kubeci-engine
 
 ## Introduction
 
-This chart bootstraps a [Kubeci-engine controller](https://github.com/kube-ci/engine) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [KubeCI engine controller](https://github.com/kube-ci/engine) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 
@@ -25,7 +25,7 @@ To install the chart with the release name `my-release`:
 $ helm install appscode/kubeci-engine --name my-release
 ```
 
-The command deploys Kubeci-engine operator on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+The command deploys KubeCI engine operator on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -41,19 +41,19 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ## Configuration
 
-The following table lists the configurable parameters of the Kubeci-engine chart and their default values.
+The following table lists the configurable parameters of the KubeCI engine chart and their default values.
 
 | Parameter                            | Description                                                       | Default            |
 | ------------------------------------ | ----------------------------------------------------------------- | ------------------ |
-| `replicaCount`                       | Number of kubeci-engine operator replicas to create (only 1 is supported) | `1`                |
-| `operator.registry`                  | Docker registry used to pull operator image                       | `kubeci`         |
-| `operator.repository`                | Operator container image                                          | `kubeci-engine`            |
+| `replicaCount`                       | Number of KubeCI engine replicas to create (only 1 is supported)  | `1`                |
+| `operator.registry`                  | Docker registry used to pull operator image                       | `kubeci`           |
+| `operator.repository`                | Operator container image                                          | `kubeci-engine`    |
 | `operator.tag`                       | Operator container image tag                                      | `0.7.0`            |
 | `cleaner.registry`                   | Docker registry used to pull Webhook cleaner image                | `appscode`         |
 | `cleaner.repository`                 | Webhook cleaner container image                                   | `kubectl`          |
 | `cleaner.tag`                        | Webhook cleaner container image tag                               | `v1.11`            |
 | `imagePullPolicy`                    | Container image pull policy                                       | `IfNotPresent`     |
-| `criticalAddon`                      | If true, installs Kubeci-engine operator as critical addon                | `false`            |
+| `criticalAddon`                      | If true, installs KubeCI engine operator as critical addon        | `false`            |
 | `logLevel`                           | Log level for operator                                            | `3`                |
 | `affinity`                           | Affinity rules for pod assignment                                 | `{}`               |
 | `annotations`                        | Annotations applied to operator pod(s)                            | `{}`               |
@@ -64,7 +64,7 @@ The following table lists the configurable parameters of the Kubeci-engine chart
 | `serviceAccount.name`                | Service account to be used. If not set and `serviceAccount.create` is `true`, a name is generated using the fullname template | `` |
 | `apiserver.groupPriorityMinimum`     | The minimum priority the group should have.                       | 10000              |
 | `apiserver.versionPriority`          | The ordering of this API inside of the group.                     | 15                 |
-| `apiserver.enableValidatingWebhook`  | Enable validating webhooks for Kubeci-engine CRDs                         | true               |
+| `apiserver.enableValidatingWebhook`  | Enable validating webhooks for KubeCI engine CRDs                 | true               |
 | `apiserver.enableMutatingWebhook`    | Enable mutating webhooks for Kubernetes workloads                 | true               |
 | `apiserver.ca`                       | CA certificate used by main Kubernetes api server                 | `not-ca-cert`      |
 | `apiserver.disableStatusSubresource` | If true, disables status sub resource for crds. Otherwise enables based on Kubernetes version | `false`            |

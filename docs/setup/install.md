@@ -1,6 +1,6 @@
 # Installation Guide
 
-Kubeci-engine can be installed via a script or as a Helm chart.
+KubeCI engine can be installed via a script or as a Helm chart.
 
 <ul class="nav nav-tabs" id="installerTab" role="tablist">
   <li class="nav-item">
@@ -15,7 +15,7 @@ Kubeci-engine can be installed via a script or as a Helm chart.
 
 ## Using Script
 
-To install Kubeci-engine in your Kubernetes cluster, run the following command:
+To install KubeCI engine in your Kubernetes cluster, run the following command:
 
 ```console
 $ curl -fsSL https://raw.githubusercontent.com/kube-ci/engine/0.1.0/hack/deploy/install.sh | bash
@@ -53,14 +53,14 @@ options:
     --purge                        purges kubeci-engine crd objects and crds
 ```
 
-If you would like to run kubeci-engine operator pod in `master` instances, pass the `--run-on-master` flag:
+If you would like to run KubeCI engine operator pod in `master` instances, pass the `--run-on-master` flag:
 
 ```console
 $ curl -fsSL https://raw.githubusercontent.com/kube-ci/engine/0.1.0/hack/deploy/install.sh \
     | bash -s -- --run-on-master [--rbac]
 ```
 
-Kubeci-engine operator will be installed in a `kube-system` namespace by default. If you would like to run Kubci operator pod in `kubeci-engine` namespace, pass the `--namespace=kubeci-engine` flag:
+KubeCI engine operator will be installed in a `kube-system` namespace by default. If you would like to run Kubci operator pod in `kubeci-engine` namespace, pass the `--namespace=kubeci-engine` flag:
 
 ```console
 $ kubectl create namespace kubeci-engine
@@ -80,27 +80,27 @@ $ curl -fsSL https://raw.githubusercontent.com/kube-ci/engine/0.1.0/hack/deploy/
     | bash -s -- --docker-registry=MY_REGISTRY [--image-pull-secret=SECRET_NAME] [--rbac]
 ```
 
-Kubeci-engine implements [validating admission webhooks](https://kubernetes.io/docs/admin/admission-controllers/#validatingadmissionwebhook-alpha-in-18-beta-in-19) to validate Kubeci-engine CRDs. This is enabled by default for Kubernetes 1.9.0 or later releases. To disable this feature, pass the `--enable-validating-webhook=false` flag.
+KubeCI engine implements [validating admission webhooks](https://kubernetes.io/docs/admin/admission-controllers/#validatingadmissionwebhook-alpha-in-18-beta-in-19) to validate KubeCI engine CRDs. This is enabled by default for Kubernetes 1.9.0 or later releases. To disable this feature, pass the `--enable-validating-webhook=false` flag.
 
 ```console
 $ curl -fsSL https://raw.githubusercontent.com/kube-ci/engine/0.1.0/hack/deploy/install.sh \
     | bash -s -- --enable-validating-webhook=false [--rbac]
 ```
 
-Kubeci-engine 0.1.0 or later releases can use status sub resource for CustomResourceDefinitions. This is enabled by default for Kubernetes 1.11.0 or later releases. To disable this feature, pass the `--enable-status-subresource=false` flag.
+KubeCI engine 0.1.0 or later releases can use status sub resource for CustomResourceDefinitions. This is enabled by default for Kubernetes 1.11.0 or later releases. To disable this feature, pass the `--enable-status-subresource=false` flag.
 
 </div>
 <div class="tab-pane fade" id="helm" role="tabpanel" aria-labelledby="helm-tab">
 
 ## Using Helm
-Kubeci-engine can be installed via [Helm](https://helm.sh/) using the [chart](https://github.com/kube-ci/engine/tree/0.1.0/chart/kubeci) from [AppsCode Charts Repository](https://github.com/appscode/charts). To install the chart with the release name `my-release`:
+KubeCI engine can be installed via [Helm](https://helm.sh/) using the [chart](https://github.com/kube-ci/engine/tree/0.1.0/chart/kubeci-engine) from [AppsCode Charts Repository](https://github.com/appscode/charts). To install the chart with the release name `my-release`:
 
 ```console
 $ helm repo add appscode https://charts.appscode.com/stable/
 $ helm repo update
 $ helm search appscode/kubeci-engine
 NAME            CHART VERSION APP VERSION DESCRIPTION
-appscode/kubeci-engine  0.1.0    0.1.0  Kubeci-engine by AppsCode - Kuberenetes native CI system
+appscode/kubeci-engine  0.1.0    0.1.0  KubeCI engine by AppsCode - Kuberenetes native CI system
 
 $ helm install appscode/kubeci-engine --name kubeci-engine --version 0.1.0 --namespace kube-system
 ```
@@ -111,7 +111,7 @@ To see the detailed configuration options, visit [here](https://github.com/kube-
 
 ### Installing in GKE Cluster
 
-If you are installing Kubeci-engine on a GKE cluster, you will need cluster admin permissions to install Kubeci-engine operator. Run the following command to grant admin permission to the cluster.
+If you are installing KubeCI engine on a GKE cluster, you will need cluster admin permissions to install KubeCI engine operator. Run the following command to grant admin permission to the cluster.
 
 ```console
 $ kubectl create clusterrolebinding "cluster-admin-$(whoami)" \
@@ -121,7 +121,7 @@ $ kubectl create clusterrolebinding "cluster-admin-$(whoami)" \
 
 
 ## Verify installation
-To check if Kubeci-engine operator pods have started, run the following command:
+To check if KubeCI engine operator pods have started, run the following command:
 ```console
 $ kubectl get pods --all-namespaces -l app=kubeci-engine --watch
 
@@ -141,16 +141,16 @@ workplans.engine.kube.ci             5s
 workflowtemplates.engine.kube.ci     5s
 ```
 
-Now, you are ready to [run your first workflow](/docs/guides/README.md) using Kubeci-engine.
+Now, you are ready to [run your first workflow](/docs/guides/README.md) using KubeCI engine.
 
 
 ## Configuring RBAC
-Kubeci-engine introduces resources, such as, `Workflow`, `Workplan`, `WorkflowTemplate`,  `Trigger` and `WorkplanLog`. Kubeci-engine installer will create 2 user facing cluster roles:
+KubeCI engine introduces resources, such as, `Workflow`, `Workplan`, `WorkflowTemplate`,  `Trigger` and `WorkplanLog`. KubeCI engine installer will create 2 user facing cluster roles:
 
 | ClusterRole                 | Aggregates To | Description                            |
 |-----------------------------|---------------|----------------------------------------|
-| appscode:kubeci-engine:edit | admin, edit   | Allows edit access to Kubeci-engine CRDs, intended to be granted within a namespace using a RoleBinding. |
-| appscode:kubeci-engine:view | view          | Allows read-only access to Kubeci-engine CRDs, intended to be granted within a namespace using a RoleBinding. |
+| appscode:kubeci-engine:edit | admin, edit   | Allows edit access to KubeCI engine CRDs, intended to be granted within a namespace using a RoleBinding. |
+| appscode:kubeci-engine:view | view          | Allows read-only access to KubeCI engine CRDs, intended to be granted within a namespace using a RoleBinding. |
 
 These user facing roles supports [ClusterRole Aggregation](https://kubernetes.io/docs/admin/authorization/rbac/#aggregated-clusterroles) feature in Kubernetes 1.9 or later clusters.
 
@@ -187,8 +187,8 @@ $ kubectl describe workplan -n <namespace> <name>
 ```
 
 
-## Detect Kubeci-engine version
-To detect Kubeci-engine version, exec into the operator pod and run `kubeci-engine version` command.
+## Detect KubeCI engine version
+To detect KubeCI engine version, exec into the operator pod and run `kubeci-engine version` command.
 
 ```console
 $ POD_NAMESPACE=kube-system
