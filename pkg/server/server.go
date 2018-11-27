@@ -6,9 +6,9 @@ import (
 
 	hooks "github.com/appscode/kubernetes-webhook-util/admission/v1beta1"
 	admissionreview "github.com/appscode/kubernetes-webhook-util/registry/admissionreview/v1beta1"
-	"github.com/kube-ci/engine/apis/extension"
-	"github.com/kube-ci/engine/apis/extension/install"
-	"github.com/kube-ci/engine/apis/extension/v1alpha1"
+	"github.com/kube-ci/engine/apis/extensions"
+	"github.com/kube-ci/engine/apis/extensions/install"
+	"github.com/kube-ci/engine/apis/extensions/v1alpha1"
 	"github.com/kube-ci/engine/pkg/controller"
 	admission "k8s.io/api/admission/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -175,7 +175,7 @@ func (c completedConfig) New() (*KubeciServer, error) {
 	}
 
 	{
-		apiGroupInfo := genericapiserver.NewDefaultAPIGroupInfo(extension.GroupName, Scheme, ParameterCodec, Codecs)
+		apiGroupInfo := genericapiserver.NewDefaultAPIGroupInfo(extensions.GroupName, Scheme, ParameterCodec, Codecs)
 		v1alpha1storage := map[string]rest.Storage{}
 		v1alpha1storage[v1alpha1.ResourceTriggers] = controller.NewTriggerREST(ctrl)
 		v1alpha1storage[v1alpha1.ResourceWorkplanLogs] = controller.NewLogsREST(ctrl)

@@ -8,7 +8,7 @@ import (
 	"github.com/appscode/go/types"
 	"github.com/drone/envsubst"
 	api "github.com/kube-ci/engine/apis/engine/v1alpha1"
-	"github.com/kube-ci/engine/apis/extension/v1alpha1"
+	"github.com/kube-ci/engine/apis/extensions/v1alpha1"
 	"github.com/kube-ci/engine/client/clientset/versioned/typed/engine/v1alpha1/util"
 	"github.com/kube-ci/engine/pkg/dependency"
 	"github.com/kube-ci/engine/pkg/eventer"
@@ -96,7 +96,7 @@ func (c *Controller) handleTrigger(obj interface{}, wfNames []string, isDeleteEv
 	}
 
 	for _, wf := range filteredWorkflows {
-		if !force || wf.Spec.AllowForceTrigger {
+		if !force || wf.Spec.AllowManualTrigger {
 			c.triggerWorkflow(wf, res, isDeleteEvent)
 		}
 	}

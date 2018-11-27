@@ -42,7 +42,7 @@ spec:
     onDelete: false
   serviceAccount: wf-sa
   executionOrder: Serial
-  allowForceTrigger: true
+  allowManualTrigger: true
   steps:
   - name: step-one
     image: alpine
@@ -66,7 +66,7 @@ Now trigger the workflow by creating a `Trigger` custom-resource which contains 
 
 ```console
 $ kubectl apply -f ./docs/examples/implicit-env-var/trigger.yaml
-trigger.extension.kube.ci/sample-trigger created
+trigger.extensions.kube.ci/sample-trigger created
 ```
 
 Whenever a workflow is triggered, a workplan is created and respective pods are scheduled.
@@ -88,14 +88,14 @@ sample-workflow-gwd7c-0   0/1     Completed   0          25s
 The `step-one` and `step-two` prints the values of `HOME`, `NAMESPACE` and `WORKPLAN` environment variables.
 
 ```console
-$ kubectl get --raw '/apis/extension.kube.ci/v1alpha1/namespaces/default/workplanlogs/sample-workflow-gwd7c?step=step-one'
+$ kubectl get --raw '/apis/extensions.kube.ci/v1alpha1/namespaces/default/workplanlogs/sample-workflow-gwd7c?step=step-one'
 HOME=/kubeci/home
 NAMESPACE=default
 WORKPLAN=sample-workflow-gwd7c
 ```
 
 ```console
-$ kubectl get --raw '/apis/extension.kube.ci/v1alpha1/namespaces/default/workplanlogs/sample-workflow-gwd7c?step=step-two'
+$ kubectl get --raw '/apis/extensions.kube.ci/v1alpha1/namespaces/default/workplanlogs/sample-workflow-gwd7c?step=step-two'
 HOME=/kubeci/home
 NAMESPACE=default
 WORKPLAN=sample-workflow-gwd7c

@@ -2,7 +2,7 @@
 
 # Force Trigger
 
-This tutorial will show you how to trigger a Workflow manually. Here, we will use the same workflow used in previous [serial-execution](serial_execution.md) example, but trigger it without creating any ConfigMap. Note that, for force trigger we have to set `allowForceTrigger` to true.
+This tutorial will show you how to trigger a Workflow manually. Here, we will use the same workflow used in previous [serial-execution](serial_execution.md) example, but trigger it without creating any ConfigMap. Note that, for force trigger we have to set `allowManualTrigger` to true.
 
 Before we start, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube). Now, install KubeCI engine in your cluster following the steps [here](/docs/setup/install.md).
 
@@ -42,7 +42,7 @@ spec:
     onDelete: false
   serviceAccount: wf-sa
   executionOrder: Serial
-  allowForceTrigger: true
+  allowManualTrigger: true
   steps:
   - name: step-echo
     image: alpine
@@ -64,11 +64,11 @@ Now trigger the workflow by creating a `Trigger` custom-resource which contains 
 
 ```console
 $ kubectl apply -f ./docs/examples/force-trigger/trigger.yaml
-trigger.extension.kube.ci/sample-trigger created
+trigger.extensions.kube.ci/sample-trigger created
 ```
 
 ```yaml
-apiVersion: extension.kube.ci/v1alpha1
+apiVersion: extensions.kube.ci/v1alpha1
 kind: Trigger
 metadata:
   name: sample-trigger

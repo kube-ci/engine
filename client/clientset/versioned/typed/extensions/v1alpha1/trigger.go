@@ -42,7 +42,7 @@ type triggers struct {
 }
 
 // newTriggers returns a Triggers
-func newTriggers(c *ExtensionV1alpha1Client, namespace string) *triggers {
+func newTriggers(c *ExtensionsV1alpha1Client, namespace string) *triggers {
 	return &triggers{
 		client: c.RESTClient(),
 		ns:     namespace,

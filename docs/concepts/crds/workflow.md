@@ -103,7 +103,7 @@ Specifies the order in which the steps will be executed. Possible values are:
 
 Note that, if nothing specified, `Serial` will be used as default execution order.
 
-### spec.allowForceTrigger
+### spec.allowManualTrigger
 
 When true, manual/fake trigger wil be allowed. See [here](/docs/guides/force_trigger.md) for more details about how to perform this.
 

@@ -6,7 +6,7 @@ import (
 	"io"
 
 	api "github.com/kube-ci/engine/apis/engine/v1alpha1"
-	"github.com/kube-ci/engine/apis/extension/v1alpha1"
+	"github.com/kube-ci/engine/apis/extensions/v1alpha1"
 	cs "github.com/kube-ci/engine/client/clientset/versioned"
 	core "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -133,4 +133,4 @@ func (s *streamer) getStepEntry() (api.StepEntry, error) {
 	return api.StepEntry{}, fmt.Errorf("pod not found for step %s", s.Step)
 }
 
-// https://{master-ip}/apis/extension.kube.ci/v1alpha1/namespace/{namespace}/workplanlogs/{workplan-name}?step={step-name}&follow={true|false}
+// https://{master-ip}/apis/extensions.kube.ci/v1alpha1/namespace/{namespace}/workplanlogs/{workplan-name}?step={step-name}&follow={true|false}

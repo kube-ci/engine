@@ -42,7 +42,7 @@ spec:
     onDelete: false
   serviceAccount: wf-sa
   executionOrder: Serial
-  allowForceTrigger: true
+  allowManualTrigger: true
   steps:
   - name: step-print-dir
     image: alpine
@@ -73,7 +73,7 @@ Now trigger the workflow by creating a `Trigger` custom-resource which contains 
 
 ```console
 $ kubectl apply -f ./docs/examples/shared-directory/trigger.yaml
-trigger.extension.kube.ci/sample-trigger created
+trigger.extensions.kube.ci/sample-trigger created
 ```
 
 Whenever a workflow is triggered, a workplan is created and respective pods are scheduled.
@@ -95,7 +95,7 @@ sample-workflow-cxg4k-0   0/1     Completed   0          25s
 The `step-print-dir` prints the path of `HOME` directory and current working directory. The working directory is set to `/kubeci/workspace` and `HOME` directory is set to `/kubeci/home` for all step-containers.
 
 ```console
-$ kubectl get --raw '/apis/extension.kube.ci/v1alpha1/namespaces/default/workplanlogs/sample-workflow-cxg4k?step=step-print-dir'
+$ kubectl get --raw '/apis/extensions.kube.ci/v1alpha1/namespaces/default/workplanlogs/sample-workflow-cxg4k?step=step-print-dir'
 working-dir /kubeci/workspace
 home-dir /kubeci/home
 ```
@@ -103,7 +103,7 @@ home-dir /kubeci/home
 The `step-create` creates `file-01` in working directory and `file-02` `HOME` directory. And the `step-list-files` lists the contents of working directory and `HOME` directory.
 
 ```console
-$ kubectl get --raw '/apis/extension.kube.ci/v1alpha1/namespaces/default/workplanlogs/sample-workflow-cxg4k?step=step-list-files'
+$ kubectl get --raw '/apis/extensions.kube.ci/v1alpha1/namespaces/default/workplanlogs/sample-workflow-cxg4k?step=step-list-files'
 files in working-dir file-01
 files in home-dir file-02
 ```

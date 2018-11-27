@@ -26,14 +26,14 @@ spec:
 apiVersion: apiregistration.k8s.io/v1beta1
 kind: APIService
 metadata:
-  name: v1alpha1.extension.kube.ci
+  name: v1alpha1.extensions.kube.ci
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     app: "{{ template "kubeci-engine.name" . }}"
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
 spec:
-  group: extension.kube.ci
+  group: extensions.kube.ci
   version: v1alpha1
   service:
     namespace: {{ .Release.Namespace }}

@@ -26,7 +26,7 @@ import (
 
 // FakeTriggers implements TriggerInterface
 type FakeTriggers struct {
-	Fake *FakeExtensionV1alpha1
+	Fake *FakeExtensionsV1alpha1
 	ns   string
 }
 

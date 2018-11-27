@@ -24,21 +24,21 @@ import (
 	testing "k8s.io/client-go/testing"
 )
 
-type FakeExtensionV1alpha1 struct {
+type FakeExtensionsV1alpha1 struct {
 	*testing.Fake
 }
 
-func (c *FakeExtensionV1alpha1) Triggers(namespace string) v1alpha1.TriggerInterface {
+func (c *FakeExtensionsV1alpha1) Triggers(namespace string) v1alpha1.TriggerInterface {
 	return &FakeTriggers{c, namespace}
 }
 
-func (c *FakeExtensionV1alpha1) WorkplanLogs(namespace string) v1alpha1.WorkplanLogInterface {
+func (c *FakeExtensionsV1alpha1) WorkplanLogs(namespace string) v1alpha1.WorkplanLogInterface {
 	return &FakeWorkplanLogs{c, namespace}
 }
 
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
-func (c *FakeExtensionV1alpha1) RESTClient() rest.Interface {
+func (c *FakeExtensionsV1alpha1) RESTClient() rest.Interface {
 	var ret *rest.RESTClient
 	return ret
 }

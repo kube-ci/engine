@@ -7,7 +7,7 @@ PACKAGE_NAME=github.com/kube-ci/engine
 REPO_ROOT="$GOPATH/src/$PACKAGE_NAME"
 DOCKER_REPO_ROOT="/go/src/$PACKAGE_NAME"
 DOCKER_CODEGEN_PKG="/go/src/k8s.io/code-generator"
-apiGroups=(engine/v1alpha1 extension/v1alpha1)
+apiGroups=(engine/v1alpha1 extensions/v1alpha1)
 
 pushd $REPO_ROOT
 
@@ -22,7 +22,7 @@ docker run --rm -ti -u $(id -u):$(id -g) \
   github.com/kube-ci/engine/client \
   github.com/kube-ci/engine/apis \
   github.com/kube-ci/engine/apis \
-  extension:v1alpha1 \
+  extensions:v1alpha1 \
   --go-header-file "$DOCKER_REPO_ROOT/hack/gengo/boilerplate.go.txt"
 
 # for both CRD and EAS types
@@ -32,7 +32,7 @@ docker run --rm -ti -u $(id -u):$(id -g) \
   appscode/gengo:release-1.12 "$DOCKER_CODEGEN_PKG"/generate-groups.sh all \
   github.com/kube-ci/engine/client \
   github.com/kube-ci/engine/apis \
-  "engine:v1alpha1 extension:v1alpha1" \
+  "engine:v1alpha1 extensions:v1alpha1" \
   --go-header-file "$DOCKER_REPO_ROOT/hack/gengo/boilerplate.go.txt"
 
 # Generate openapi

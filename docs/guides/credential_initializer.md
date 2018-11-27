@@ -84,7 +84,7 @@ spec:
     onDelete: false
   serviceAccount: wf-sa
   executionOrder: Serial
-  allowForceTrigger: true
+  allowManualTrigger: true
   steps:
   - name: step-ls-home
     image: alpine
@@ -101,7 +101,7 @@ Now trigger the workflow by creating a `Trigger` custom-resource which contains 
 
 ```console
 $ kubectl apply -f ./docs/examples/credential-initializer/trigger.yaml
-trigger.extension.kube.ci/sample-trigger created
+trigger.extensions.kube.ci/sample-trigger created
 ```
 
 Whenever a workflow is triggered, a workplan is created and respective pods are scheduled.
@@ -123,7 +123,7 @@ sample-workflow-xj9gl-0   0/1     Completed   0          29s
 The `step-ls-home` prints the contents of `HOME` directory.
 
 ```console
-$ kubectl get --raw '/apis/extension.kube.ci/v1alpha1/namespaces/default/workplanlogs/sample-workflow-xj9gl?step=step-ls-home'
+$ kubectl get --raw '/apis/extensions.kube.ci/v1alpha1/namespaces/default/workplanlogs/sample-workflow-xj9gl?step=step-ls-home'
 total 8
 drwxr-xr-x    4 root     root           120 Oct 30 04:53 .
 drwxr-xr-x    4 root     root          4096 Oct 30 04:53 ..

@@ -16,7 +16,7 @@ spec:
       ENV_ONE: '{$.data.example\.property\.1}'
       ENV_TWO: '{$.data.example\.property\.2}'
   serviceAccount: wf-sa
-  allowForceTrigger: true
+  allowManualTrigger: true
   steps:
   - name: step-one
     image: alpine

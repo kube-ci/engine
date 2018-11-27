@@ -9,7 +9,7 @@ $ curl -fsSL https://raw.githubusercontent.com/kube-ci/engine/0.1.0/hack/deploy/
 validatingwebhookconfiguration.admissionregistration.k8s.io "admission.engine.kube.ci" deleted
 No resources found
 apiservice.apiregistration.k8s.io "v1alpha1.admission.engine.kube.ci" deleted
-apiservice.apiregistration.k8s.io "v1alpha1.extension.kube.ci" deleted
+apiservice.apiregistration.k8s.io "v1alpha1.extensions.kube.ci" deleted
 deployment.extensions "kubeci-engine" deleted
 service "kubeci-engine" deleted
 secret "kubeci-engine-apiserver-cert" deleted

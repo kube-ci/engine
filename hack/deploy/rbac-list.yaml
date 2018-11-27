@@ -24,7 +24,7 @@ rules:
   - "*"
 - apiGroups:
   - engine.kube.ci
-  - extension.kube.ci
+  - extensions.kube.ci
   resources: ["*"]
   verbs: ["*"]
 - apiGroups:

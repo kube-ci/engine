@@ -22,8 +22,8 @@ import (
 	clientset "github.com/kube-ci/engine/client/clientset/versioned"
 	enginev1alpha1 "github.com/kube-ci/engine/client/clientset/versioned/typed/engine/v1alpha1"
 	fakeenginev1alpha1 "github.com/kube-ci/engine/client/clientset/versioned/typed/engine/v1alpha1/fake"
-	extensionv1alpha1 "github.com/kube-ci/engine/client/clientset/versioned/typed/extension/v1alpha1"
-	fakeextensionv1alpha1 "github.com/kube-ci/engine/client/clientset/versioned/typed/extension/v1alpha1/fake"
+	extensionsv1alpha1 "github.com/kube-ci/engine/client/clientset/versioned/typed/extensions/v1alpha1"
+	fakeextensionsv1alpha1 "github.com/kube-ci/engine/client/clientset/versioned/typed/extensions/v1alpha1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"
@@ -83,12 +83,12 @@ func (c *Clientset) Engine() enginev1alpha1.EngineV1alpha1Interface {
 	return &fakeenginev1alpha1.FakeEngineV1alpha1{Fake: &c.Fake}
 }
 
-// ExtensionV1alpha1 retrieves the ExtensionV1alpha1Client
-func (c *Clientset) ExtensionV1alpha1() extensionv1alpha1.ExtensionV1alpha1Interface {
-	return &fakeextensionv1alpha1.FakeExtensionV1alpha1{Fake: &c.Fake}
+// ExtensionsV1alpha1 retrieves the ExtensionsV1alpha1Client
+func (c *Clientset) ExtensionsV1alpha1() extensionsv1alpha1.ExtensionsV1alpha1Interface {
+	return &fakeextensionsv1alpha1.FakeExtensionsV1alpha1{Fake: &c.Fake}
 }
 
-// Extension retrieves the ExtensionV1alpha1Client
-func (c *Clientset) Extension() extensionv1alpha1.ExtensionV1alpha1Interface {
-	return &fakeextensionv1alpha1.FakeExtensionV1alpha1{Fake: &c.Fake}
+// Extensions retrieves the ExtensionsV1alpha1Client
+func (c *Clientset) Extensions() extensionsv1alpha1.ExtensionsV1alpha1Interface {
+	return &fakeextensionsv1alpha1.FakeExtensionsV1alpha1{Fake: &c.Fake}
 }
