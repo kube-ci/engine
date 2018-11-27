@@ -1,0 +1,25 @@
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: mutators.engine.kube.ci
+  labels:
+    app: kubeci-engine
+webhooks:
+- name: workflow.mutators.engine.kube.ci
+  clientConfig:
+    service:
+      namespace: default
+      name: kubernetes
+      path: /apis/mutators.engine.kube.ci/v1alpha1/workflows
+    caBundle: ${KUBE_CA}
+  rules:
+  - operations:
+    - CREATE
+    - UPDATE
+    apiGroups:
+    - engine.kube.ci
+    apiVersions:
+    - "*"
+    resources:
+    - workflows
+  failurePolicy: Fail

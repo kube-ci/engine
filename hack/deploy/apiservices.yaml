@@ -2,12 +2,29 @@
 apiVersion: apiregistration.k8s.io/v1beta1
 kind: APIService
 metadata:
-  name: v1alpha1.admission.engine.kube.ci
+  name: v1alpha1.validators.engine.kube.ci
   labels:
     app: kubeci-engine
 spec:
   caBundle: ${SERVICE_SERVING_CERT_CA}
-  group: admission.engine.kube.ci
+  group: validators.engine.kube.ci
+  groupPriorityMinimum: 1000
+  versionPriority: 15
+  service:
+    name: kubeci-engine
+    namespace: ${KUBECI_ENGINE_NAMESPACE}
+  version: v1alpha1
+---
+# register as aggregated apiserver
+apiVersion: apiregistration.k8s.io/v1beta1
+kind: APIService
+metadata:
+  name: v1alpha1.mutators.engine.kube.ci
+  labels:
+    app: kubeci-engine
+spec:
+  caBundle: ${SERVICE_SERVING_CERT_CA}
+  group: mutators.engine.kube.ci
   groupPriorityMinimum: 1000
   versionPriority: 15
   service:

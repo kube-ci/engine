@@ -75,9 +75,12 @@ func (c *Controller) ensureCustomResourceDefinitions() error {
 func (c *Controller) Run(stopCh <-chan struct{}) {
 	go c.RunInformers(stopCh)
 
-	cancel, _ := reg_util.SyncValidatingWebhookCABundle(c.clientConfig, validatingWebhook)
+	cancelValidatingWebhook, _ := reg_util.SyncValidatingWebhookCABundle(c.clientConfig, validatingWebhook)
+	cancelMutatingWebhook, _ := reg_util.SyncMutatingWebhookCABundle(c.clientConfig, mutatingWebhook)
+
 	<-stopCh
-	cancel()
+	cancelValidatingWebhook()
+	cancelMutatingWebhook()
 }
 
 func (c *Controller) RunInformers(stopCh <-chan struct{}) {

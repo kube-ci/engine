@@ -116,8 +116,9 @@ func (c completedConfig) New() (*KubeciServer, error) {
 		return nil, err
 	}
 	admissionHooks := []hooks.AdmissionHook{
-		ctrl.NewWorkflowWebhook(),
-		ctrl.NewWorkplanWebhook(),
+		ctrl.NewWorkflowValidatingWebhook(),
+		ctrl.NewWorkflowMutatingWebhook(),
+		ctrl.NewWorkplanMutatingWebhook(),
 	}
 
 	s := &KubeciServer{

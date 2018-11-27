@@ -1,16 +1,16 @@
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: ValidatingWebhookConfiguration
 metadata:
-  name: admission.engine.kube.ci
+  name: validators.engine.kube.ci
   labels:
     app: kubeci-engine
 webhooks:
-- name: workflow.admission.engine.kube.ci
+- name: workflow.validators.engine.kube.ci
   clientConfig:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/admission.engine.kube.ci/v1alpha1/workflows
+      path: /apis/validators.engine.kube.ci/v1alpha1/workflows
     caBundle: ${KUBE_CA}
   rules:
   - operations:
@@ -23,12 +23,12 @@ webhooks:
     resources:
     - workflows
   failurePolicy: Fail
-- name: workplan.admission.engine.kube.ci
+- name: workplan.validators.engine.kube.ci
   clientConfig:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/admission.engine.kube.ci/v1alpha1/workplans
+      path: /apis/validators.engine.kube.ci/v1alpha1/workplans
     caBundle: ${KUBE_CA}
   rules:
   - operations:

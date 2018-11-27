@@ -16,7 +16,8 @@ import (
 )
 
 const (
-	validatingWebhook = "admission.engine.kube.ci"
+	validatingWebhook = "validators.engine.kube.ci"
+	mutatingWebhook   = "mutators.engine.kube.ci"
 )
 
 type config struct {
@@ -65,6 +66,9 @@ func (c *Config) New() (*Controller, error) {
 		return nil, err
 	}
 	if err := reg_util.UpdateValidatingWebhookCABundle(ctrl.clientConfig, validatingWebhook); err != nil {
+		return nil, err
+	}
+	if err := reg_util.UpdateMutatingWebhookCABundle(ctrl.clientConfig, mutatingWebhook); err != nil {
 		return nil, err
 	}
 

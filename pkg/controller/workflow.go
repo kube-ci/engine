@@ -12,10 +12,10 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 
-func (c *Controller) NewWorkflowWebhook() hooks.AdmissionHook {
+func (c *Controller) NewWorkflowValidatingWebhook() hooks.AdmissionHook {
 	return webhook.NewGenericWebhook(
 		schema.GroupVersionResource{
-			Group:    "admission.engine.kube.ci",
+			Group:    "validators.engine.kube.ci",
 			Version:  "v1alpha1",
 			Resource: "workflows",
 		},
@@ -29,6 +29,28 @@ func (c *Controller) NewWorkflowWebhook() hooks.AdmissionHook {
 			},
 			UpdateFunc: func(oldObj, newObj runtime.Object) (runtime.Object, error) {
 				return nil, newObj.(*api.Workflow).IsValid()
+			},
+		},
+	)
+}
+
+func (c *Controller) NewWorkflowMutatingWebhook() hooks.AdmissionHook {
+	return webhook.NewGenericWebhook(
+		schema.GroupVersionResource{
+			Group:    "mutators.engine.kube.ci",
+			Version:  "v1alpha1",
+			Resource: "workflows",
+		},
+		"workflow",
+		[]string{kubeci.GroupName},
+		api.SchemeGroupVersion.WithKind("Workflow"),
+		nil,
+		&admission.ResourceHandlerFuncs{
+			CreateFunc: func(obj runtime.Object) (runtime.Object, error) {
+				return obj.(*api.Workflow).SetDefaults()
+			},
+			UpdateFunc: func(oldObj, newObj runtime.Object) (runtime.Object, error) {
+				return newObj.(*api.Workflow).SetDefaults()
 			},
 		},
 	)

@@ -26,6 +26,6 @@ spec:
         command:
           - sh
           - -c
-          - "sleep 2; kubectl delete validatingwebhookconfigurations admission.engine.kube.ci || true"
+          - "sleep 2; kubectl delete validatingwebhookconfigurations validators.engine.kube.ci || true; kubectl delete mutatingwebhookconfigurations mutators.engine.kube.ci || true"
         imagePullPolicy: IfNotPresent
       restartPolicy: Never

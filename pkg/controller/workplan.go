@@ -17,10 +17,10 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 
-func (c *Controller) NewWorkplanWebhook() hooks.AdmissionHook {
+func (c *Controller) NewWorkplanMutatingWebhook() hooks.AdmissionHook {
 	return webhook.NewGenericWebhook(
 		schema.GroupVersionResource{
-			Group:    "admission.engine.kube.ci",
+			Group:    "validators.engine.kube.ci",
 			Version:  "v1alpha1",
 			Resource: "workplans",
 		},
