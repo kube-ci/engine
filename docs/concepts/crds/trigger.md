@@ -2,14 +2,14 @@
 
 ## What is Trigger
 
-A `Trigger` is a representation of a Kubernetes object with the help of [Aggregated API Servers](https://github.com/kubernetes/community/blob/master/contributors/design-proposals/api-machinery/aggregated-api-servers.md). User can manually trigger a workflow by creating a `Trigger` resource. For this, `workflow.spec.allowForceTrigger` must be `true`. Note that, only `create` verb is available for this custom resource.
+A `Trigger` is a representation of a Kubernetes object with the help of [Aggregated API Servers](https://github.com/kubernetes/community/blob/master/contributors/design-proposals/api-machinery/aggregated-api-servers.md). User can manually trigger a workflow by creating a `Trigger` resource. For this, `workflow.spec.allowManualTrigger` must be `true`. Note that, only `create` verb is available for this custom resource.
 
 ## Trigger structure
 
 As with all other Kubernetes objects, a Trigger needs `apiVersion`, `kind`, and `metadata` fields. It also includes `.workflows` and `.request` sections. Below is an example Trigger object:
 
 ```yaml
-apiVersion: extension.kube.ci/v1alpha1
+apiVersion: extensions.kube.ci/v1alpha1
 kind: Trigger
 metadata:
   name: testing-force-trigger

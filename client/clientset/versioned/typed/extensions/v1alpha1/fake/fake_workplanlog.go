@@ -24,7 +24,7 @@ import (
 
 // FakeWorkplanLogs implements WorkplanLogInterface
 type FakeWorkplanLogs struct {
-	Fake *FakeExtensionV1alpha1
+	Fake *FakeExtensionsV1alpha1
 	ns   string
 }
 

@@ -14,7 +14,7 @@ spec:
     onDelete: false
   serviceAccount: wf-sa
   executionOrder: Serial
-  allowForceTrigger: true
+  allowManualTrigger: true
   steps:
   - name: step-print-dir
     image: alpine

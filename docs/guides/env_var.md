@@ -62,7 +62,7 @@ spec:
     onCreateOrUpdate: true
     onDelete: false
   serviceAccount: wf-sa
-  allowForceTrigger: true
+  allowManualTrigger: true
   steps:
   - name: step-one
     image: alpine
@@ -90,7 +90,7 @@ Now trigger the workflow by creating a `Trigger` custom-resource which contains 
 
 ```console
 $ kubectl apply -f ./docs/examples/env-var/trigger.yaml
-trigger.extension.kube.ci/sample-trigger created
+trigger.extensions.kube.ci/sample-trigger created
 ```
 
 Whenever a workflow is triggered, a workplan is created and respective pods are scheduled.
@@ -112,7 +112,7 @@ sample-workflow-blkh9-0   0/1     Completed   0          25s
 The `step-one` prints the values of explicit environment variables.
 
 ```console
-$ kubectl get --raw '/apis/extension.kube.ci/v1alpha1/namespaces/default/workplanlogs/sample-workflow-blkh9?step=step-one'
+$ kubectl get --raw '/apis/extensions.kube.ci/v1alpha1/namespaces/default/workplanlogs/sample-workflow-blkh9?step=step-one'
 ENV_ONE=one
 ENV_TWO=secret-data-two
 KEY_ONE=secret-data-one

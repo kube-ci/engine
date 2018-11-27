@@ -194,7 +194,7 @@ status:
 To get/stream logs of a particular step of a workplan, you need to call the `Get` API of `WorkplanLog` custom resource.
 
 ```console
-$ kubectl get --raw '/apis/extension.kube.ci/v1alpha1/namespaces/default/workplanlogs/sample-workflow-sg9h4?step=step-echo'
+$ kubectl get --raw '/apis/extensions.kube.ci/v1alpha1/namespaces/default/workplanlogs/sample-workflow-sg9h4?step=step-echo'
 hello world
 ```
 

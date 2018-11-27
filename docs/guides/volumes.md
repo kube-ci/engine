@@ -42,7 +42,7 @@ spec:
     onDelete: false
   serviceAccount: wf-sa
   executionOrder: Serial
-  allowForceTrigger: true
+  allowManualTrigger: true
   steps:
   - name: step-one
     image: alpine
@@ -75,7 +75,7 @@ Now trigger the workflow by creating a `Trigger` custom-resource which contains 
 
 ```console
 $ kubectl apply -f ./docs/examples/volumes/trigger.yaml
-trigger.extension.kube.ci/sample-trigger created
+trigger.extensions.kube.ci/sample-trigger created
 ```
 
 Whenever a workflow is triggered, a workplan is created and respective pods are scheduled.
@@ -97,7 +97,7 @@ sample-workflow-gmjrl-0   0/1     Completed   0          29s
 Both `step-one` and `step-two` mounts the same hostpath volume but in different paths. So the content created by `step-one` in path `/path-one` is also available to `step-two` in path `/path-two`.
 
 ```console
-$ kubectl get --raw '/apis/extension.kube.ci/v1alpha1/namespaces/default/workplanlogs/sample-workflow-gmjrl?step=step-two'
+$ kubectl get --raw '/apis/extensions.kube.ci/v1alpha1/namespaces/default/workplanlogs/sample-workflow-gmjrl?step=step-two'
 file-01
 ```
 

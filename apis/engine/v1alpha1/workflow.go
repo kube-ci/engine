@@ -33,11 +33,11 @@ const (
 )
 
 type WorkflowSpec struct {
-	AllowForceTrigger bool           `json:"allowForceTrigger,omitempty"`
-	Triggers          []Trigger      `json:"triggers,omitempty"`
-	Steps             []Step         `json:"steps,omitempty"`
-	Template          *Template      `json:"template,omitempty"`
-	ExecutionOrder    ExecutionOrder `json:"executionOrder,omitempty"`
+	AllowManualTrigger bool           `json:"allowManualTrigger,omitempty"`
+	Triggers           []Trigger      `json:"triggers,omitempty"`
+	Steps              []Step         `json:"steps,omitempty"`
+	Template           *Template      `json:"template,omitempty"`
+	ExecutionOrder     ExecutionOrder `json:"executionOrder,omitempty"`
 	// set explicit environment variables
 	EnvVar []corev1.EnvVar `json:"envVar,omitempty"`
 	// set container environment variables from configmaps and secrets

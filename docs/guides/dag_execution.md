@@ -42,7 +42,7 @@ spec:
     onDelete: false
   serviceAccount: wf-sa
   executionOrder: DAG
-  allowForceTrigger: true
+  allowManualTrigger: true
   steps:
   - name: step-01
     image: alpine
@@ -105,7 +105,7 @@ Now trigger the workflow by creating a `Trigger` custom-resource which contains 
 
 ```console
 $ kubectl apply -f ./docs/examples/dag-execution/trigger.yaml
-trigger.extension.kube.ci/sample-trigger created
+trigger.extensions.kube.ci/sample-trigger created
 ```
 
 Whenever a workflow is triggered, a workplan is created and respective pods are scheduled.

@@ -5,7 +5,7 @@ import (
 
 	"github.com/appscode/kutil/tools/clientcmd"
 	api "github.com/kube-ci/engine/apis/engine/v1alpha1"
-	"github.com/kube-ci/engine/apis/extension/v1alpha1"
+	"github.com/kube-ci/engine/apis/extensions/v1alpha1"
 	cs "github.com/kube-ci/engine/client/clientset/versioned"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -56,7 +56,7 @@ func (c *LogController) getLogReader(query Query) (io.ReadCloser, error) {
 		Step:   query.Step,
 		Follow: true,
 	}
-	return c.kubeciClient.ExtensionV1alpha1().RESTClient().Get().
+	return c.kubeciClient.ExtensionsV1alpha1().RESTClient().Get().
 		Resource("workplanlogs").
 		Namespace(query.Namespace).
 		Name(query.Workplan).

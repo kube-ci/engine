@@ -313,7 +313,7 @@ spec:
               type: string
         spec:
           properties:
-            allowForceTrigger:
+            allowManualTrigger:
               type: boolean
             envFrom:
               description: set container environment variables from configmaps and

@@ -3058,7 +3058,7 @@
     },
     "com.github.kube-ci.engine.apis.engine.v1alpha1.WorkflowSpec": {
       "properties": {
-        "allowForceTrigger": {
+        "allowManualTrigger": {
           "type": "boolean"
         },
         "envFrom": {

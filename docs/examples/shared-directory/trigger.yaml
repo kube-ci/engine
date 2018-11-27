@@ -1,4 +1,4 @@
-apiVersion: extension.kube.ci/v1alpha1
+apiVersion: extensions.kube.ci/v1alpha1
 kind: Trigger
 metadata:
   name: sample-trigger

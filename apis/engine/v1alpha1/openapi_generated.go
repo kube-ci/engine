@@ -718,7 +718,7 @@ func schema_engine_apis_engine_v1alpha1_WorkflowSpec(ref common.ReferenceCallbac
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
 				Properties: map[string]spec.Schema{
-					"allowForceTrigger": {
+					"allowManualTrigger": {
 						SchemaProps: spec.SchemaProps{
 							Type:   []string{"boolean"},
 							Format: "",

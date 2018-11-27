@@ -13,7 +13,7 @@ spec:
     onCreateOrUpdate: true
     onDelete: false
   serviceAccount: wf-sa
-  allowForceTrigger: true
+  allowManualTrigger: true
   steps:
   - name: step-one
     image: alpine

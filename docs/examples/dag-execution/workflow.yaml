@@ -14,7 +14,7 @@ spec:
     onDelete: false
   serviceAccount: wf-sa
   executionOrder: DAG
-  allowForceTrigger: true
+  allowManualTrigger: true
   steps:
   - name: step-01
     image: alpine

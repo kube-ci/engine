@@ -25,27 +25,27 @@ import (
 	rest "k8s.io/client-go/rest"
 )
 
-type ExtensionV1alpha1Interface interface {
+type ExtensionsV1alpha1Interface interface {
 	RESTClient() rest.Interface
 	TriggersGetter
 	WorkplanLogsGetter
 }
 
-// ExtensionV1alpha1Client is used to interact with features provided by the extensions.kube.ci group.
-type ExtensionV1alpha1Client struct {
+// ExtensionsV1alpha1Client is used to interact with features provided by the extensions.kube.ci group.
+type ExtensionsV1alpha1Client struct {
 	restClient rest.Interface
 }
 
-func (c *ExtensionV1alpha1Client) Triggers(namespace string) TriggerInterface {
+func (c *ExtensionsV1alpha1Client) Triggers(namespace string) TriggerInterface {
 	return newTriggers(c, namespace)
 }
 
-func (c *ExtensionV1alpha1Client) WorkplanLogs(namespace string) WorkplanLogInterface {
+func (c *ExtensionsV1alpha1Client) WorkplanLogs(namespace string) WorkplanLogInterface {
 	return newWorkplanLogs(c, namespace)
 }
 
-// NewForConfig creates a new ExtensionV1alpha1Client for the given config.
-func NewForConfig(c *rest.Config) (*ExtensionV1alpha1Client, error) {
+// NewForConfig creates a new ExtensionsV1alpha1Client for the given config.
+func NewForConfig(c *rest.Config) (*ExtensionsV1alpha1Client, error) {
 	config := *c
 	if err := setConfigDefaults(&config); err != nil {
 		return nil, err
@@ -54,12 +54,12 @@ func NewForConfig(c *rest.Config) (*ExtensionV1alpha1Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &ExtensionV1alpha1Client{client}, nil
+	return &ExtensionsV1alpha1Client{client}, nil
 }
 
-// NewForConfigOrDie creates a new ExtensionV1alpha1Client for the given config and
+// NewForConfigOrDie creates a new ExtensionsV1alpha1Client for the given config and
 // panics if there is an error in the config.
-func NewForConfigOrDie(c *rest.Config) *ExtensionV1alpha1Client {
+func NewForConfigOrDie(c *rest.Config) *ExtensionsV1alpha1Client {
 	client, err := NewForConfig(c)
 	if err != nil {
 		panic(err)
@@ -67,9 +67,9 @@ func NewForConfigOrDie(c *rest.Config) *ExtensionV1alpha1Client {
 	return client
 }
 
-// New creates a new ExtensionV1alpha1Client for the given RESTClient.
-func New(c rest.Interface) *ExtensionV1alpha1Client {
-	return &ExtensionV1alpha1Client{c}
+// New creates a new ExtensionsV1alpha1Client for the given RESTClient.
+func New(c rest.Interface) *ExtensionsV1alpha1Client {
+	return &ExtensionsV1alpha1Client{c}
 }
 
 func setConfigDefaults(config *rest.Config) error {
@@ -87,7 +87,7 @@ func setConfigDefaults(config *rest.Config) error {
 
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
-func (c *ExtensionV1alpha1Client) RESTClient() rest.Interface {
+func (c *ExtensionsV1alpha1Client) RESTClient() rest.Interface {
 	if c == nil {
 		return nil
 	}

@@ -6,8 +6,8 @@ A `WorkplanLog` is a representation of a Kubernetes object with the help of [Agg
 
 API url for workplan logs:
 
-`https://{master-ip}/apis/extension.kube.ci/v1alpha1/namespaces/{namespace}/workplanlogs/{workplan-name}?step={step-name}&follow={true|false}`
+`https://{master-ip}/apis/extensions.kube.ci/v1alpha1/namespaces/{namespace}/workplanlogs/{workplan-name}?step={step-name}&follow={true|false}`
 
 Get using kubectl:
 
-`kubectl get --raw /apis/extension.kube.ci/v1alpha1/namespaces/{namespace}/workplanlogs/{workplan-name}?step={step-name}&follow={true|false}`
+`kubectl get --raw /apis/extensions.kube.ci/v1alpha1/namespaces/{namespace}/workplanlogs/{workplan-name}?step={step-name}&follow={true|false}`

@@ -19,12 +19,12 @@ spec:
 apiVersion: apiregistration.k8s.io/v1beta1
 kind: APIService
 metadata:
-  name: v1alpha1.extension.kube.ci
+  name: v1alpha1.extensions.kube.ci
   labels:
     app: kubeci-engine
 spec:
   caBundle: ${SERVICE_SERVING_CERT_CA}
-  group: extension.kube.ci
+  group: extensions.kube.ci
   groupPriorityMinimum: 1000
   versionPriority: 15
   service:

@@ -100,7 +100,7 @@ var _ = AfterSuite(func() {
 		root.KubeClient.CoreV1().Endpoints(root.Namespace()).Delete("kubeci-dev-apiserver", meta.DeleteInBackground())
 		root.KubeClient.CoreV1().Services(root.Namespace()).Delete("kubeci-dev-apiserver", meta.DeleteInBackground())
 		root.KAClient.ApiregistrationV1beta1().APIServices().Delete("v1alpha1.admission.engine.kube.ci", meta.DeleteInBackground())
-		root.KAClient.ApiregistrationV1beta1().APIServices().Delete("v1alpha1.extension.kube.ci", meta.DeleteInBackground())
+		root.KAClient.ApiregistrationV1beta1().APIServices().Delete("v1alpha1.extensions.kube.ci", meta.DeleteInBackground())
 	}
 	root.DeleteNamespace(root.Namespace())
 })

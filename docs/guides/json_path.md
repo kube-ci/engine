@@ -44,7 +44,7 @@ spec:
       ENV_ONE: '{$.data.example\.property\.1}'
       ENV_TWO: '{$.data.example\.property\.2}'
   serviceAccount: wf-sa
-  allowForceTrigger: true
+  allowManualTrigger: true
   steps:
   - name: step-one
     image: alpine
@@ -61,7 +61,7 @@ Now trigger the workflow by creating a `Trigger` custom-resource which contains 
 
 ```console
 $ kubectl apply -f ./docs/examples/json-path/trigger.yaml
-trigger.extension.kube.ci/sample-trigger created
+trigger.extensions.kube.ci/sample-trigger created
 ```
 
 Whenever a workflow is triggered, a workplan is created and respective pods are scheduled.
@@ -112,7 +112,7 @@ type: Opaque
 The `step-one` prints the values of explicit environment variables populated from json-path data of the triggering resource (which is `sample-config` configmap in this example).
 
 ```console
-$ kubectl get --raw '/apis/extension.kube.ci/v1alpha1/namespaces/default/workplanlogs/sample-workflow-8nfcr?step=step-one'
+$ kubectl get --raw '/apis/extensions.kube.ci/v1alpha1/namespaces/default/workplanlogs/sample-workflow-8nfcr?step=step-one'
 ENV_ONE=hello
 ENV_TWO=world
 ```
