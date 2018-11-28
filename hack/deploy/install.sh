@@ -335,9 +335,9 @@ fi
 if [ "$KUBECI_ENGINE_ENABLE_VALIDATING_WEBHOOK" = true ]; then
   ${SCRIPT_LOCATION}hack/deploy/validating-webhook.yaml | $ONESSL envsubst | kubectl apply -f -
 fi
-# if [ "$KUBECI_ENGINE_ENABLE_MUTATING_WEBHOOK" = true ]; then
-#   ${SCRIPT_LOCATION}hack/deploy/mutating-webhook.yaml | $ONESSL envsubst | kubectl apply -f -
-# fi
+if [ "$KUBECI_ENGINE_ENABLE_MUTATING_WEBHOOK" = true ]; then
+  ${SCRIPT_LOCATION}hack/deploy/mutating-webhook.yaml | $ONESSL envsubst | kubectl apply -f -
+fi
 
 echo
 echo "waiting until kubeci-engine operator deployment is ready"
@@ -348,7 +348,7 @@ $ONESSL wait-until-ready deployment kubeci-engine --namespace $KUBECI_ENGINE_NAM
 
 if [ "$KUBECI_ENGINE_ENABLE_APISERVER" = true ]; then
   echo "waiting until kubeci-engine apiservice is available"
-  $ONESSL wait-until-ready apiservice v1alpha1.admission.engine.kube.ci || {
+  $ONESSL wait-until-ready apiservice v1alpha1.validators.engine.kube.ci || {
     echo "KUBECI-ENGINE apiservice failed to be ready"
     exit 1
   }

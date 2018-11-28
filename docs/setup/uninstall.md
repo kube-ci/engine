@@ -6,9 +6,9 @@ To uninstall KubeCI engine, run the following command:
 $ curl -fsSL https://raw.githubusercontent.com/kube-ci/engine/0.1.0/hack/deploy/install.sh \
     | bash -s -- --uninstall [--namespace=NAMESPACE]
 
-validatingwebhookconfiguration.admissionregistration.k8s.io "admission.engine.kube.ci" deleted
+validatingwebhookconfiguration.admissionregistration.k8s.io "validators.engine.kube.ci" deleted
 No resources found
-apiservice.apiregistration.k8s.io "v1alpha1.admission.engine.kube.ci" deleted
+apiservice.apiregistration.k8s.io "v1alpha1.validators.engine.kube.ci" deleted
 apiservice.apiregistration.k8s.io "v1alpha1.extensions.kube.ci" deleted
 deployment.extensions "kubeci-engine" deleted
 service "kubeci-engine" deleted

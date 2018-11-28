@@ -67,8 +67,9 @@ func (o KubeciOptions) Config() (*server.KubeciServerConfig, error) {
 	serverConfig.OpenAPIConfig.Info.Version = v1alpha1.SchemeGroupVersion.Version
 	serverConfig.OpenAPIConfig.IgnorePrefixes = []string{
 		"/swaggerapi",
-		"/apis/admission.engine.kube.ci/v1alpha1/workflows",
-		"/apis/admission.engine.kube.ci/v1alpha1/workplans",
+		"/apis/validators.engine.kube.ci/v1alpha1/workflows",
+		"/apis/validators.engine.kube.ci/v1alpha1/workplans",
+		"/apis/mutators.engine.kube.ci/v1alpha1/workflows",
 		"/apis/extensions.kube.ci/v1alpha1",
 	}
 

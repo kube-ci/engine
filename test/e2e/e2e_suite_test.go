@@ -92,14 +92,15 @@ var _ = AfterSuite(func() {
 	By("Cleaning API server and Webhook stuff")
 
 	if options.EnableWebhook && !options.SelfHostedOperator {
-		root.KubeClient.AdmissionregistrationV1beta1().MutatingWebhookConfigurations().Delete("admission.engine.kube.ci", meta.DeleteInBackground())
-		root.KubeClient.AdmissionregistrationV1beta1().ValidatingWebhookConfigurations().Delete("admission.engine.kube.ci", meta.DeleteInBackground())
+		root.KubeClient.AdmissionregistrationV1beta1().MutatingWebhookConfigurations().Delete("mutators.engine.kube.ci", meta.DeleteInBackground())
+		root.KubeClient.AdmissionregistrationV1beta1().ValidatingWebhookConfigurations().Delete("validators.engine.kube.ci", meta.DeleteInBackground())
 	}
 
 	if !options.SelfHostedOperator {
 		root.KubeClient.CoreV1().Endpoints(root.Namespace()).Delete("kubeci-dev-apiserver", meta.DeleteInBackground())
 		root.KubeClient.CoreV1().Services(root.Namespace()).Delete("kubeci-dev-apiserver", meta.DeleteInBackground())
-		root.KAClient.ApiregistrationV1beta1().APIServices().Delete("v1alpha1.admission.engine.kube.ci", meta.DeleteInBackground())
+		root.KAClient.ApiregistrationV1beta1().APIServices().Delete("v1alpha1.validators.engine.kube.ci", meta.DeleteInBackground())
+		root.KAClient.ApiregistrationV1beta1().APIServices().Delete("v1alpha1.mutators.engine.kube.ci", meta.DeleteInBackground())
 		root.KAClient.ApiregistrationV1beta1().APIServices().Delete("v1alpha1.extensions.kube.ci", meta.DeleteInBackground())
 	}
 	root.DeleteNamespace(root.Namespace())

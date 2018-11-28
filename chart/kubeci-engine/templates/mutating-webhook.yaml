@@ -1,8 +1,8 @@
-{{- if .Values.apiserver.enableValidatingWebhook }}
+{{- if .Values.apiserver.enableMutatingWebhook }}
 apiVersion: admissionregistration.k8s.io/v1beta1
-kind: ValidatingWebhookConfiguration
+kind: MutatingWebhookConfiguration
 metadata:
-  name: validators.engine.kube.ci
+  name: mutators.engine.kube.ci
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     app: "{{ template "kubeci-engine.name" . }}"
@@ -12,12 +12,12 @@ metadata:
     "helm.sh/hook": post-install,post-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation
 webhooks:
-- name: workflow.validators.engine.kube.ci
+- name: workflow.mutators.engine.kube.ci
   clientConfig:
     service:
       namespace: default
       name: kubernetes
-      path: /apis/validators.engine.kube.ci/v1alpha1/workflows
+      path: /apis/mutators.engine.kube.ci/v1alpha1/workflows
     caBundle: {{ b64enc .Values.apiserver.ca }}
   rules:
   - operations:
@@ -29,22 +29,5 @@ webhooks:
     - "*"
     resources:
     - workflows
-  failurePolicy: Fail
-- name: workplan.validators.engine.kube.ci
-  clientConfig:
-    service:
-      namespace: default
-      name: kubernetes
-      path: /apis/validators.engine.kube.ci/v1alpha1/workplans
-    caBundle: {{ b64enc .Values.apiserver.ca }}
-  rules:
-  - operations:
-    - UPDATE
-    apiGroups:
-    - engine.kube.ci
-    apiVersions:
-    - "*"
-    resources:
-    - workplans
   failurePolicy: Fail
 {{ end }}
