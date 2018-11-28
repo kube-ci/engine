@@ -6,6 +6,7 @@ import (
 
 	"github.com/appscode/go/log"
 	"github.com/appscode/go/types"
+	core_util "github.com/appscode/kutil/core/v1"
 	"github.com/drone/envsubst"
 	api "github.com/kube-ci/engine/apis/engine/v1alpha1"
 	"github.com/kube-ci/engine/apis/extensions/v1alpha1"
@@ -109,7 +110,7 @@ func (c *Controller) triggerWorkflow(wf *api.Workflow, res ResourceIdentifier, i
 		// log.Infof("should not handle trigger, resource: %s, workflow: %s/%s", res, wf.Namespace, wf.Name)
 		return
 	}
-	data := res.GetData(trigger.EnvFromPath) // json-path-data
+	envFromPath := res.GetEnvFromPath(trigger.EnvFromPath) // json-path-data
 	triggeredFor := api.TriggeredFor{
 		ObjectReference:    res.ObjectReference,
 		ResourceGeneration: res.ResourceGeneration,
@@ -117,7 +118,7 @@ func (c *Controller) triggerWorkflow(wf *api.Workflow, res ResourceIdentifier, i
 
 	log.Infof("Triggering workflow %s for resource %s", wf.Name, triggeredFor)
 
-	if err := c.performTrigger(wf, triggeredFor, data); err != nil {
+	if _, err := c.createWorkplan(wf, triggeredFor, envFromPath); err != nil {
 		log.Errorf("Trigger failed for resource %v, reason: %s", res, err.Error())
 		c.recorder.Eventf(
 			wf.ObjectReference(),
@@ -138,21 +139,6 @@ func (c *Controller) triggerWorkflow(wf *api.Workflow, res ResourceIdentifier, i
 		eventer.EventReasonWorkflowTriggered,
 		"Successfully triggered workflow %s for resource %s", wf.Name, res,
 	)
-}
-
-// create json-path-secret and workplan
-func (c *Controller) performTrigger(wf *api.Workflow, triggeredFor api.TriggeredFor, data map[string]string) error {
-	var err error
-	var secretRef *core.SecretEnvSource
-	if data != nil && len(data) != 0 {
-		if secretRef, err = c.createSecret(wf, data); err != nil {
-			return err
-		}
-	}
-	if _, err := c.createWorkplan(wf, secretRef, triggeredFor); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflow, isDeleteEvent bool) (bool, api.Trigger) {
@@ -226,19 +212,6 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 			); !ok {
 				return false, api.Trigger{}
 			}
-			// check secret create permission // TODO: check secret get permission also ?
-			if ok := c.checkAccess(
-				authorizationapi.ResourceAttributes{ // TODO: use constants
-					Group:     "",
-					Version:   "v1",
-					Resource:  "secrets",
-					Namespace: wf.Namespace,
-					Verb:      "create",
-				},
-				wf.Spec.ServiceAccount,
-			); !ok {
-				return false, api.Trigger{}
-			}
 		}
 
 		for _, env := range wf.Spec.EnvFrom {
@@ -306,7 +279,7 @@ func (c *Controller) checkAccess(res authorizationapi.ResourceAttributes, servic
 	return true
 }
 
-func (c *Controller) createWorkplan(wf *api.Workflow, secretRef *core.SecretEnvSource, triggeredFor api.TriggeredFor) (*api.Workplan, error) {
+func (c *Controller) createWorkplan(wf *api.Workflow, triggeredFor api.TriggeredFor, envFromPath []core.EnvVar) (*api.Workplan, error) {
 	var (
 		preSteps  []api.Step
 		postSteps = []api.Step{cleanupStep}
@@ -353,17 +326,11 @@ func (c *Controller) createWorkplan(wf *api.Workflow, secretRef *core.SecretEnvS
 		Spec: api.WorkplanSpec{
 			Workflow:     wf.Name,
 			Tasks:        tasks,
-			EnvVar:       wf.Spec.EnvVar,
+			EnvVar:       core_util.UpsertEnvVars(wf.Spec.EnvVar, envFromPath...), // upsert env var from json path data
 			EnvFrom:      wf.Spec.EnvFrom,
 			TriggeredFor: triggeredFor,
 			Volumes:      volumes,
 		},
-	}
-
-	if secretRef != nil { // secret with json-path data
-		wp.Spec.EnvFrom = append(wp.Spec.EnvFrom, core.EnvFromSource{
-			SecretRef: secretRef,
-		})
 	}
 
 	log.Infof("Creating workplan for workflow %s", wf.Name)
@@ -436,27 +403,4 @@ func (c *Controller) resolveTemplate(wf *api.Workflow) ([]api.Step, error) {
 		steps = append(steps, step)
 	}
 	return steps, nil
-}
-
-func (c *Controller) createSecret(wf *api.Workflow, data map[string]string) (*core.SecretEnvSource, error) {
-	secret := &core.Secret{
-		ObjectMeta: metav1.ObjectMeta{
-			GenerateName:    wf.Name + "-",
-			Namespace:       wf.Namespace,
-			OwnerReferences: []metav1.OwnerReference{wf.Reference()}, // TODO: use workplan as owner ?
-		},
-		StringData: data,
-	}
-
-	log.Infof("Creating secret for workflow %s", wf.Name)
-	secret, err := c.kubeClient.CoreV1().Secrets(secret.Namespace).Create(secret)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create secret for workflow %s", wf.Name)
-	}
-
-	return &core.SecretEnvSource{
-		LocalObjectReference: core.LocalObjectReference{
-			Name: secret.Name,
-		},
-	}, nil
 }

@@ -2,13 +2,13 @@
 
 # JSON Path Data
 
-Your steps might need some information about the resource for which the workflow was triggered. This tutorial will show you how to populate explicit environment variables from json-path data of the triggering resource. When `envFromPath` is used for triggering resource, a secret is created with json-path data and this secret is used for populating environment variables.
+Your steps might need some information about the resource for which the workflow was triggered. This tutorial will show you how to populate explicit environment variables from json-path data of the triggering resource. Using `envFromPath` you can specify a set of key value pairs indicating which json-path data to be mapped to which environment variable.
 
 Before we start, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube). Now, install KubeCI engine in your cluster following the steps [here](/docs/setup/install.md).
 
 ## Configure RBAC
 
-First, create a service-account for the workflow. Then, create a cluster-role with ConfigMap get, `list` and `watch` permissions. We also need secret create and get permissions. Now, bind the cluster-role with service-accounts of both workflow and operator.
+First, create a service-account for the workflow. Then, create a cluster-role with ConfigMap `get`, `list` and `watch` permissions. Now, bind the cluster-role with service-accounts of both workflow and operator.
 
 ```console
 $ kubectl apply -f ./docs/examples/json-path/rbac.yaml
@@ -78,33 +78,60 @@ NAME                      READY   STATUS      RESTARTS   AGE
 sample-workflow-8nfcr-0   0/1     Completed   0          25s
 ```
 
-Also, for json-path data a secret is created with workflow name prefix .
+Also, resolved environment variables from json-path data are set to `spec.envVar` of the workplan.
 
-```console
-$ kubectl get secret | grep sample-workflow
-sample-workflow-gv2kr   Opaque                                2      92s
-
-$ kubectl get secret sample-workflow-gv2kr -o yaml
-apiVersion: v1
-data:
-  ENV_ONE: aGVsbG8=
-  ENV_TWO: d29ybGQ=
-kind: Secret
+```yaml
+$ kubectl get workplan sample-workflow-8nfcr -o yaml
+apiVersion: engine.kube.ci/v1alpha1
+kind: Workplan
 metadata:
-  creationTimestamp: 2018-10-29T10:58:27Z
+  creationTimestamp: 2018-11-28T05:16:56Z
   generateName: sample-workflow-
-  name: sample-workflow-gv2kr
+  generation: 1
+  labels:
+    workflow: sample-workflow
+  name: sample-workflow-8nfcr
   namespace: default
   ownerReferences:
   - apiVersion: engine.kube.ci/v1alpha1
     blockOwnerDeletion: true
     kind: Workflow
     name: sample-workflow
-    uid: 87b5b407-db69-11e8-a5a2-080027f998cc
-  resourceVersion: "29084"
-  selfLink: /api/v1/namespaces/default/secrets/sample-workflow-gv2kr
-  uid: 903f13a1-db69-11e8-a5a2-080027f998cc
-type: Opaque
+    uid: ce8c454c-f2cc-11e8-a969-0800270eb1c1
+  resourceVersion: "5114"
+  selfLink: /apis/engine.kube.ci/v1alpha1/namespaces/default/workplans/sample-workflow-8nfcr
+  uid: d2eaefb0-f2cc-11e8-a969-0800270eb1c1
+spec:
+  envVar:
+  - name: ENV_TWO
+    value: world
+  - name: ENV_ONE
+    value: hello
+  tasks:
+  - ParallelSteps:
+    - args:
+      - -c
+      - echo deleting files/folders; ls /kubeci; rm -rf /kubeci/home/*; rm -rf /kubeci/workspace/*
+      commands:
+      - sh
+      image: alpine
+      name: cleanup-step
+    SerialSteps:
+    - args:
+      - -c
+      - echo ENV_ONE=$ENV_ONE; echo ENV_TWO=$ENV_TWO
+      commands:
+      - sh
+      image: alpine
+      name: step-one
+  triggeredFor:
+    objectReference:
+      apiVersion: v1
+      kind: ConfigMap
+      name: sample-config
+      namespace: default
+    resourceGeneration: 0$9874914804914738715
+  workflow: sample-workflow
 ```
 
 ## Check Logs

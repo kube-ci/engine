@@ -14,6 +14,7 @@ import (
 	dynamicinformer "github.com/appscode/kutil/dynamic/informer"
 	meta_util "github.com/appscode/kutil/meta"
 	api "github.com/kube-ci/engine/apis/engine/v1alpha1"
+	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/util/sets"
@@ -41,15 +42,18 @@ func (res ResourceIdentifier) String() string {
 		res.ObjectReference.Namespace, res.ObjectReference.Name)
 }
 
-func (res ResourceIdentifier) GetData(paths map[string]string) map[string]string {
+func (res ResourceIdentifier) GetEnvFromPath(paths map[string]string) []corev1.EnvVar {
 	if paths == nil {
 		return nil
 	}
-	data := make(map[string]string, 0)
+	var envVars []corev1.EnvVar
 	for env, path := range paths {
-		data[env] = jsonPathData(path, res.Object)
+		envVars = append(envVars, corev1.EnvVar{
+			Name:  env,
+			Value: jsonPathData(path, res.Object),
+		})
 	}
-	return data
+	return envVars
 }
 
 func jsonPathData(path string, data interface{}) string {
