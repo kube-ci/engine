@@ -8,6 +8,8 @@ Before we start, you need to have a Kubernetes cluster, and the kubectl command-
 
 ## Configure RBAC
 
+You need to specify a service-account in `spec.serviceAccount` to ensure RBAC for the workflow. This service-account along with operator's service-account must have `list` and `watch` permissions for the resources specified in `spec.triggers`.
+
 First, create a service-account for the workflow. Then, create a cluster-role with ConfigMap get, `list` and `watch` permissions. We also need secret create and get permissions. Now, bind the cluster-role with service-accounts of both workflow and operator.
 
 ```console

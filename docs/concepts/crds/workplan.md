@@ -35,15 +35,7 @@ spec:
   - secretRef:
       name: sample-workflow-2wbj2
   tasks:
-  - ParallelSteps:
-    - args:
-      - -c
-      - echo deleting files/folders; ls /kubeci; rm -rf /kubeci/home/*; rm -rf /kubeci/workspace/*
-      commands:
-      - sh
-      image: alpine
-      name: cleanup-step
-    SerialSteps:
+  - SerialSteps:
     - args:
       - -c
       - git clone https://github.com/diptadas/kubeci-gpig.git .; git checkout $HEAD_SHA
@@ -58,6 +50,14 @@ spec:
       - sh
       image: golang:1.10-alpine3.8
       name: step-test
+    ParallelSteps:
+    - args:
+      - -c
+      - echo deleting files/folders; ls /kubeci; rm -rf /kubeci/home/*; rm -rf /kubeci/workspace/*
+      commands:
+      - sh
+      image: alpine
+      name: cleanup-step
   triggeredFor:
     objectReference:
       apiVersion: git.kube.ci/v1alpha1

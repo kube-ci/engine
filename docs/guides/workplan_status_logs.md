@@ -6,19 +6,81 @@ This tutorial will show you how to use interactive `workplan-logs` CLI to collec
 
 Before we start, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube). Now, install KubeCI engine in your cluster following the steps [here](/docs/setup/install.md).
 
-First create and trigger a workflow. You can follow any one of previous guides to do so. Let say, you have following workflow and workplans:
+## Configure RBAC
+
+You need to specify a service-account in `spec.serviceAccount` to ensure RBAC for the workflow. This service-account along with operator's service-account must have `list` and `watch` permissions for the resources specified in `spec.triggers`.
+
+First, create a service-account for the workflow. Then, create a cluster-role with ConfigMap `list` and `watch` permissions. Now, bind it with service-accounts of both workflow and operator.
 
 ```console
-$ kubectl get workflow
-NAME              AGE
-sample-workflow   5h
+$ kubectl apply -f ./docs/examples/force-trigger/rbac.yaml
+serviceaccount/wf-sa created
+clusterrole.rbac.authorization.k8s.io/wf-role created
+rolebinding.rbac.authorization.k8s.io/wf-role-binding created
+clusterrolebinding.rbac.authorization.k8s.io/operator-role-binding created
+```
+
+## Create Workflow
+
+```console
+$ kubectl apply -f ./docs/examples/force-trigger/workflow.yaml
+workflow.engine.kube.ci/sample-workflow created
+```
+
+```yaml
+apiVersion: engine.kube.ci/v1alpha1
+kind: Workflow
+metadata:
+  name: sample-workflow
+  namespace: default
+spec:
+  triggers:
+  - apiVersion: v1
+    kind: ConfigMap
+    resource: configmaps
+    namespace: default
+    name: sample-config
+    onCreateOrUpdate: true
+    onDelete: false
+  serviceAccount: wf-sa
+  executionOrder: Serial
+  allowManualTrigger: true
+  steps:
+  - name: step-echo
+    image: alpine
+    commands:
+    - echo
+    args:
+    - hello world
+  - name: step-wait
+    image: alpine
+    commands:
+    - sleep
+    args:
+    - 10s
+```
+
+## Trigger Workflow
+
+Now trigger the workflow by creating a `Trigger` custom-resource which contains a complete ConfigMap resource inside `.request` section.
+
+```console
+$ kubectl apply -f ./docs/examples/force-trigger/trigger.yaml
+trigger.extensions.kube.ci/sample-trigger created
+```
+
+Whenever a workflow is triggered, a workplan is created and respective pods are scheduled.
+
+```console
+$ kubectl get workplan -l workflow=sample-workflow
+NAME                    CREATED AT
+sample-workflow-v8skm   13s
 ```
 
 ```console
-$ kubectl get workplan
-NAME                    AGE
-sample-workflow-krx8p   2h
-sample-workflow-v8skm   5h
+$ kubectl get pods -l workplan=sample-workflow-v8skm
+NAME                      READY   STATUS      RESTARTS   AGE
+sample-workflow-v8skm-0   0/1     Completed   0          29s
 ```
 
 ## Workplan Logs CLI
@@ -26,49 +88,19 @@ sample-workflow-v8skm   5h
 You need to provide namespace, workplan and step using flags. For example:
 
 ```console
-$ kubeci-engine workplan-logs --namespace default --workplan sample-workflow-v8skm --step step-test
-
-fetch http://dl-cdn.alpinelinux.org/alpine/v3.8/main/x86_64/APKINDEX.tar.gz
-fetch http://dl-cdn.alpinelinux.org/alpine/v3.8/community/x86_64/APKINDEX.tar.gz
-(1/4) Installing nghttp2-libs (1.32.0-r0)
-(2/4) Installing libssh2 (1.8.0-r3)
-(3/4) Installing libcurl (7.61.1-r0)
-(4/4) Installing curl (7.61.1-r0)
-Executing busybox-1.28.4-r1.trigger
-OK: 6 MiB in 18 packages
-setting pending status...
-running go tests...
-ok  	github.com/diptadas/kubeci-gpig	0.001s
-waiting for 30s...
-setting succeed/failed status...
-removing ok-to-test label...
-done
+$ kubeci-engine workplan-logs --namespace default --workplan sample-workflow-v8skm --step step-echo
+hello world
 ```
 
 Alternatively, we can choose them interactively:
 
 ```console
 $ kubeci-engine workplan-logs
-
 ? Choose a Namespace: default
 ? Choose a Workflow: sample-workflow
 ? Choose a Workplan: sample-workflow-v8skm
-? Choose a running/terminated step: step-test
-fetch http://dl-cdn.alpinelinux.org/alpine/v3.8/main/x86_64/APKINDEX.tar.gz
-fetch http://dl-cdn.alpinelinux.org/alpine/v3.8/community/x86_64/APKINDEX.tar.gz
-(1/4) Installing nghttp2-libs (1.32.0-r0)
-(2/4) Installing libssh2 (1.8.0-r3)
-(3/4) Installing libcurl (7.61.1-r0)
-(4/4) Installing curl (7.61.1-r0)
-Executing busybox-1.28.4-r1.trigger
-OK: 6 MiB in 18 packages
-setting pending status...
-running go tests...
-ok  	github.com/diptadas/kubeci-gpig	0.001s
-waiting for 30s...
-setting succeed/failed status...
-removing ok-to-test label...
-done
+? Choose a running/terminated step: step-echo
+hello world
 ```
 
 ## Workplan Viewer
@@ -97,6 +129,6 @@ Go to following URL to get current of status workplan `sample-workflow-v8skm`:
 
 `http://127.0.0.1:9090/namespaces/default/workplans/sample-workflow-v8skm`
 
-Go to following URL to get logs of step `step-test`:
+Go to following URL to get logs of step `step-echo`:
 
-`http://127.0.0.1:9090/namespaces/default/workplans/sample-workflow-v8skm/steps/step-test`
+`http://127.0.0.1:9090/namespaces/default/workplans/sample-workflow-v8skm/steps/step-echo`

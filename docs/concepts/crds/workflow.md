@@ -109,7 +109,7 @@ When true, manual/fake trigger wil be allowed. See [here](/docs/guides/force_tri
 
 ### spec.serviceAccount
 
-Name of the service-account to ensure RBAC for the workflow. This service-account must have `watch` permission for the resources specified in `spec.triggers`. If you specify `envFromPath` in `spec.triggers`, it must also have `create` and `get` permissions for `secrets`.
+Name of the service-account to ensure RBAC for the workflow. This service-account along with operator's service-account must have `list` and `watch` permissions for the resources specified in `spec.triggers`.
 
 ### spec.envVar
 

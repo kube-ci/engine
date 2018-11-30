@@ -29,9 +29,9 @@ metadata:
   namespace: default
 spec:
   host: github
-  owner: diptadas
+  owner: tamalsaha
   repo: kubeci-gpig
-  cloneUrl: https://github.com/diptadas/kubeci-gpig.git
+  cloneUrl: https://github.com/kube-ci/kubeci-gpig.git
 ```
 
 ## Create Github Secret
@@ -44,6 +44,8 @@ secret github-credential created
 ```
 
 ## Configure RBAC
+
+You need to specify a service-account in `spec.serviceAccount` to ensure RBAC for the workflow. This service-account along with operator's service-account must have `list` and `watch` permissions for the resources specified in `spec.triggers`.
 
 Create a service-account for the workflow. Then, create a cluster-role with `PullRequest` `list` and `watch` permissions. Also need Secret Create and Get permissions for environment from json-path and github-secret. Now, bind the cluster-role with service-accounts of both workflow and operator.
 
@@ -95,7 +97,7 @@ spec:
     - sh
     args:
     - -c
-    - git clone https://github.com/diptadas/kubeci-gpig.git .; git checkout $HEAD_SHA
+    - git clone https://github.com/kube-ci/kubeci-gpig.git .; git checkout $HEAD_SHA
   - name: step-test
     image: golang:1.10-alpine3.8
     commands:
