@@ -29,9 +29,9 @@ metadata:
   namespace: default
 spec:
   host: github
-  owner: diptadas
+  owner: tamalsaha
   repo: kubeci-gpig
-  cloneUrl: https://github.com/diptadas/kubeci-gpig.git
+  cloneUrl: https://github.com/kube-ci/kubeci-gpig.git
 ```
 
 ## Create Github Secret
@@ -95,7 +95,7 @@ spec:
     - sh
     args:
     - -c
-    - git clone https://github.com/diptadas/kubeci-gpig.git .; git checkout $HEAD_SHA
+    - git clone https://github.com/kube-ci/kubeci-gpig.git .; git checkout $HEAD_SHA
   - name: step-test
     image: golang:1.10-alpine3.8
     commands:
