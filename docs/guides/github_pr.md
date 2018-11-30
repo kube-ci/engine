@@ -45,6 +45,8 @@ secret github-credential created
 
 ## Configure RBAC
 
+You need to specify a service-account in `spec.serviceAccount` to ensure RBAC for the workflow. This service-account along with operator's service-account must have `list` and `watch` permissions for the resources specified in `spec.triggers`.
+
 Create a service-account for the workflow. Then, create a cluster-role with `PullRequest` `list` and `watch` permissions. Also need Secret Create and Get permissions for environment from json-path and github-secret. Now, bind the cluster-role with service-accounts of both workflow and operator.
 
 ```console
