@@ -9,12 +9,12 @@ import (
 	crdutils "github.com/appscode/kutil/apiextensions/v1beta1"
 	discovery_util "github.com/appscode/kutil/discovery"
 	"github.com/appscode/kutil/meta"
+	"github.com/appscode/kutil/tools/cli"
 	"github.com/appscode/kutil/tools/clientcmd"
 	api "github.com/kube-ci/engine/apis/engine/v1alpha1"
 	"github.com/kube-ci/engine/client/clientset/versioned/scheme"
 	_ "github.com/kube-ci/engine/client/clientset/versioned/scheme"
 	"github.com/kube-ci/engine/pkg/controller"
-	"github.com/kube-ci/engine/pkg/util"
 	"github.com/kube-ci/engine/test/e2e/framework"
 	. "github.com/onsi/ginkgo"
 	"github.com/onsi/ginkgo/reporters"
@@ -47,7 +47,7 @@ func TestE2e(t *testing.T) {
 var _ = BeforeSuite(func() {
 	scheme.AddToScheme(clientsetscheme.Scheme)
 	scheme.AddToScheme(legacyscheme.Scheme)
-	util.LoggerOptions.Verbosity = "5"
+	cli.LoggerOptions.Verbosity = "5"
 
 	clientConfig, err := clientcmd.BuildConfigFromContext(options.KubeConfig, options.KubeContext)
 	Expect(err).NotTo(HaveOccurred())
