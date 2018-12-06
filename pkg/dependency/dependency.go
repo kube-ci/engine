@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/kube-ci/engine/apis/engine/v1alpha1"
-	"github.com/philopon/go-toposort"
+	toposort "github.com/philopon/go-toposort"
 )
 
 // TODO: check in validation webhook

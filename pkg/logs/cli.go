@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	api "github.com/kube-ci/engine/apis/engine/v1alpha1"
-	"gopkg.in/AlecAivazis/survey.v1"
+	survey "gopkg.in/AlecAivazis/survey.v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 )

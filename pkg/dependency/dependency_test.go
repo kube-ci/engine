@@ -5,7 +5,7 @@ import (
 
 	"github.com/appscode/kutil/meta"
 	"github.com/kube-ci/engine/apis/engine/v1alpha1"
-	"github.com/tamalsaha/go-oneliners"
+	oneliners "github.com/tamalsaha/go-oneliners"
 )
 
 var preSteps = []v1alpha1.Step{

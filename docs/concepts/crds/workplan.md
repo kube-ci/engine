@@ -38,7 +38,7 @@ spec:
   - SerialSteps:
     - args:
       - -c
-      - git clone https://github.com/diptadas/kubeci-gpig.git .; git checkout $HEAD_SHA
+      - git clone https://github.com/kube-ci/kubeci-gpig.git .; git checkout $HEAD_SHA
       commands:
       - sh
       image: alpine/git
