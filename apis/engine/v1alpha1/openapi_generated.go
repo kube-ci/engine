@@ -409,11 +409,17 @@ func schema_engine_apis_engine_v1alpha1_Step(ref common.ReferenceCallback) commo
 							},
 						},
 					},
+					"securityContext": {
+						SchemaProps: spec.SchemaProps{
+							Description: "container security context",
+							Ref:         ref("k8s.io/api/core/v1.SecurityContext"),
+						},
+					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/api/core/v1.VolumeMount"},
+			"k8s.io/api/core/v1.SecurityContext", "k8s.io/api/core/v1.VolumeMount"},
 	}
 }
 
@@ -804,11 +810,17 @@ func schema_engine_apis_engine_v1alpha1_WorkflowSpec(ref common.ReferenceCallbac
 							},
 						},
 					},
+					"securityContext": {
+						SchemaProps: spec.SchemaProps{
+							Description: "pod security context",
+							Ref:         ref("k8s.io/api/core/v1.PodSecurityContext"),
+						},
+					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/kube-ci/engine/apis/engine/v1alpha1.Step", "github.com/kube-ci/engine/apis/engine/v1alpha1.Template", "github.com/kube-ci/engine/apis/engine/v1alpha1.Trigger", "k8s.io/api/core/v1.EnvFromSource", "k8s.io/api/core/v1.EnvVar", "k8s.io/api/core/v1.Volume"},
+			"github.com/kube-ci/engine/apis/engine/v1alpha1.Step", "github.com/kube-ci/engine/apis/engine/v1alpha1.Template", "github.com/kube-ci/engine/apis/engine/v1alpha1.Trigger", "k8s.io/api/core/v1.EnvFromSource", "k8s.io/api/core/v1.EnvVar", "k8s.io/api/core/v1.PodSecurityContext", "k8s.io/api/core/v1.Volume"},
 	}
 }
 
@@ -1072,12 +1084,18 @@ func schema_engine_apis_engine_v1alpha1_WorkplanSpec(ref common.ReferenceCallbac
 							},
 						},
 					},
+					"securityContext": {
+						SchemaProps: spec.SchemaProps{
+							Description: "pod security context",
+							Ref:         ref("k8s.io/api/core/v1.PodSecurityContext"),
+						},
+					},
 				},
 				Required: []string{"triggeredFor"},
 			},
 		},
 		Dependencies: []string{
-			"github.com/kube-ci/engine/apis/engine/v1alpha1.Task", "github.com/kube-ci/engine/apis/engine/v1alpha1.TriggeredFor", "k8s.io/api/core/v1.EnvFromSource", "k8s.io/api/core/v1.EnvVar", "k8s.io/api/core/v1.Volume"},
+			"github.com/kube-ci/engine/apis/engine/v1alpha1.Task", "github.com/kube-ci/engine/apis/engine/v1alpha1.TriggeredFor", "k8s.io/api/core/v1.EnvFromSource", "k8s.io/api/core/v1.EnvVar", "k8s.io/api/core/v1.PodSecurityContext", "k8s.io/api/core/v1.Volume"},
 	}
 }
 

@@ -46,6 +46,8 @@ type WorkflowSpec struct {
 	// TODO: also use this in pods ?
 	ServiceAccount string          `json:"serviceAccount,omitempty"`
 	Volumes        []corev1.Volume `json:"volumes,omitempty"`
+	// pod security context
+	SecurityContext *corev1.PodSecurityContext `json:"securityContext,omitempty"`
 }
 
 type Template struct {
@@ -74,6 +76,8 @@ type Step struct {
 	Args         []string             `json:"args,omitempty"`
 	Dependency   []string             `json:"dependency,omitempty"`
 	VolumeMounts []corev1.VolumeMount `json:"volumeMounts,omitempty"`
+	// container security context
+	SecurityContext *corev1.SecurityContext `json:"securityContext,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
