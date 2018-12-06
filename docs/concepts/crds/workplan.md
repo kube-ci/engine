@@ -135,6 +135,10 @@ Copied from `workflow.spec.envFrom`. If `envFromPath` is found in `workflow.spec
 
 Copied from `workflow.spec.volumes`.
 
+### spec.securityContext
+
+Copied from `workflow.spec.securityContext`.
+
 ## Workplan Status
 
 The status section of a workplan contains enough information to describe the current phase of a workplan. It has following sections:
