@@ -8,7 +8,7 @@ Before we start, you need to have a Kubernetes cluster, and the kubectl command-
 
 ## Create Secrets
 
-First, create secrets with docker and git credentials.
+First, create secrets with docker and git credentials. You need to specify this secret in workflow's service-account in order to configure credential-initializer.
 
 ```console
 $ kubectl apply -f ./docs/examples/credential-initializer/secret.yaml

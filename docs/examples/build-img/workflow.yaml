@@ -1,0 +1,39 @@
+apiVersion: engine.kube.ci/v1alpha1
+kind: Workflow
+metadata:
+  name: sample-workflow
+  namespace: default
+spec:
+  triggers:
+    - apiVersion: v1
+      kind: ConfigMap
+      resource: configmaps
+      namespace: default
+      name: sample-config
+      onCreateOrUpdate: true
+      onDelete: false
+  serviceAccount: wf-sa
+  executionOrder: Serial
+  allowManualTrigger: true
+  steps:
+    - name: clone
+      image: alpine/git
+      commands:
+        - sh
+      args:
+        - -c
+        - git clone https://github.com/kube-ci/kubeci-gpig .
+    - name: permit
+      image: alpine
+      commands:
+        - sh
+      args:
+        - -c
+        - chown -R 1000 /kubeci/home
+    - name: build-and-push
+      image: r.j3ss.co/img
+      commands:
+        - sh
+      args:
+        - -c
+        - img build -s /home/user/.local/share/img -t kubeci/kubeci-gpig:img .; img push -s /home/user/.local/share/img kubeci/kubeci-gpig:img

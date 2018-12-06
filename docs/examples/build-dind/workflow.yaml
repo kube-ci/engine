@@ -1,0 +1,50 @@
+apiVersion: engine.kube.ci/v1alpha1
+kind: Workflow
+metadata:
+  name: sample-workflow
+  namespace: default
+spec:
+  triggers:
+  - apiVersion: v1
+    kind: ConfigMap
+    resource: configmaps
+    namespace: default
+    name: sample-config
+    onCreateOrUpdate: true
+    onDelete: false
+  serviceAccount: wf-sa
+  executionOrder: DAG
+  allowManualTrigger: true
+  volumes:
+  - name: dind-storage
+    emptyDir: {}
+  envVar:
+  - name: DOCKER_HOST
+    value: tcp://localhost:2375
+  steps:
+  - name: clone
+    image: alpine/git
+    commands:
+    - sh
+    args:
+    - -c
+    - git clone https://github.com/kube-ci/kubeci-gpig .
+  - name: dind-daemon
+    image: docker:18.09-dind
+    securityContext:
+      privileged: true
+      procMount: Default
+    volumeMounts:
+    - name: dind-storage
+      mountPath: /var/lib/docker
+    dependency:
+    - clone
+  - name: build-and-push
+    image: docker:18.09
+    commands:
+    - sh
+    args:
+    - -c
+    - docker build -t kubeci/kubeci-gpig:dind .; docker push kubeci/kubeci-gpig:dind
+    dependency:
+    - clone
