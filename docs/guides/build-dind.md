@@ -2,7 +2,7 @@
 
 # Build From Source
 
-This tutorial will show you how to build and push container image from a Github source repository using [dind](https://github.com/GoogleContainerTools/dind).
+This tutorial will show you how to build and push container image from a Github source repository using [dind](https://hub.docker.com/_/docker/).
 
 Before we start, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using [Minikube](https://github.com/kubernetes/minikube). Now, install KubeCI engine in your cluster following the steps [here](/docs/setup/install.md).
 
@@ -32,7 +32,20 @@ stringData:
 
 You need to specify a service-account in `spec.serviceAccount` to ensure RBAC for the workflow. This service-account along with operator's service-account must have `list` and `watch` permissions for the resources specified in `spec.triggers`.
 
-Create a service-account for the workflow and specify previously created secret. Then, create a cluster-role with ConfigMap `list` and `watch` permissions. Now, bind it with service-accounts of both workflow and operator.
+Now, create a service-account for the workflow and specify previously created secret.
+
+```yaml
+# service-account for workflow
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: wf-sa
+  namespace: default
+secrets:
+- name: docker-credential
+```
+
+Then, create a cluster-role with ConfigMap `list` and `watch` permissions. Now, bind it with service-accounts of both workflow and operator.
 
 ```console
 $ kubectl apply -f ./docs/examples/build-dind/rbac.yaml  

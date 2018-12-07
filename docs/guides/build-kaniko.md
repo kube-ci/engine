@@ -32,7 +32,20 @@ stringData:
 
 You need to specify a service-account in `spec.serviceAccount` to ensure RBAC for the workflow. This service-account along with operator's service-account must have `list` and `watch` permissions for the resources specified in `spec.triggers`.
 
-Create a service-account for the workflow and specify previously created secret. Then, create a cluster-role with ConfigMap `list` and `watch` permissions. Now, bind it with service-accounts of both workflow and operator.
+Now, create a service-account for the workflow and specify previously created secret.
+
+```yaml
+# service-account for workflow
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: wf-sa
+  namespace: default
+secrets:
+- name: docker-credential
+```
+
+Then, create a cluster-role with ConfigMap `list` and `watch` permissions. Now, bind it with service-accounts of both workflow and operator.
 
 ```console
 $ kubectl apply -f ./docs/examples/build-kaniko/rbac.yaml  
