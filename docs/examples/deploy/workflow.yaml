@@ -1,0 +1,38 @@
+apiVersion: engine.kube.ci/v1alpha1
+kind: Workflow
+metadata:
+  name: sample-workflow
+  namespace: default
+spec:
+  triggers:
+  - apiVersion: v1
+    kind: ConfigMap
+    resource: configmaps
+    namespace: default
+    name: sample-config
+    onCreateOrUpdate: true
+    onDelete: false
+  serviceAccount: wf-sa
+  executionOrder: Serial
+  allowManualTrigger: true
+  steps:
+  - name: clone
+    image: alpine/git
+    commands:
+    - sh
+    args:
+    - -c
+    - git clone https://github.com/kube-ci/kubeci-gpig .
+  - name: build-and-push
+    image: gcr.io/kaniko-project/executor
+    args:
+    - --dockerfile=/kubeci/workspace/Dockerfile
+    - --context=/kubeci/workspace
+    - --destination=index.docker.io/kubeci/kubeci-gpig:kaniko
+  - name: deploy
+    image: appscode/kubectl:1.12
+    commands:
+    - sh
+    args:
+    - -c
+    - kubectl apply -f deploy.yaml
