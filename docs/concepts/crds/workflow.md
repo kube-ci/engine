@@ -110,7 +110,7 @@ When true, manual/fake trigger wil be allowed. See [here](/docs/guides/force_tri
 
 ### spec.serviceAccount
 
-Name of the service-account to ensure RBAC for the workflow. This service-account along with operator's service-account must have `list` and `watch` permissions for the resources specified in `spec.triggers`.
+Name of the service-account to ensure RBAC for the workflow. This service-account along with operator's service-account must have `list` and `watch` permissions for the resources specified in `spec.triggers`. This service-account is also used to run all pods associated with the workflow.
 
 ### spec.envVar
 

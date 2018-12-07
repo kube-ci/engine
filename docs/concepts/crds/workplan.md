@@ -135,6 +135,10 @@ Copied from `workflow.spec.envFrom`. If `envFromPath` is found in `workflow.spec
 
 Copied from `workflow.spec.volumes`.
 
+### spec.serviceAccount
+
+Copied from `workflow.spec.serviceAccount`.
+
 ### spec.securityContext
 
 Copied from `workflow.spec.securityContext`.
