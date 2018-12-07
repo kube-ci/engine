@@ -6,7 +6,7 @@ import (
 	hooks "github.com/appscode/kubernetes-webhook-util/admission/v1beta1"
 	webhook "github.com/appscode/kubernetes-webhook-util/admission/v1beta1/generic"
 	"github.com/appscode/kutil/tools/queue"
-	kubeci "github.com/kube-ci/engine/apis/engine"
+	"github.com/kube-ci/engine/apis/engine"
 	api "github.com/kube-ci/engine/apis/engine/v1alpha1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -20,7 +20,7 @@ func (c *Controller) NewWorkflowValidatingWebhook() hooks.AdmissionHook {
 			Resource: "workflows",
 		},
 		"workflow",
-		[]string{kubeci.GroupName},
+		[]string{engine.GroupName},
 		api.SchemeGroupVersion.WithKind("Workflow"),
 		nil,
 		&admission.ResourceHandlerFuncs{
@@ -42,7 +42,7 @@ func (c *Controller) NewWorkflowMutatingWebhook() hooks.AdmissionHook {
 			Resource: "workflows",
 		},
 		"workflow",
-		[]string{kubeci.GroupName},
+		[]string{engine.GroupName},
 		api.SchemeGroupVersion.WithKind("Workflow"),
 		nil,
 		&admission.ResourceHandlerFuncs{
