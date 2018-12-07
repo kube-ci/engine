@@ -20,7 +20,7 @@ func (c *Controller) NewWorkflowValidatingWebhook() hooks.AdmissionHook {
 			Resource: "workflows",
 		},
 		"workflow",
-		[]string{kubeci.GroupName},
+		[]string{engine.GroupName},
 		api.SchemeGroupVersion.WithKind("Workflow"),
 		nil,
 		&admission.ResourceHandlerFuncs{
@@ -42,7 +42,7 @@ func (c *Controller) NewWorkflowMutatingWebhook() hooks.AdmissionHook {
 			Resource: "workflows",
 		},
 		"workflow",
-		[]string{kubeci.GroupName},
+		[]string{engine.GroupName},
 		api.SchemeGroupVersion.WithKind("Workflow"),
 		nil,
 		&admission.ResourceHandlerFuncs{

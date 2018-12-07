@@ -351,12 +351,13 @@ func (c *Controller) createWorkplan(wf *api.Workflow, secretRef *core.SecretEnvS
 			},
 		},
 		Spec: api.WorkplanSpec{
-			Workflow:     wf.Name,
-			Tasks:        tasks,
-			EnvVar:       wf.Spec.EnvVar,
-			EnvFrom:      wf.Spec.EnvFrom,
-			TriggeredFor: triggeredFor,
-			Volumes:      volumes,
+			Workflow:        wf.Name,
+			Tasks:           tasks,
+			EnvVar:          wf.Spec.EnvVar,
+			EnvFrom:         wf.Spec.EnvFrom,
+			TriggeredFor:    triggeredFor,
+			Volumes:         volumes,
+			SecurityContext: wf.Spec.SecurityContext,
 		},
 	}
 

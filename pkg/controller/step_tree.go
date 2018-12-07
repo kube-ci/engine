@@ -3,7 +3,7 @@ package controller
 import (
 	api "github.com/kube-ci/engine/apis/engine/v1alpha1"
 	"github.com/kube-ci/engine/pkg/dependency"
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 )
 
 func InitWorkplanTree(tasks []api.Task) [][]api.StepEntry {

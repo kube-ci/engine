@@ -38,6 +38,8 @@ type WorkplanSpec struct {
 	// set container environment variables from configmaps and secrets
 	EnvFrom []corev1.EnvFromSource `json:"envFrom,omitempty"`
 	Volumes []corev1.Volume        `json:"volumes,omitempty"`
+	// pod security context
+	SecurityContext *corev1.PodSecurityContext `json:"securityContext,omitempty"`
 }
 
 type WorkplanPhase string

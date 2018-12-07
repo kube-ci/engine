@@ -38,7 +38,7 @@ func TestFlagHandling(t *testing.T) {
 	}
 
 	fs := flag.NewFlagSet("test", flag.ContinueOnError)
-	flags(fs)
+	Flags(fs)
 	err := fs.Parse([]string{
 		"-basic-docker=foo=https://us.gcr.io",
 	})
@@ -87,7 +87,7 @@ func TestFlagHandlingTwice(t *testing.T) {
 	}
 
 	fs := flag.NewFlagSet("test", flag.ContinueOnError)
-	flags(fs)
+	Flags(fs)
 	err := fs.Parse([]string{
 		"-basic-docker=foo=https://us.gcr.io",
 		"-basic-docker=bar=https://eu.gcr.io",

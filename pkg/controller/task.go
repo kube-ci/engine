@@ -81,8 +81,9 @@ func podSpecForTasks(wp *api.Workplan, task api.Task, index int) *core.Pod {
 			},
 		},
 		Spec: core.PodSpec{
-			RestartPolicy: core.RestartPolicyNever,
-			Volumes:       core_util.UpsertVolume(wp.Spec.Volumes, getImplicitVolumes(wp.Name)...),
+			RestartPolicy:   core.RestartPolicyNever,
+			Volumes:         core_util.UpsertVolume(wp.Spec.Volumes, getImplicitVolumes(wp.Name)...),
+			SecurityContext: wp.Spec.SecurityContext,
 		},
 	}
 
@@ -98,13 +99,14 @@ func podSpecForTasks(wp *api.Workplan, task api.Task, index int) *core.Pod {
 
 func containerForStep(wp *api.Workplan, step api.Step) core.Container {
 	return core.Container{
-		Name:         step.Name,
-		Image:        step.Image,
-		Command:      step.Commands,
-		Args:         step.Args,
-		EnvFrom:      wp.Spec.EnvFrom,
-		Env:          core_util.UpsertEnvVars(wp.Spec.EnvVar, getImplicitEnvVars(wp.Name)...),
-		WorkingDir:   implicitWorkingDir,
-		VolumeMounts: core_util.UpsertVolumeMount(step.VolumeMounts, implicitVolumeMounts...),
+		Name:            step.Name,
+		Image:           step.Image,
+		Command:         step.Commands,
+		Args:            step.Args,
+		EnvFrom:         wp.Spec.EnvFrom,
+		Env:             core_util.UpsertEnvVars(wp.Spec.EnvVar, getImplicitEnvVars(wp.Name)...),
+		WorkingDir:      implicitWorkingDir,
+		VolumeMounts:    core_util.UpsertVolumeMount(step.VolumeMounts, implicitVolumeMounts...),
+		SecurityContext: step.SecurityContext,
 	}
 }

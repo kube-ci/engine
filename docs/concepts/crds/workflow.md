@@ -85,6 +85,7 @@ Specifies a set of tasks which will be executed in serial or, parallel order. A 
 - `args`: Set of arguments to the commands.
 - `dependency`: Set of step-names which required to be completed before running this step. It should only be specified when `spec.executionOrder` is `DAG`.
 - `volumeMounts`: Workflow volumes (specified in `workflow.spec.volumes`) to mount into the container's filesystem. For more details see [here](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#volumemount-v1-core).
+- `securityContext`: Specifies security context for the container associated with this step. For more details see [here](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#securitycontext-v1-core).
 
 ### spec.template
 
@@ -122,3 +123,7 @@ List of sources to populate environment variables in all task containers. For mo
 ### spec.volumes
 
 List of volumes that can be mounted by the task containers belonging to the workflow. For more details see [here](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#volume-v1-core).
+
+### spec.securityContext
+
+Specifies security context for all pods associated with this workflow. For more details see [here](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#podsecuritycontext-v1-core).

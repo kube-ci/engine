@@ -25,7 +25,7 @@ func (c *Controller) NewWorkplanMutatingWebhook() hooks.AdmissionHook {
 			Resource: "workplans",
 		},
 		"workplan",
-		[]string{kubeci.GroupName},
+		[]string{engine.GroupName},
 		api.SchemeGroupVersion.WithKind("Workplan"),
 		nil,
 		&admission.ResourceHandlerFuncs{

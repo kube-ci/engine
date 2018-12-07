@@ -8,7 +8,7 @@ Before we start, you need to have a Kubernetes cluster, and the kubectl command-
 
 ## Create Secrets
 
-First, create secrets with docker and git credentials.
+First, create secrets with docker and git credentials. You need to specify this secret in workflow's service-account in order to configure credential-initializer.
 
 ```console
 $ kubectl apply -f ./docs/examples/credential-initializer/secret.yaml
@@ -52,7 +52,21 @@ data:
 
 You need to specify a service-account in `spec.serviceAccount` to ensure RBAC for the workflow. This service-account along with operator's service-account must have `list` and `watch` permissions for the resources specified in `spec.triggers`.
 
-Create a service-account for the workflow and specify previously created secrets. Then, create a cluster-role with ConfigMap `list` and `watch` permissions. Now, bind it with service-accounts of both workflow and operator.
+Now, create a service-account for the workflow and specify previously created secrets.
+
+```yaml
+# service-account for workflow
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: wf-sa
+  namespace: default
+secrets:
+- name: test-docker-basic
+- name: test-git-ssh
+```
+
+Then, create a cluster-role with ConfigMap `list` and `watch` permissions. Now, bind it with service-accounts of both workflow and operator.
 
 ```console
 $ kubectl apply -f ./docs/examples/credential-initializer/rbac.yaml

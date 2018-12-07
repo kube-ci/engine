@@ -6,7 +6,7 @@ apk --update add curl
 # required environment variables
 
 TARGET_URL=http://127.0.0.1:9090/namespaces/${NAMESPACE}/workplans/${WORKPLAN}
-REPO=diptadas/kubeci-gpig
+REPO=kube-ci/kubeci-gpig
 CONTEXT=kubeci
 
 STATE_PENDING=pending
@@ -44,13 +44,13 @@ curl -s -o /dev/null -X POST -d "$(generate_status)" $API_URL
 
 # link repository files to package path
 
-mkdir -p $GOPATH/src/github.com/diptadas/
-ln -s /kubeci/workspace $GOPATH/src/github.com/diptadas/kubeci-gpig
+mkdir -p $GOPATH/src/github.com/kube-ci/
+ln -s /kubeci/workspace $GOPATH/src/github.com/kube-ci/kubeci-gpig
 
 # run tests
 echo "running go tests..."
 
-cd $GOPATH/src/github.com/diptadas/kubeci-gpig
+cd $GOPATH/src/github.com/kube-ci/kubeci-gpig
 go test ./...
 
 # just wait to see log stream working or not

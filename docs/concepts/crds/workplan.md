@@ -38,7 +38,7 @@ spec:
   - SerialSteps:
     - args:
       - -c
-      - git clone https://github.com/diptadas/kubeci-gpig.git .; git checkout $HEAD_SHA
+      - git clone https://github.com/kube-ci/kubeci-gpig.git .; git checkout $HEAD_SHA
       commands:
       - sh
       image: alpine/git
@@ -134,6 +134,10 @@ Copied from `workflow.spec.envFrom`. If `envFromPath` is found in `workflow.spec
 ### spec.volumes
 
 Copied from `workflow.spec.volumes`.
+
+### spec.securityContext
+
+Copied from `workflow.spec.securityContext`.
 
 ## Workplan Status
 
