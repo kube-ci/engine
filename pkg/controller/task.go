@@ -81,9 +81,10 @@ func podSpecForTasks(wp *api.Workplan, task api.Task, index int) *core.Pod {
 			},
 		},
 		Spec: core.PodSpec{
-			RestartPolicy:   core.RestartPolicyNever,
-			Volumes:         core_util.UpsertVolume(wp.Spec.Volumes, getImplicitVolumes(wp.Name)...),
-			SecurityContext: wp.Spec.SecurityContext,
+			RestartPolicy:      core.RestartPolicyNever,
+			Volumes:            core_util.UpsertVolume(wp.Spec.Volumes, getImplicitVolumes(wp.Name)...),
+			SecurityContext:    wp.Spec.SecurityContext,
+			ServiceAccountName: wp.Spec.ServiceAccount,
 		},
 	}
 

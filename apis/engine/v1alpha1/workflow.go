@@ -42,8 +42,8 @@ type WorkflowSpec struct {
 	EnvVar []corev1.EnvVar `json:"envVar,omitempty"`
 	// set container environment variables from configmaps and secrets
 	EnvFrom []corev1.EnvFromSource `json:"envFrom,omitempty"`
-	// ServiceAccount with triggering-resource/configmaps/secrets watch/read permissions
-	// TODO: also use this in pods ?
+	// ServiceAccount with triggering-resource/configmaps/secrets watch/read permissions.
+	// Also used to run all associated pods
 	ServiceAccount string          `json:"serviceAccount,omitempty"`
 	Volumes        []corev1.Volume `json:"volumes,omitempty"`
 	// pod security context

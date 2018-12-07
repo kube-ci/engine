@@ -3087,7 +3087,7 @@
           "$ref": "#/definitions/io.k8s.api.core.v1.PodSecurityContext"
         },
         "serviceAccount": {
-          "description": "ServiceAccount with triggering-resource/configmaps/secrets watch/read permissions",
+          "description": "ServiceAccount with triggering-resource/configmaps/secrets watch/read permissions. Also used to run all associated pods",
           "type": "string"
         },
         "steps": {
@@ -3262,6 +3262,10 @@
         "securityContext": {
           "description": "pod security context",
           "$ref": "#/definitions/io.k8s.api.core.v1.PodSecurityContext"
+        },
+        "serviceAccount": {
+          "description": "ServiceAccount with triggering-resource/configmaps/secrets watch/read permissions. Also used to run all associated pods",
+          "type": "string"
         },
         "tasks": {
           "type": "array",

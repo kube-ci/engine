@@ -40,6 +40,9 @@ type WorkplanSpec struct {
 	Volumes []corev1.Volume        `json:"volumes,omitempty"`
 	// pod security context
 	SecurityContext *corev1.PodSecurityContext `json:"securityContext,omitempty"`
+	// ServiceAccount with triggering-resource/configmaps/secrets watch/read permissions.
+	// Also used to run all associated pods
+	ServiceAccount string `json:"serviceAccount,omitempty"`
 }
 
 type WorkplanPhase string

@@ -793,7 +793,7 @@ func schema_engine_apis_engine_v1alpha1_WorkflowSpec(ref common.ReferenceCallbac
 					},
 					"serviceAccount": {
 						SchemaProps: spec.SchemaProps{
-							Description: "ServiceAccount with triggering-resource/configmaps/secrets watch/read permissions",
+							Description: "ServiceAccount with triggering-resource/configmaps/secrets watch/read permissions. Also used to run all associated pods",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -1088,6 +1088,13 @@ func schema_engine_apis_engine_v1alpha1_WorkplanSpec(ref common.ReferenceCallbac
 						SchemaProps: spec.SchemaProps{
 							Description: "pod security context",
 							Ref:         ref("k8s.io/api/core/v1.PodSecurityContext"),
+						},
+					},
+					"serviceAccount": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ServiceAccount with triggering-resource/configmaps/secrets watch/read permissions. Also used to run all associated pods",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 				},

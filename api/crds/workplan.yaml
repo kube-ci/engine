@@ -549,6 +549,10 @@ spec:
                     - name
                     - value
                   type: array
+            serviceAccount:
+              description: ServiceAccount with triggering-resource/configmaps/secrets
+                watch/read permissions. Also used to run all associated pods
+              type: string
             tasks:
               items:
                 properties:
