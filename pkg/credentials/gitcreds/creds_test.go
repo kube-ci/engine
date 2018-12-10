@@ -39,7 +39,7 @@ func TestBasicFlagHandling(t *testing.T) {
 	}
 
 	fs := flag.NewFlagSet("test", flag.ContinueOnError)
-	flags(fs)
+	Flags(fs)
 	err := fs.Parse([]string{
 		"-basic-git=foo=https://github.com",
 	})
@@ -102,7 +102,7 @@ func TestBasicFlagHandlingTwice(t *testing.T) {
 	}
 
 	fs := flag.NewFlagSet("test", flag.ContinueOnError)
-	flags(fs)
+	Flags(fs)
 	err := fs.Parse([]string{
 		"-basic-git=foo=https://github.com",
 		"-basic-git=bar=https://gitlab.com",
@@ -195,7 +195,7 @@ func TestSSHFlagHandling(t *testing.T) {
 	}
 
 	fs := flag.NewFlagSet("test", flag.ContinueOnError)
-	flags(fs)
+	Flags(fs)
 	err := fs.Parse([]string{
 		"-ssh-git=foo=github.com",
 	})
@@ -265,7 +265,7 @@ func TestSSHFlagHandlingTwice(t *testing.T) {
 	}
 
 	fs := flag.NewFlagSet("test", flag.ContinueOnError)
-	flags(fs)
+	Flags(fs)
 	err := fs.Parse([]string{
 		"-ssh-git=foo=github.com",
 		"-ssh-git=bar=gitlab.com",
