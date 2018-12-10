@@ -66,11 +66,11 @@ const (
 
 // status of a step containing enough info to collect logs
 type StepEntry struct {
-	Name           string // container name
-	Namespace      string
-	PodName        string
-	Status         ContainerStatus // simplified container status
-	ContainerState corev1.ContainerState
+	Name           string                `json:"name"` // container name
+	Namespace      string                `json:"namespace"`
+	PodName        string                `json:"podName"`
+	Status         ContainerStatus       `json:"status"` // simplified container status
+	ContainerState corev1.ContainerState `json:"containerState"`
 }
 
 type WorkplanStatus struct {

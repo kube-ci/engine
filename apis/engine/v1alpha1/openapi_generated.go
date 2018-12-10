@@ -429,39 +429,39 @@ func schema_engine_apis_engine_v1alpha1_StepEntry(ref common.ReferenceCallback) 
 			SchemaProps: spec.SchemaProps{
 				Description: "status of a step containing enough info to collect logs",
 				Properties: map[string]spec.Schema{
-					"Name": {
+					"name": {
 						SchemaProps: spec.SchemaProps{
 							Type:   []string{"string"},
 							Format: "",
 						},
 					},
-					"Namespace": {
+					"namespace": {
 						SchemaProps: spec.SchemaProps{
 							Description: "container name",
 							Type:        []string{"string"},
 							Format:      "",
 						},
 					},
-					"PodName": {
+					"podName": {
 						SchemaProps: spec.SchemaProps{
 							Type:   []string{"string"},
 							Format: "",
 						},
 					},
-					"Status": {
+					"status": {
 						SchemaProps: spec.SchemaProps{
 							Type:   []string{"string"},
 							Format: "",
 						},
 					},
-					"ContainerState": {
+					"containerState": {
 						SchemaProps: spec.SchemaProps{
 							Description: "simplified container status",
 							Ref:         ref("k8s.io/api/core/v1.ContainerState"),
 						},
 					},
 				},
-				Required: []string{"Name", "Namespace", "PodName", "Status", "ContainerState"},
+				Required: []string{"name", "namespace", "podName", "status", "containerState"},
 			},
 		},
 		Dependencies: []string{
