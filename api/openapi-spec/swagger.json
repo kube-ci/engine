@@ -2897,28 +2897,28 @@
     "com.github.kube-ci.engine.apis.engine.v1alpha1.StepEntry": {
       "description": "status of a step containing enough info to collect logs",
       "required": [
-        "Name",
-        "Namespace",
-        "PodName",
-        "Status",
-        "ContainerState"
+        "name",
+        "namespace",
+        "podName",
+        "status",
+        "containerState"
       ],
       "properties": {
-        "ContainerState": {
+        "containerState": {
           "description": "simplified container status",
           "$ref": "#/definitions/io.k8s.api.core.v1.ContainerState"
         },
-        "Name": {
+        "name": {
           "type": "string"
         },
-        "Namespace": {
+        "namespace": {
           "description": "container name",
           "type": "string"
         },
-        "PodName": {
+        "podName": {
           "type": "string"
         },
-        "Status": {
+        "status": {
           "type": "string"
         }
       }

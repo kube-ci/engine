@@ -2034,7 +2034,7 @@ spec:
                   description: status of a step containing enough info to collect
                     logs
                   properties:
-                    ContainerState:
+                    containerState:
                       description: ContainerState holds a possible state of container.
                         Only one of its members may be specified. If none of them
                         is specified, the default one is ContainerStateWaiting.
@@ -2103,21 +2103,21 @@ spec:
                               description: (brief) reason the container is not yet
                                 running.
                               type: string
-                    Name:
+                    name:
                       type: string
-                    Namespace:
+                    namespace:
                       description: container name
                       type: string
-                    PodName:
+                    podName:
                       type: string
-                    Status:
+                    status:
                       type: string
                   required:
-                  - Name
-                  - Namespace
-                  - PodName
-                  - Status
-                  - ContainerState
+                  - name
+                  - namespace
+                  - podName
+                  - status
+                  - containerState
                 type: array
               type: array
             taskIndex:

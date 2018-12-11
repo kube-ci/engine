@@ -40,5 +40,5 @@ type WorkplanLog struct {
 type WorkplanLogOptions struct {
 	metav1.TypeMeta
 	Step   string `json:"step,omitempty"`
-	Follow bool   `json:"step,omitempty"`
+	Follow bool   `json:"follow,omitempty"`
 }
