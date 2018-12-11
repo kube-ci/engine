@@ -67,7 +67,6 @@ const (
 // status of a step containing enough info to collect logs
 type StepEntry struct {
 	Name           string                `json:"name"` // container name
-	Namespace      string                `json:"namespace"`
 	PodName        string                `json:"podName"`
 	Status         ContainerStatus       `json:"status"` // simplified container status
 	ContainerState corev1.ContainerState `json:"containerState"`

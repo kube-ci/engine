@@ -435,17 +435,11 @@ func schema_engine_apis_engine_v1alpha1_StepEntry(ref common.ReferenceCallback) 
 							Format: "",
 						},
 					},
-					"namespace": {
+					"podName": {
 						SchemaProps: spec.SchemaProps{
 							Description: "container name",
 							Type:        []string{"string"},
 							Format:      "",
-						},
-					},
-					"podName": {
-						SchemaProps: spec.SchemaProps{
-							Type:   []string{"string"},
-							Format: "",
 						},
 					},
 					"status": {
@@ -461,7 +455,7 @@ func schema_engine_apis_engine_v1alpha1_StepEntry(ref common.ReferenceCallback) 
 						},
 					},
 				},
-				Required: []string{"name", "namespace", "podName", "status", "containerState"},
+				Required: []string{"name", "podName", "status", "containerState"},
 			},
 		},
 		Dependencies: []string{
