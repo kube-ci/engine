@@ -2105,16 +2105,13 @@ spec:
                               type: string
                     name:
                       type: string
-                    namespace:
-                      description: container name
-                      type: string
                     podName:
+                      description: container name
                       type: string
                     status:
                       type: string
                   required:
                   - name
-                  - namespace
                   - podName
                   - status
                   - containerState
