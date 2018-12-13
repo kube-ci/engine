@@ -11,8 +11,8 @@ import (
 	"text/template"
 
 	"github.com/appscode/go/runtime"
-	"github.com/spf13/cobra/doc"
 	"github.com/kube-ci/engine/pkg/cmds"
+	"github.com/spf13/cobra/doc"
 )
 
 const (
@@ -21,33 +21,34 @@ const (
 
 var (
 	tplFrontMatter = template.Must(template.New("index").Parse(`---
-title: Reference
-description: Kubeci-engine CLI Reference
+title: Reference | KubeCI Engine
+description: KubeCI Engine CLI Reference
 menu:
-  product_kubeci_engine_{{ .Version }}:
-    identifier: reference
-    name: Reference
-    weight: 1000
-menu_name: product_kubeci_engine_{{ .Version }}
+  product_kubeci_{{ .Version }}:
+    identifier: reference-engine
+    name: KubeCI Engine
+    weight: 10
+    parent: reference
+menu_name: product_kubeci_{{ .Version }}
 ---
 `))
 
 	_ = template.Must(tplFrontMatter.New("cmd").Parse(`---
 title: {{ .Name }}
 menu:
-  product_kubeci_engine_{{ .Version }}:
+  product_kubeci_{{ .Version }}:
     identifier: {{ .ID }}
     name: {{ .Name }}
-    parent: reference
+    parent: reference-engine
 {{- if .RootCmd }}
     weight: 0
 {{ end }}
-product_name: kubeci-engine
-menu_name: product_kubeci_engine_{{ .Version }}
+product_name: kubeci
+menu_name: product_kubeci_{{ .Version }}
 section_menu_id: reference
 {{- if .RootCmd }}
 aliases:
-  - products/kubeci-engine/{{ .Version }}/reference/
+  - products/kubeci/{{ .Version }}/reference/engine/
 {{ end }}
 ---
 `))
@@ -56,7 +57,7 @@ aliases:
 // ref: https://github.com/spf13/cobra/blob/master/doc/md_docs.md
 func main() {
 	rootCmd := cmds.NewRootCmd()
-	dir := runtime.GOPath() + "/src/github.com/kube-ci/engine/docs/reference"
+	dir := runtime.GOPath() + "/src/github.com/kube-ci/docs/docs/reference/engine"
 	fmt.Printf("Generating cli markdown tree in: %v\n", dir)
 	err := os.RemoveAll(dir)
 	if err != nil {
@@ -89,7 +90,7 @@ func main() {
 	}
 
 	linkHandler := func(name string) string {
-		return "/docs/reference/" + name
+		return "/docs/reference/engine/" + name
 	}
 	doc.GenMarkdownTreeCustom(rootCmd, dir, filePrepender, linkHandler)
 
