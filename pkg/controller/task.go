@@ -50,6 +50,7 @@ func (c *Controller) runTasks(wp *api.Workplan) error {
 					wp,
 					func(r *api.WorkplanStatus) *api.WorkplanStatus {
 						r.StepTree = UpdateWorkplanTreeForPod(r.StepTree, pod)
+						r.NodeName = pod.Spec.NodeName
 						return r
 					},
 					api.EnableStatusSubresource,
@@ -86,6 +87,13 @@ func podSpecForTasks(wp *api.Workplan, task api.Task, index int) *core.Pod {
 			SecurityContext:    wp.Spec.SecurityContext,
 			ServiceAccountName: wp.Spec.ServiceAccount,
 		},
+	}
+
+	// if workplan.status.NodeName is not empty then at least one pod is already scheduled
+	if wp.Status.NodeName != "" {
+		pod.Spec.NodeName = wp.Status.NodeName
+	} else { // no pod is scheduled yet, use node selector instead of node name
+		pod.Spec.NodeSelector = wp.Spec.NodeSelector
 	}
 
 	for _, step := range task.SerialSteps {

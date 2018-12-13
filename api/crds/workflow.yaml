@@ -469,6 +469,8 @@ spec:
               type: array
             executionOrder:
               type: string
+            nodeSelector:
+              type: object
             securityContext:
               description: PodSecurityContext holds pod-level security attributes
                 and common container settings. Some fields are also present in container.securityContext.  Field

@@ -359,6 +359,7 @@ func (c *Controller) createWorkplan(wf *api.Workflow, secretRef *core.SecretEnvS
 			Volumes:         volumes,
 			SecurityContext: wf.Spec.SecurityContext,
 			ServiceAccount:  wf.Spec.ServiceAccount,
+			NodeSelector:    wf.Spec.NodeSelector,
 		},
 	}
 

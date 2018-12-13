@@ -48,6 +48,7 @@ type WorkflowSpec struct {
 	Volumes        []corev1.Volume `json:"volumes,omitempty"`
 	// pod security context
 	SecurityContext *corev1.PodSecurityContext `json:"securityContext,omitempty"`
+	NodeSelector    map[string]string          `json:"nodeSelector,omitempty"`
 }
 
 type Template struct {

@@ -810,6 +810,19 @@ func schema_engine_apis_engine_v1alpha1_WorkflowSpec(ref common.ReferenceCallbac
 							Ref:         ref("k8s.io/api/core/v1.PodSecurityContext"),
 						},
 					},
+					"nodeSelector": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type:   []string{"string"},
+										Format: "",
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 		},
@@ -1091,6 +1104,19 @@ func schema_engine_apis_engine_v1alpha1_WorkplanSpec(ref common.ReferenceCallbac
 							Format:      "",
 						},
 					},
+					"nodeSelector": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type:   []string{"string"},
+										Format: "",
+									},
+								},
+							},
+						},
+					},
 				},
 				Required: []string{"triggeredFor"},
 			},
@@ -1123,6 +1149,12 @@ func schema_engine_apis_engine_v1alpha1_WorkplanStatus(ref common.ReferenceCallb
 							Format: "int32",
 						},
 					},
+					"nodeName": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
 					"stepTree": {
 						SchemaProps: spec.SchemaProps{
 							Type: []string{"array"},
@@ -1143,7 +1175,7 @@ func schema_engine_apis_engine_v1alpha1_WorkplanStatus(ref common.ReferenceCallb
 						},
 					},
 				},
-				Required: []string{"phase", "reason", "taskIndex", "stepTree"},
+				Required: []string{"phase", "reason", "taskIndex", "nodeName", "stepTree"},
 			},
 		},
 		Dependencies: []string{

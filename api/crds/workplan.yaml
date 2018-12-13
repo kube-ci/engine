@@ -465,6 +465,8 @@ spec:
                 required:
                 - name
               type: array
+            nodeSelector:
+              type: object
             securityContext:
               description: PodSecurityContext holds pod-level security attributes
                 and common container settings. Some fields are also present in container.securityContext.  Field
@@ -2024,6 +2026,8 @@ spec:
           - triggeredFor
         status:
           properties:
+            nodeName:
+              type: string
             phase:
               type: string
             reason:
@@ -2124,6 +2128,7 @@ spec:
           - phase
           - reason
           - taskIndex
+          - nodeName
           - stepTree
   version: v1alpha1
   versions:

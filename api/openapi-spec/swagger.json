@@ -3078,6 +3078,12 @@
         "executionOrder": {
           "type": "string"
         },
+        "nodeSelector": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
         "securityContext": {
           "description": "pod security context",
           "$ref": "#/definitions/io.k8s.api.core.v1.PodSecurityContext"
@@ -3255,6 +3261,12 @@
             "$ref": "#/definitions/io.k8s.api.core.v1.EnvVar"
           }
         },
+        "nodeSelector": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
         "securityContext": {
           "description": "pod security context",
           "$ref": "#/definitions/io.k8s.api.core.v1.PodSecurityContext"
@@ -3288,9 +3300,13 @@
         "phase",
         "reason",
         "taskIndex",
+        "nodeName",
         "stepTree"
       ],
       "properties": {
+        "nodeName": {
+          "type": "string"
+        },
         "phase": {
           "type": "string"
         },
