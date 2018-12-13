@@ -10,12 +10,12 @@ import (
 	crdutils "github.com/appscode/kutil/apiextensions/v1beta1"
 	"github.com/appscode/kutil/openapi"
 	"github.com/go-openapi/spec"
+	api_install "github.com/kube-ci/engine/apis/engine/install"
+	v1alpha1 "github.com/kube-ci/engine/apis/engine/v1alpha1"
 	crd_api "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/serializer"
 	"k8s.io/kube-openapi/pkg/common"
-	api_install "github.com/kube-ci/engine/apis/engine/install"
-	v1alpha1 "github.com/kube-ci/engine/apis/engine/v1alpha1"
 )
 
 func generateCRDDefinitions() {
