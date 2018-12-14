@@ -48,7 +48,16 @@ type WorkflowSpec struct {
 	Volumes        []corev1.Volume `json:"volumes,omitempty"`
 	// pod security context
 	SecurityContext *corev1.PodSecurityContext `json:"securityContext,omitempty"`
-	NodeSelector    map[string]string          `json:"nodeSelector,omitempty"`
+	// NodeSelector is a selector which must be true for the pod to fit on a node.
+	// Selector which must match a node's labels for the pod to be scheduled on that node.
+	NodeSelector map[string]string `json:"nodeSelector,omitempty"`
+	// If specified, the pod will be dispatched by specified scheduler.
+	// If not specified, the pod will be dispatched by default scheduler.
+	SchedulerName string `json:"schedulerName,omitempty"`
+	// If specified, the pod's tolerations.
+	Tolerations []corev1.Toleration `json:"tolerations,omitempty"`
+	// Compute Resources required by the sidecar container.
+	Resources corev1.ResourceRequirements `json:"resources,omitempty"`
 }
 
 type Template struct {

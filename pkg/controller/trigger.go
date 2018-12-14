@@ -360,6 +360,9 @@ func (c *Controller) createWorkplan(wf *api.Workflow, secretRef *core.SecretEnvS
 			SecurityContext: wf.Spec.SecurityContext,
 			ServiceAccount:  wf.Spec.ServiceAccount,
 			NodeSelector:    wf.Spec.NodeSelector,
+			SchedulerName:   wf.Spec.SchedulerName,
+			Tolerations:     wf.Spec.Tolerations,
+			Resources:       wf.Spec.Resources,
 		},
 	}
 

@@ -86,6 +86,8 @@ func podSpecForTasks(wp *api.Workplan, task api.Task, index int) *core.Pod {
 			Volumes:            core_util.UpsertVolume(wp.Spec.Volumes, getImplicitVolumes(wp.Name)...),
 			SecurityContext:    wp.Spec.SecurityContext,
 			ServiceAccountName: wp.Spec.ServiceAccount,
+			SchedulerName:      wp.Spec.SchedulerName,
+			Tolerations:        wp.Spec.Tolerations,
 		},
 	}
 
@@ -117,5 +119,6 @@ func containerForStep(wp *api.Workplan, step api.Step) core.Container {
 		WorkingDir:      implicitWorkingDir,
 		VolumeMounts:    core_util.UpsertVolumeMount(step.VolumeMounts, implicitVolumeMounts...),
 		SecurityContext: step.SecurityContext,
+		Resources:       wp.Spec.Resources,
 	}
 }

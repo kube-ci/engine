@@ -3079,10 +3079,19 @@
           "type": "string"
         },
         "nodeSelector": {
+          "description": "NodeSelector is a selector which must be true for the pod to fit on a node. Selector which must match a node's labels for the pod to be scheduled on that node.",
           "type": "object",
           "additionalProperties": {
             "type": "string"
           }
+        },
+        "resources": {
+          "description": "Compute Resources required by the sidecar container.",
+          "$ref": "#/definitions/io.k8s.api.core.v1.ResourceRequirements"
+        },
+        "schedulerName": {
+          "description": "If specified, the pod will be dispatched by specified scheduler. If not specified, the pod will be dispatched by default scheduler.",
+          "type": "string"
         },
         "securityContext": {
           "description": "pod security context",
@@ -3100,6 +3109,13 @@
         },
         "template": {
           "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Template"
+        },
+        "tolerations": {
+          "description": "If specified, the pod's tolerations.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/io.k8s.api.core.v1.Toleration"
+          }
         },
         "triggers": {
           "type": "array",
@@ -3267,6 +3283,12 @@
             "type": "string"
           }
         },
+        "resources": {
+          "$ref": "#/definitions/io.k8s.api.core.v1.ResourceRequirements"
+        },
+        "schedulerName": {
+          "type": "string"
+        },
         "securityContext": {
           "description": "pod security context",
           "$ref": "#/definitions/io.k8s.api.core.v1.PodSecurityContext"
@@ -3279,6 +3301,12 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/com.github.kube-ci.engine.apis.engine.v1alpha1.Task"
+          }
+        },
+        "tolerations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/io.k8s.api.core.v1.Toleration"
           }
         },
         "triggeredFor": {
@@ -4257,6 +4285,25 @@
         }
       }
     },
+    "io.k8s.api.core.v1.ResourceRequirements": {
+      "description": "ResourceRequirements describes the compute resource requirements.",
+      "properties": {
+        "limits": {
+          "description": "Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/",
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/io.k8s.apimachinery.pkg.api.resource.Quantity"
+          }
+        },
+        "requests": {
+          "description": "Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/",
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/io.k8s.apimachinery.pkg.api.resource.Quantity"
+          }
+        }
+      }
+    },
     "io.k8s.api.core.v1.SELinuxOptions": {
       "description": "SELinuxOptions are the labels to be applied to the container",
       "properties": {
@@ -4508,6 +4555,32 @@
         },
         "value": {
           "description": "Value of a property to set",
+          "type": "string"
+        }
+      }
+    },
+    "io.k8s.api.core.v1.Toleration": {
+      "description": "The pod this Toleration is attached to tolerates any taint that matches the triple \u003ckey,value,effect\u003e using the matching operator \u003coperator\u003e.",
+      "properties": {
+        "effect": {
+          "description": "Effect indicates the taint effect to match. Empty means match all taint effects. When specified, allowed values are NoSchedule, PreferNoSchedule and NoExecute.",
+          "type": "string"
+        },
+        "key": {
+          "description": "Key is the taint key that the toleration applies to. Empty means match all taint keys. If the key is empty, operator must be Exists; this combination means to match all values and all keys.",
+          "type": "string"
+        },
+        "operator": {
+          "description": "Operator represents a key's relationship to the value. Valid operators are Exists and Equal. Defaults to Equal. Exists is equivalent to wildcard for value, so that a pod can tolerate all taints of a particular category.",
+          "type": "string"
+        },
+        "tolerationSeconds": {
+          "description": "TolerationSeconds represents the period of time the toleration (which must be of effect NoExecute, otherwise this field is ignored) tolerates the taint. By default, it is not set, which means tolerate the taint forever (do not evict). Zero and negative values will be treated as 0 (evict immediately) by the system.",
+          "type": "integer",
+          "format": "int64"
+        },
+        "value": {
+          "description": "Value is the taint value the toleration matches to. If the operator is Exists, the value should be empty, otherwise just a regular string.",
           "type": "string"
         }
       }
