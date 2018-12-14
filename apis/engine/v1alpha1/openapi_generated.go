@@ -810,11 +810,51 @@ func schema_engine_apis_engine_v1alpha1_WorkflowSpec(ref common.ReferenceCallbac
 							Ref:         ref("k8s.io/api/core/v1.PodSecurityContext"),
 						},
 					},
+					"nodeSelector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "NodeSelector is a selector which must be true for the pod to fit on a node. Selector which must match a node's labels for the pod to be scheduled on that node.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type:   []string{"string"},
+										Format: "",
+									},
+								},
+							},
+						},
+					},
+					"schedulerName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "If specified, the pod will be dispatched by specified scheduler. If not specified, the pod will be dispatched by default scheduler.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"tolerations": {
+						SchemaProps: spec.SchemaProps{
+							Description: "If specified, the pod's tolerations.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("k8s.io/api/core/v1.Toleration"),
+									},
+								},
+							},
+						},
+					},
+					"resources": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Compute Resources required by the sidecar container.",
+							Ref:         ref("k8s.io/api/core/v1.ResourceRequirements"),
+						},
+					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/kube-ci/engine/apis/engine/v1alpha1.Step", "github.com/kube-ci/engine/apis/engine/v1alpha1.Template", "github.com/kube-ci/engine/apis/engine/v1alpha1.Trigger", "k8s.io/api/core/v1.EnvFromSource", "k8s.io/api/core/v1.EnvVar", "k8s.io/api/core/v1.PodSecurityContext", "k8s.io/api/core/v1.Volume"},
+			"github.com/kube-ci/engine/apis/engine/v1alpha1.Step", "github.com/kube-ci/engine/apis/engine/v1alpha1.Template", "github.com/kube-ci/engine/apis/engine/v1alpha1.Trigger", "k8s.io/api/core/v1.EnvFromSource", "k8s.io/api/core/v1.EnvVar", "k8s.io/api/core/v1.PodSecurityContext", "k8s.io/api/core/v1.ResourceRequirements", "k8s.io/api/core/v1.Toleration", "k8s.io/api/core/v1.Volume"},
 	}
 }
 
@@ -1091,12 +1131,48 @@ func schema_engine_apis_engine_v1alpha1_WorkplanSpec(ref common.ReferenceCallbac
 							Format:      "",
 						},
 					},
+					"nodeSelector": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type:   []string{"string"},
+										Format: "",
+									},
+								},
+							},
+						},
+					},
+					"schedulerName": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
+					"tolerations": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("k8s.io/api/core/v1.Toleration"),
+									},
+								},
+							},
+						},
+					},
+					"resources": {
+						SchemaProps: spec.SchemaProps{
+							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
+						},
+					},
 				},
 				Required: []string{"triggeredFor"},
 			},
 		},
 		Dependencies: []string{
-			"github.com/kube-ci/engine/apis/engine/v1alpha1.Task", "github.com/kube-ci/engine/apis/engine/v1alpha1.TriggeredFor", "k8s.io/api/core/v1.EnvFromSource", "k8s.io/api/core/v1.EnvVar", "k8s.io/api/core/v1.PodSecurityContext", "k8s.io/api/core/v1.Volume"},
+			"github.com/kube-ci/engine/apis/engine/v1alpha1.Task", "github.com/kube-ci/engine/apis/engine/v1alpha1.TriggeredFor", "k8s.io/api/core/v1.EnvFromSource", "k8s.io/api/core/v1.EnvVar", "k8s.io/api/core/v1.PodSecurityContext", "k8s.io/api/core/v1.ResourceRequirements", "k8s.io/api/core/v1.Toleration", "k8s.io/api/core/v1.Volume"},
 	}
 }
 
@@ -1123,6 +1199,12 @@ func schema_engine_apis_engine_v1alpha1_WorkplanStatus(ref common.ReferenceCallb
 							Format: "int32",
 						},
 					},
+					"nodeName": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"string"},
+							Format: "",
+						},
+					},
 					"stepTree": {
 						SchemaProps: spec.SchemaProps{
 							Type: []string{"array"},
@@ -1143,7 +1225,7 @@ func schema_engine_apis_engine_v1alpha1_WorkplanStatus(ref common.ReferenceCallb
 						},
 					},
 				},
-				Required: []string{"phase", "reason", "taskIndex", "stepTree"},
+				Required: []string{"phase", "reason", "taskIndex", "nodeName", "stepTree"},
 			},
 		},
 		Dependencies: []string{
