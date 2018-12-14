@@ -1,12 +1,12 @@
-# KubeCI engine
-[KubeCI engine by AppsCode](https://github.com/kube-ci/engine) - Kubernetes Native Workflow Engine
+# KubeCI Engine
+[KubeCI Engine by AppsCode](https://github.com/kube-ci/engine) - Kubernetes Native Workflow Engine
 
 ## TL;DR;
 
 ```console
 $ helm repo add appscode https://charts.appscode.com/stable/
 $ helm repo update
-$ helm install appscode/kubeci-engine
+$ helm install appscode/kubeci-engine --name kubeci-engine --namespace kube-system
 ```
 
 ## Introduction
@@ -19,10 +19,10 @@ This chart bootstraps a [KubeCI engine controller](https://github.com/kube-ci/en
 
 ## Installing the Chart
 
-To install the chart with the release name `my-release`:
+To install the chart with the release name `kubeci-engine`:
 
 ```console
-$ helm install appscode/kubeci-engine --name my-release
+$ helm install appscode/kubeci-engine --name kubeci-engine
 ```
 
 The command deploys KubeCI engine operator on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -31,10 +31,10 @@ The command deploys KubeCI engine operator on the Kubernetes cluster in the defa
 
 ## Uninstalling the Chart
 
-To uninstall/delete the `my-release`:
+To uninstall/delete the `kubeci-engine`:
 
 ```console
-$ helm delete my-release
+$ helm delete kubeci-engine
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -74,14 +74,14 @@ The following table lists the configurable parameters of the KubeCI engine chart
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example:
 
 ```console
-$ helm install --name my-release --set image.tag=v0.2.1 appscode/kubeci-engine
+$ helm install --name kubeci-engine --set image.tag=v0.2.1 appscode/kubeci-engine
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while
 installing the chart. For example:
 
 ```console
-$ helm install --name my-release --values values.yaml appscode/kubeci-engine
+$ helm install --name kubeci-engine --values values.yaml appscode/kubeci-engine
 ```
 
 ## RBAC
@@ -103,5 +103,5 @@ If the output contains "beta", you may install the chart with RBAC enabled (see 
 To enable the creation of RBAC resources (On clusters with RBAC). Do the following:
 
 ```console
-$ helm install --name my-release appscode/kubeci-engine --set rbac.create=true
+$ helm install --name kubeci-engine appscode/kubeci-engine --set rbac.create=true
 ```
