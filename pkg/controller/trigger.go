@@ -55,28 +55,35 @@ func (r *TriggerREST) Categories() []string {
 
 func (r *TriggerREST) Create(ctx context.Context, obj runtime.Object, createValidation rest.ValidateObjectFunc, _ *metav1.CreateOptions) (runtime.Object, error) {
 	trigger := obj.(*v1alpha1.Trigger)
+	if len(trigger.Workflows) == 0 {
+		return nil, fmt.Errorf("no workflow specified")
+	}
 	if err := r.controller.handleTrigger(trigger.Request, trigger.Workflows, false, true); err != nil {
 		return nil, err
 	}
 	return trigger, nil
 }
 
-func (c *Controller) handleTrigger(obj interface{}, wfNames []string, isDeleteEvent bool, force bool) error {
+func (c *Controller) handleTrigger(obj interface{}, wfNames []string, isDeleteEvent bool, manualTrigger bool) error {
 	// convert object to ResourceIdentifier
 	res, err := c.objToResourceIdentifier(obj)
 	if err != nil {
 		return fmt.Errorf("failed to parse object, reason: %s", err.Error())
 	}
-	// log.Infof("Received trigger, resource: %v, isDeleteEvent: %v, force: %v", res, isDeleteEvent, force)
+	// log.Infof("Received trigger, resource: %v, isDeleteEvent: %v, manualTrigger: %v", res, isDeleteEvent, manualTrigger)
 
 	workflows, err := c.wfLister.Workflows(metav1.NamespaceAll).List(labels.Everything())
 	if err != nil {
 		return fmt.Errorf("failed to list workflows, reason: %s", err.Error())
 	}
 
-	// if list is not empty then only trigger for listed workflows
+	// trigger all workflows for "*", otherwise trigger listed workflows
 	var filteredWorkflows []*api.Workflow
-	if len(wfNames) != 0 {
+	if hasStar(wfNames) { // just copy all
+		for _, wf := range workflows {
+			filteredWorkflows = append(filteredWorkflows, wf)
+		}
+	} else {
 		for _, name := range wfNames {
 			found := false
 			for _, wf := range workflows {
@@ -90,30 +97,49 @@ func (c *Controller) handleTrigger(obj interface{}, wfNames []string, isDeleteEv
 				log.Errorf("Can't find workflow %s for resource %s", name, res)
 			}
 		}
-	} else { // just copy
-		for _, wf := range workflows {
-			filteredWorkflows = append(filteredWorkflows, wf)
-		}
 	}
 
 	for _, wf := range filteredWorkflows {
-		if !force || wf.Spec.AllowManualTrigger {
-			c.triggerWorkflow(wf, res, isDeleteEvent)
+		// for manual trigger AllowManualTrigger must be true
+		if !manualTrigger || wf.Spec.AllowManualTrigger {
+			c.triggerWorkflow(wf, res, isDeleteEvent, manualTrigger)
 		}
 	}
 	return nil
 }
 
-func (c *Controller) triggerWorkflow(wf *api.Workflow, res ResourceIdentifier, isDeleteEvent bool) {
-	ok, trigger := c.shouldHandleTrigger(res, wf, isDeleteEvent)
-	if !ok {
-		// log.Infof("should not handle trigger, resource: %s, workflow: %s/%s", res, wf.Namespace, wf.Name)
-		return
+func hasStar(wfNames []string) bool {
+	for _, wf := range wfNames {
+		if wf == "*" {
+			return true
+		}
 	}
-	envFromPath := res.GetEnvFromPath(trigger.EnvFromPath) // json-path-data
-	triggeredFor := api.TriggeredFor{
-		ObjectReference:    res.ObjectReference,
-		ResourceGeneration: res.ResourceGeneration,
+	return false
+}
+
+func (c *Controller) triggerWorkflow(wf *api.Workflow, res *ResourceIdentifier, isDeleteEvent, manualTrigger bool) {
+	if res == nil && !manualTrigger {
+		log.Errorf("resource can be nil only for manual triggers")
+	}
+
+	var (
+		trigger      api.Trigger
+		ok           bool
+		envFromPath  []core.EnvVar
+		triggeredFor api.TriggeredFor
+	)
+
+	if res != nil {
+		ok, trigger = c.shouldHandleTrigger(*res, wf, isDeleteEvent, manualTrigger)
+		if !ok {
+			// log.Infof("should not handle trigger, resource: %s, workflow: %s/%s", res, wf.Namespace, wf.Name)
+			return
+		}
+		envFromPath = res.GetEnvFromPath(trigger.EnvFromPath) // json-path-data
+		triggeredFor = api.TriggeredFor{
+			ObjectReference:    res.ObjectReference,
+			ResourceGeneration: res.ResourceGeneration,
+		}
 	}
 
 	log.Infof("Triggering workflow %s for resource %s", wf.Name, triggeredFor)
@@ -141,11 +167,50 @@ func (c *Controller) triggerWorkflow(wf *api.Workflow, res ResourceIdentifier, i
 	)
 }
 
-func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflow, isDeleteEvent bool) (bool, api.Trigger) {
+func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflow, isDeleteEvent, manualTrigger bool) (bool, api.Trigger) {
 	// check generation and hash to prevent duplicate trigger
-	if c.observedWorkflows.resourceAlreadyObserved(wf.Key(), api.TriggeredFor{
-		ObjectReference: res.ObjectReference, ResourceGeneration: res.ResourceGeneration}) {
-		return false, api.Trigger{}
+	// don't check this for manual trigger
+	if !manualTrigger {
+		if c.observedWorkflows.resourceAlreadyObserved(wf.Key(), api.TriggeredFor{
+			ObjectReference: res.ObjectReference, ResourceGeneration: res.ResourceGeneration}) {
+			return false, api.Trigger{}
+		}
+	}
+
+	// check RBAC permissions for env from configmaps/secrets
+	for _, env := range wf.Spec.EnvFrom {
+		if env.ConfigMapRef != nil {
+			// check configmap get permission
+			if ok := c.checkAccess(
+				authorizationapi.ResourceAttributes{ // TODO: use constants
+					Group:     "",
+					Version:   "v1",
+					Resource:  "configmaps",
+					Name:      env.ConfigMapRef.Name,
+					Namespace: wf.Namespace,
+					Verb:      "get",
+				},
+				wf.Spec.ServiceAccount,
+			); !ok {
+				return false, api.Trigger{}
+			}
+		}
+		if env.SecretRef != nil {
+			// check secret get permission
+			if ok := c.checkAccess(
+				authorizationapi.ResourceAttributes{ // TODO: use constants
+					Group:     "",
+					Version:   "v1",
+					Resource:  "secrets",
+					Name:      env.SecretRef.Name,
+					Namespace: wf.Namespace,
+					Verb:      "get",
+				},
+				wf.Spec.ServiceAccount,
+			); !ok {
+				return false, api.Trigger{}
+			}
+		}
 	}
 
 	// try to match all required conditions
@@ -180,7 +245,7 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 			continue
 		}
 
-		// === check RBAC permissions ===
+		// check RBAC permissions for triggering resource
 
 		// check resource watch permission
 		if ok := c.checkAccess(
@@ -214,43 +279,9 @@ func (c *Controller) shouldHandleTrigger(res ResourceIdentifier, wf *api.Workflo
 			}
 		}
 
-		for _, env := range wf.Spec.EnvFrom {
-			if env.ConfigMapRef != nil {
-				// check configmap get permission
-				if ok := c.checkAccess(
-					authorizationapi.ResourceAttributes{ // TODO: use constants
-						Group:     "",
-						Version:   "v1",
-						Resource:  "configmaps",
-						Name:      env.ConfigMapRef.Name,
-						Namespace: wf.Namespace,
-						Verb:      "get",
-					},
-					wf.Spec.ServiceAccount,
-				); !ok {
-					return false, api.Trigger{}
-				}
-			}
-			if env.SecretRef != nil {
-				// check secret get permission
-				if ok := c.checkAccess(
-					authorizationapi.ResourceAttributes{ // TODO: use constants
-						Group:     "",
-						Version:   "v1",
-						Resource:  "secrets",
-						Name:      env.SecretRef.Name,
-						Namespace: wf.Namespace,
-						Verb:      "get",
-					},
-					wf.Spec.ServiceAccount,
-				); !ok {
-					return false, api.Trigger{}
-				}
-			}
-		}
-
 		return true, trigger
 	}
+
 	return false, api.Trigger{}
 }
 
