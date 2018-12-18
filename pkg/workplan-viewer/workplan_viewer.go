@@ -1,4 +1,4 @@
-package logs
+package workplan_viewer
 
 import (
 	"bufio"
@@ -12,12 +12,16 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
 	"github.com/kube-ci/engine/apis/engine/v1alpha1"
+	"github.com/kube-ci/engine/pkg/logs"
+	"k8s.io/client-go/rest"
 )
 
 const (
 	statusPath = "/namespaces/%s/workplans/%s"
 	logsPath   = "/namespaces/%s/workplans/%s/steps/%s"
 )
+
+var logController *logs.LogController
 
 func wsWriter(ws *websocket.Conn, reader io.Reader) {
 	defer func() {
@@ -54,9 +58,9 @@ func serveUpgrade(w http.ResponseWriter, r *http.Request) {
 	wsTemplate.Execute(w, "ws://"+r.Host+r.URL.Path)
 }
 
-func (c *LogController) serveLog(w http.ResponseWriter, r *http.Request) {
+func serveLog(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	query := Query{
+	query := logs.Query{
 		Namespace: vars["namespace"],
 		Workplan:  vars["workplan"],
 		Step:      vars["step"],
@@ -80,7 +84,7 @@ func (c *LogController) serveLog(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 
-	reader, err := c.getLogReader(query)
+	reader, err := logController.LogReader(query)
 	if err != nil {
 		err = fmt.Errorf("can't get LogReader, reason: %s", err)
 		return
@@ -89,9 +93,9 @@ func (c *LogController) serveLog(w http.ResponseWriter, r *http.Request) {
 	go wsWriter(ws, reader)
 }
 
-func (c *LogController) serveWorkplan(w http.ResponseWriter, r *http.Request) {
+func serveWorkplan(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	query := Query{
+	query := logs.Query{
 		Namespace: vars["namespace"],
 		Workplan:  vars["workplan"],
 	}
@@ -105,7 +109,7 @@ func (c *LogController) serveWorkplan(w http.ResponseWriter, r *http.Request) {
 	}()
 
 	// list all steps in the given Workplan along with their status
-	workplanStatus, err := c.getWorkplanStatus(query)
+	workplanStatus, err := logController.WorkplanStatus(query)
 	if err != nil {
 		err = fmt.Errorf("can't get WorkplanStatus, reason: %s", err)
 		return
@@ -132,15 +136,15 @@ func (c *LogController) serveWorkplan(w http.ResponseWriter, r *http.Request) {
 	statusTemplate.Execute(w, string(statusJson))
 }
 
-func Serve(kubeConfig string) error {
-	c, err := NewLogController(kubeConfig)
+func Serve(clientConfig *rest.Config) (err error) {
+	logController, err = logs.NewLogController(clientConfig)
 	if err != nil {
 		return fmt.Errorf("error initializing log-controller, reason: %s", err)
 	}
 
 	r := mux.NewRouter()
-	r.HandleFunc(fmt.Sprintf(statusPath, "{namespace}", "{workplan}"), c.serveWorkplan)
-	r.HandleFunc(fmt.Sprintf(logsPath, "{namespace}", "{workplan}", "{step}"), c.serveLog)
+	r.HandleFunc(fmt.Sprintf(statusPath, "{namespace}", "{workplan}"), serveWorkplan)
+	r.HandleFunc(fmt.Sprintf(logsPath, "{namespace}", "{workplan}", "{step}"), serveLog)
 	http.Handle("/", r)
 
 	fmt.Println("Starting workplan-viewer...")

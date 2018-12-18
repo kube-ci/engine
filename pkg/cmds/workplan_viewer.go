@@ -1,7 +1,8 @@
 package cmds
 
 import (
-	"github.com/kube-ci/engine/pkg/logs"
+	"github.com/appscode/kutil/tools/clientcmd"
+	workplan_viewer "github.com/kube-ci/engine/pkg/workplan-viewer"
 	"github.com/spf13/cobra"
 )
 
@@ -13,7 +14,11 @@ func NewCmdWorkplanViewer() *cobra.Command {
 		Long:              "Start workplan-viewer server",
 		DisableAutoGenTag: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return logs.Serve(kubeConfig)
+			clientConfig, err := clientcmd.BuildConfigFromContext(kubeConfig, "")
+			if err != nil {
+				return err
+			}
+			return workplan_viewer.Serve(clientConfig)
 		},
 	}
 	cmd.Flags().StringVar(&kubeConfig, "kubeconfig", "", "Kube config file.")
