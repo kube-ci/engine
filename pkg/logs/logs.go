@@ -18,10 +18,11 @@ type LogController struct {
 }
 
 type Query struct {
-	Namespace string `survey:"namespace"`
+	Namespace string
 	Workflow  string `survey:"workflow"`
 	Workplan  string `survey:"workplan"`
 	Step      string `survey:"step"`
+	Follow    bool
 }
 
 func NewLogController(clientConfig *rest.Config) (*LogController, error) {
@@ -50,7 +51,7 @@ func (c *LogController) WorkplanStatus(query Query) (api.WorkplanStatus, error) 
 func (c *LogController) LogReader(query Query) (io.ReadCloser, error) {
 	opts := &v1alpha1.WorkplanLogOptions{
 		Step:   query.Step,
-		Follow: true,
+		Follow: query.Follow,
 	}
 	return c.KubeciClient.ExtensionsV1alpha1().RESTClient().Get().
 		Resource("workplanlogs").

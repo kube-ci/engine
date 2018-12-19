@@ -64,6 +64,7 @@ func serveLog(w http.ResponseWriter, r *http.Request) {
 		Namespace: vars["namespace"],
 		Workplan:  vars["workplan"],
 		Step:      vars["step"],
+		Follow:    true,
 	}
 
 	if !websocket.IsWebSocketUpgrade(r) { // TODO: remove
