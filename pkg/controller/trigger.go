@@ -144,7 +144,7 @@ func (c *Controller) triggerWorkflow(wf *api.Workflow, res *ResourceIdentifier, 
 
 	log.Infof("Triggering workflow %s for resource %s", wf.Name, triggeredFor)
 
-	if _, err := c.createWorkplan(wf, triggeredFor, envFromPath); err != nil {
+	if _, err := c.createWorkplan(wf, triggeredFor, envFromPath, manualTrigger); err != nil {
 		log.Errorf("Trigger failed for resource %v, reason: %s", res, err.Error())
 		c.recorder.Eventf(
 			wf.ObjectReference(),
@@ -156,7 +156,10 @@ func (c *Controller) triggerWorkflow(wf *api.Workflow, res *ResourceIdentifier, 
 	}
 
 	// update generation and hash for observed resource
-	c.observedWorkflows.setObservedResource(wf.Key(), triggeredFor)
+	// skip for manual trigger
+	if !manualTrigger {
+		c.observedWorkflows.setObservedResource(wf.Key(), triggeredFor)
+	}
 
 	log.Infof("Successfully triggered workflow %s for resource %s", wf.Name, res)
 	c.recorder.Eventf(
@@ -310,7 +313,7 @@ func (c *Controller) checkAccess(res authorizationapi.ResourceAttributes, servic
 	return true
 }
 
-func (c *Controller) createWorkplan(wf *api.Workflow, triggeredFor api.TriggeredFor, envFromPath []core.EnvVar) (*api.Workplan, error) {
+func (c *Controller) createWorkplan(wf *api.Workflow, triggeredFor api.TriggeredFor, envFromPath []core.EnvVar, manualTrigger bool) (*api.Workplan, error) {
 	var (
 		preSteps  []api.Step
 		postSteps = []api.Step{cleanupStep}
@@ -355,18 +358,19 @@ func (c *Controller) createWorkplan(wf *api.Workflow, triggeredFor api.Triggered
 			},
 		},
 		Spec: api.WorkplanSpec{
-			Workflow:        wf.Name,
-			Tasks:           tasks,
-			EnvVar:          core_util.UpsertEnvVars(wf.Spec.EnvVar, envFromPath...), // upsert env var from json path data
-			EnvFrom:         wf.Spec.EnvFrom,
-			TriggeredFor:    triggeredFor,
-			Volumes:         volumes,
-			SecurityContext: wf.Spec.SecurityContext,
-			ServiceAccount:  wf.Spec.ServiceAccount,
-			NodeSelector:    wf.Spec.NodeSelector,
-			SchedulerName:   wf.Spec.SchedulerName,
-			Tolerations:     wf.Spec.Tolerations,
-			Resources:       wf.Spec.Resources,
+			Workflow:          wf.Name,
+			Tasks:             tasks,
+			EnvVar:            core_util.UpsertEnvVars(wf.Spec.EnvVar, envFromPath...), // upsert env var from json path data
+			EnvFrom:           wf.Spec.EnvFrom,
+			TriggeredFor:      triggeredFor,
+			Volumes:           volumes,
+			SecurityContext:   wf.Spec.SecurityContext,
+			ServiceAccount:    wf.Spec.ServiceAccount,
+			NodeSelector:      wf.Spec.NodeSelector,
+			SchedulerName:     wf.Spec.SchedulerName,
+			Tolerations:       wf.Spec.Tolerations,
+			Resources:         wf.Spec.Resources,
+			ManuallyTriggered: manualTrigger,
 		},
 	}
 
