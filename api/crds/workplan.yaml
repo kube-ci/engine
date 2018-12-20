@@ -465,6 +465,8 @@ spec:
                 required:
                 - name
               type: array
+            manuallyTriggered:
+              type: boolean
             nodeSelector:
               type: object
             resources:

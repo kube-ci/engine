@@ -1167,6 +1167,12 @@ func schema_engine_apis_engine_v1alpha1_WorkplanSpec(ref common.ReferenceCallbac
 							Ref: ref("k8s.io/api/core/v1.ResourceRequirements"),
 						},
 					},
+					"manuallyTriggered": {
+						SchemaProps: spec.SchemaProps{
+							Type:   []string{"boolean"},
+							Format: "",
+						},
+					},
 				},
 				Required: []string{"triggeredFor"},
 			},

@@ -3277,6 +3277,9 @@
             "$ref": "#/definitions/io.k8s.api.core.v1.EnvVar"
           }
         },
+        "manuallyTriggered": {
+          "type": "boolean"
+        },
         "nodeSelector": {
           "type": "object",
           "additionalProperties": {

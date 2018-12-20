@@ -42,11 +42,12 @@ type WorkplanSpec struct {
 	SecurityContext *corev1.PodSecurityContext `json:"securityContext,omitempty"`
 	// ServiceAccount with triggering-resource/configmaps/secrets watch/read permissions.
 	// Also used to run all associated pods
-	ServiceAccount string                      `json:"serviceAccount,omitempty"`
-	NodeSelector   map[string]string           `json:"nodeSelector,omitempty"`
-	SchedulerName  string                      `json:"schedulerName,omitempty"`
-	Tolerations    []corev1.Toleration         `json:"tolerations,omitempty"`
-	Resources      corev1.ResourceRequirements `json:"resources,omitempty"`
+	ServiceAccount    string                      `json:"serviceAccount,omitempty"`
+	NodeSelector      map[string]string           `json:"nodeSelector,omitempty"`
+	SchedulerName     string                      `json:"schedulerName,omitempty"`
+	Tolerations       []corev1.Toleration         `json:"tolerations,omitempty"`
+	Resources         corev1.ResourceRequirements `json:"resources,omitempty"`
+	ManuallyTriggered bool                        `json:"manuallyTriggered,omitempty"`
 }
 
 type WorkplanPhase string

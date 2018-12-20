@@ -119,9 +119,12 @@ func (c *Controller) RunInformers(stopCh <-chan struct{}) {
 
 	// workplan and workflow are in same namespace
 	// if key exists, we have already stored the latest version since workplans are sorted
+	// skip workplans created by manualTrigger
 	for _, wp := range workplans {
-		key := wp.Namespace + "/" + wp.Spec.Workflow
-		c.observedWorkflows.upsertObservedResource(key, wp.Spec.TriggeredFor)
+		if !wp.Spec.ManuallyTriggered {
+			key := wp.Namespace + "/" + wp.Spec.Workflow
+			c.observedWorkflows.upsertObservedResource(key, wp.Spec.TriggeredFor)
+		}
 	}
 
 	c.wfQueue.Run(stopCh)
