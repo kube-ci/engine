@@ -12,7 +12,7 @@ import (
 func ResolveDependency(workflowSteps []v1alpha1.Step, preSteps, postSteps []v1alpha1.Step, order v1alpha1.ExecutionOrder) ([]v1alpha1.Task, error) {
 	if order != v1alpha1.ExecutionOrderDAG {
 		for _, step := range workflowSteps {
-			if len(step.Dependency) != 0 {
+			if len(step.Requires) != 0 {
 				return nil, fmt.Errorf("dependencies are valid only when ExecutionOrder is dag")
 			}
 		}
@@ -90,7 +90,7 @@ func dagToLayers(stepsMap map[string]v1alpha1.Step) ([][]v1alpha1.Step, error) {
 		graph.AddNode(step.Name)
 	}
 	for _, step := range stepsMap {
-		for _, parent := range step.Dependency {
+		for _, parent := range step.Requires {
 			if ok := graph.AddEdge(parent, step.Name); !ok {
 				return nil, fmt.Errorf("can't resolve dependency %s for step %s", parent, step.Name)
 			}
@@ -111,7 +111,7 @@ func dagToLayers(stepsMap map[string]v1alpha1.Step) ([][]v1alpha1.Step, error) {
 		}
 
 		maxParentLevel := 0
-		for _, parent := range stepsMap[node].Dependency {
+		for _, parent := range stepsMap[node].Requires {
 			if levels[parent] == 0 {
 				return nil, fmt.Errorf("can't resolve dependency, reason: topsort corrupted")
 			}

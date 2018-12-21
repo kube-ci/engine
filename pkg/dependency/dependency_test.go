@@ -44,49 +44,24 @@ var dagStepsData = [][]v1alpha1.Step{
 			Name: "A",
 		},
 		{
-			Name:       "B",
-			Dependency: []string{"A"},
+			Name:     "B",
+			Requires: []string{"A"},
 		},
 		{
-			Name:       "C",
-			Dependency: []string{"A"},
+			Name:     "C",
+			Requires: []string{"A"},
 		},
 		{
-			Name:       "D",
-			Dependency: []string{"A", "B"},
+			Name:     "D",
+			Requires: []string{"A", "B"},
 		},
 		{
-			Name:       "E",
-			Dependency: []string{"B", "C"},
+			Name:     "E",
+			Requires: []string{"B", "C"},
 		},
 		{
-			Name:       "F",
-			Dependency: []string{"A"},
-		},
-	},
-	{
-		{
-			Name: "A",
-		},
-		{
-			Name:       "B",
-			Dependency: []string{"A"},
-		},
-		{
-			Name:       "C",
-			Dependency: []string{"B"},
-		},
-		{
-			Name:       "D",
-			Dependency: []string{"A", "B"},
-		},
-		{
-			Name:       "E",
-			Dependency: []string{"B", "C"},
-		},
-		{
-			Name:       "F",
-			Dependency: []string{"D"},
+			Name:     "F",
+			Requires: []string{"A"},
 		},
 	},
 	{
@@ -94,16 +69,41 @@ var dagStepsData = [][]v1alpha1.Step{
 			Name: "A",
 		},
 		{
-			Name:       "B",
-			Dependency: []string{"A"},
+			Name:     "B",
+			Requires: []string{"A"},
 		},
 		{
-			Name:       "C",
-			Dependency: []string{"B"},
+			Name:     "C",
+			Requires: []string{"B"},
 		},
 		{
-			Name:       "D",
-			Dependency: []string{"C"},
+			Name:     "D",
+			Requires: []string{"A", "B"},
+		},
+		{
+			Name:     "E",
+			Requires: []string{"B", "C"},
+		},
+		{
+			Name:     "F",
+			Requires: []string{"D"},
+		},
+	},
+	{
+		{
+			Name: "A",
+		},
+		{
+			Name:     "B",
+			Requires: []string{"A"},
+		},
+		{
+			Name:     "C",
+			Requires: []string{"B"},
+		},
+		{
+			Name:     "D",
+			Requires: []string{"C"},
 		},
 	},
 }

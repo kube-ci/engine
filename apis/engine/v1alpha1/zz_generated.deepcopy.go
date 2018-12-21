@@ -54,8 +54,8 @@ func (in *Step) DeepCopyInto(out *Step) {
 		*out = make([]string, len(*in))
 		copy(*out, *in)
 	}
-	if in.Dependency != nil {
-		in, out := &in.Dependency, &out.Dependency
+	if in.Requires != nil {
+		in, out := &in.Requires, &out.Requires
 		*out = make([]string, len(*in))
 		copy(*out, *in)
 	}
