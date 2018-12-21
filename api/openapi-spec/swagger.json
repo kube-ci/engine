@@ -2870,17 +2870,17 @@
             "type": "string"
           }
         },
-        "dependency": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
         "image": {
           "type": "string"
         },
         "name": {
           "type": "string"
+        },
+        "requires": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "securityContext": {
           "description": "container security context",

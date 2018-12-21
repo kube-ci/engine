@@ -436,8 +436,8 @@ func (c *Controller) resolveTemplate(wf *api.Workflow) ([]api.Step, error) {
 				return nil, err
 			}
 		}
-		for i := range step.Dependency {
-			if step.Dependency[i], err = applyReplacements(step.Dependency[i]); err != nil {
+		for i := range step.Requires {
+			if step.Requires[i], err = applyReplacements(step.Requires[i]); err != nil {
 				return nil, err
 			}
 		}

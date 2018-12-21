@@ -84,7 +84,7 @@ type Step struct {
 	Image        string               `json:"image,omitempty"`
 	Commands     []string             `json:"commands,omitempty"`
 	Args         []string             `json:"args,omitempty"`
-	Dependency   []string             `json:"dependency,omitempty"`
+	Requires     []string             `json:"requires,omitempty"`
 	VolumeMounts []corev1.VolumeMount `json:"volumeMounts,omitempty"`
 	// container security context
 	SecurityContext *corev1.SecurityContext `json:"securityContext,omitempty"`

@@ -384,7 +384,7 @@ func schema_engine_apis_engine_v1alpha1_Step(ref common.ReferenceCallback) commo
 							},
 						},
 					},
-					"dependency": {
+					"requires": {
 						SchemaProps: spec.SchemaProps{
 							Type: []string{"array"},
 							Items: &spec.SchemaOrArray{
