@@ -68,6 +68,8 @@ The following table lists the configurable parameters of the KubeCI engine chart
 | `apiserver.enableMutatingWebhook`    | Enable mutating webhooks for Kubernetes workloads                 | true               |
 | `apiserver.ca`                       | CA certificate used by main Kubernetes api server                 | `not-ca-cert`      |
 | `apiserver.disableStatusSubresource` | If true, disables status sub resource for crds. Otherwise enables based on Kubernetes version | `false`            |
+| `apiserver.useKubeapiserverFqdnForAks` | If true, uses kube-apiserver FQDN for AKS cluster to workaround https://github.com/Azure/AKS/issues/522 | `true`             |
+| `apiserver.healthcheck.enabled`      | Enable readiness and liveliness probes                            | `true`             |
 | `enableAnalytics`                    | Send usage events to Google Analytics                             | `true`             |
 
 
