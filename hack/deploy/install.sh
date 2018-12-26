@@ -114,6 +114,7 @@ export KUBECI_ENGINE_IMAGE_TAG=0.1.0
 export KUBECI_ENGINE_IMAGE_PULL_SECRET=
 export KUBECI_ENGINE_IMAGE_PULL_POLICY=IfNotPresent
 export KUBECI_ENGINE_ENABLE_STATUS_SUBRESOURCE=false
+export KUBECI_ENGINE_USE_KUBEAPISERVER_FQDN_FOR_AKS=true
 export KUBECI_ENGINE_ENABLE_ANALYTICS=true
 export KUBECI_ENGINE_UNINSTALL=0
 export KUBECI_ENGINE_PURGE=0
@@ -140,18 +141,19 @@ show_help() {
   echo "kubeci-engine.sh [options]"
   echo " "
   echo "options:"
-  echo "-h, --help                         show brief help"
-  echo "-n, --namespace=NAMESPACE          specify namespace (default: kube-system)"
-  echo "    --rbac                         create RBAC roles and bindings (default: true)"
-  echo "    --docker-registry              docker registry used to pull kubeci-engine images (default: kubeci)"
-  echo "    --image-pull-secret            name of secret used to pull kubeci-engine operator images"
-  echo "    --run-on-master                run kubeci-engine operator on master"
-  echo "    --enable-validating-webhook    enable/disable validating webhooks for kubeci-engine crds"
-  echo "    --enable-mutating-webhook      enable/disable mutating webhooks for Kubernetes workloads"
-  echo "    --enable-status-subresource    If enabled, uses status sub resource for crds"
-  echo "    --enable-analytics             send usage events to Google Analytics (default: true)"
-  echo "    --uninstall                    uninstall kubeci-engine"
-  echo "    --purge                        purges kubeci-engine crd objects and crds"
+  echo "-h, --help                             show brief help"
+  echo "-n, --namespace=NAMESPACE              specify namespace (default: kube-system)"
+  echo "    --rbac                             create RBAC roles and bindings (default: true)"
+  echo "    --docker-registry                  docker registry used to pull kubeci-engine images (default: kubeci)"
+  echo "    --image-pull-secret                name of secret used to pull kubeci-engine operator images"
+  echo "    --run-on-master                    run kubeci-engine operator on master"
+  echo "    --enable-validating-webhook        enable/disable validating webhooks for kubeci-engine crds"
+  echo "    --enable-mutating-webhook          enable/disable mutating webhooks for Kubernetes workloads"
+  echo "    --enable-status-subresource        If enabled, uses status sub resource for crds"
+  echo "    --use-kubeapiserver-fqdn-for-aks   if true, uses kube-apiserver FQDN for AKS cluster to workaround https://github.com/Azure/AKS/issues/522 (default true)"
+  echo "    --enable-analytics                 send usage events to Google Analytics (default: true)"
+  echo "    --uninstall                        uninstall kubeci-engine"
+  echo "    --purge                            purges kubeci-engine crd objects and crds"
 }
 
 while test $# -gt 0; do
@@ -201,6 +203,15 @@ while test $# -gt 0; do
       val=$(echo $1 | sed -e 's/^[^=]*=//g')
       if [ "$val" = "false" ]; then
         export KUBECI_ENGINE_ENABLE_STATUS_SUBRESOURCE=false
+      fi
+      shift
+      ;;
+    --use-kubeapiserver-fqdn-for-aks*)
+      val=$(echo $1 | sed -e 's/^[^=]*=//g')
+      if [ "$val" = "false" ]; then
+        export KUBECI_ENGINE_USE_KUBEAPISERVER_FQDN_FOR_AKS=false
+      else
+        export KUBECI_ENGINE_USE_KUBEAPISERVER_FQDN_FOR_AKS=true
       fi
       shift
       ;;
