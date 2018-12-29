@@ -4,10 +4,7 @@ kind: ClusterRole
 metadata:
   name: {{ template "kubeci-engine.fullname" . }}
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubeci-engine.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubeci-engine.labels" . | nindent 4 }}
 rules:
 - apiGroups:
   - admissionregistration.k8s.io
