@@ -9,10 +9,7 @@ kind: APIService
 metadata:
   name: v1alpha1.validators.engine.kube.ci
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubeci-engine.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubeci-engine.labels" . | nindent 4 }}
 spec:
   group: validators.engine.kube.ci
   version: v1alpha1
@@ -28,10 +25,7 @@ kind: APIService
 metadata:
   name: v1alpha1.mutators.engine.kube.ci
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubeci-engine.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubeci-engine.labels" . | nindent 4 }}
 spec:
   group: mutators.engine.kube.ci
   version: v1alpha1
@@ -47,10 +41,7 @@ kind: APIService
 metadata:
   name: v1alpha1.extensions.kube.ci
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubeci-engine.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubeci-engine.labels" . | nindent 4 }}
 spec:
   group: extensions.kube.ci
   version: v1alpha1
@@ -68,10 +59,7 @@ metadata:
   name: {{ template "kubeci-engine.fullname" . }}-apiserver-cert
   namespace: {{ .Release.Namespace }}
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubeci-engine.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubeci-engine.labels" . | nindent 4 }}
 type: kubernetes.io/tls
 data:
   tls.crt: {{ b64enc $cert.Cert }}
@@ -85,10 +73,7 @@ metadata:
   name: {{ template "kubeci-engine.fullname" . }}-apiserver-extension-server-authentication-reader
   namespace: kube-system
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubeci-engine.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubeci-engine.labels" . | nindent 4 }}
 roleRef:
   kind: Role
   apiGroup: rbac.authorization.k8s.io
@@ -104,10 +89,7 @@ kind: ClusterRoleBinding
 metadata:
   name: {{ template "kubeci-engine.fullname" . }}-apiserver-auth-delegator
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubeci-engine.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubeci-engine.labels" . | nindent 4 }}
 roleRef:
   kind: ClusterRole
   apiGroup: rbac.authorization.k8s.io

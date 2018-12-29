@@ -1,12 +1,9 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Release.Name }}-cleaner
+  name: {{ template "kubeci-engine.fullname" . }}-cleaner
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    app: "{{ template "kubeci-engine.name" . }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+    {{- include "kubeci-engine.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": pre-delete
     "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
@@ -27,5 +24,5 @@ spec:
           - sh
           - -c
           - "sleep 2; kubectl delete validatingwebhookconfigurations validators.engine.kube.ci || true; kubectl delete mutatingwebhookconfigurations mutators.engine.kube.ci || true"
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: {{ .Values.imagePullPolicy }}
       restartPolicy: Never
