@@ -1,7 +1,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/kube-ci/engine)](https://goreportcard.com/report/github.com/kube-ci/engine)
 [![Build Status](https://travis-ci.org/kube-ci/engine.svg?branch=master)](https://travis-ci.org/kube-ci/engine)
 [![codecov](https://codecov.io/gh/kube-ci/engine/branch/master/graph/badge.svg)](https://codecov.io/gh/kube-ci/engine)
-[![Docker Pulls](https://img.shields.io/docker/pulls/kube-ci/kubeci-engine.svg)](https://hub.docker.com/r/kubeci/kubeci-engine/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/kubeci/kubeci-engine.svg)](https://hub.docker.com/r/kubeci/kubeci-engine/)
 [![Slack](https://slack.appscode.com/badge.svg)](https://slack.appscode.com)
 [![Twitter](https://img.shields.io/twitter/follow/thekubeci.svg?style=social&logo=twitter&label=Follow)](https://twitter.com/intent/follow?screen_name=TheKubeCi)
 
