@@ -118,6 +118,7 @@ export KUBECI_ENGINE_USE_KUBEAPISERVER_FQDN_FOR_AKS=true
 export KUBECI_ENGINE_ENABLE_ANALYTICS=true
 export KUBECI_ENGINE_UNINSTALL=0
 export KUBECI_ENGINE_PURGE=0
+export KUBECI_PRIORITY_CLASS=system-cluster-critical
 
 export APPSCODE_ENV=${APPSCODE_ENV:-prod}
 export SCRIPT_LOCATION="curl -fsSL https://raw.githubusercontent.com/kubeci/engine/0.1.0/"
@@ -251,6 +252,10 @@ while test $# -gt 0; do
       ;;
   esac
 done
+
+if [ "$KUBECI_NAMESPACE" != "kube-system" ]; then
+    export KUBECI_PRIORITY_CLASS=""
+fi
 
 if [ "$KUBECI_ENGINE_UNINSTALL" -eq 1 ]; then
   # delete webhooks and apiservices
