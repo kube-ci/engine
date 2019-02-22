@@ -24,31 +24,30 @@ var (
 title: Reference | KubeCI Engine
 description: KubeCI Engine CLI Reference
 menu:
-  product_kubeci_{{ .Version }}:
+  docs_{{ .Version }}:
     identifier: reference-engine
     name: KubeCI Engine
     weight: 10
     parent: reference
-menu_name: product_kubeci_{{ .Version }}
+menu_name: docs_{{ .Version }}
 ---
 `))
 
 	_ = template.Must(tplFrontMatter.New("cmd").Parse(`---
 title: {{ .Name }}
 menu:
-  product_kubeci_{{ .Version }}:
+  docs_{{ .Version }}:
     identifier: {{ .ID }}
     name: {{ .Name }}
     parent: reference-engine
 {{- if .RootCmd }}
     weight: 0
 {{ end }}
-product_name: kubeci
-menu_name: product_kubeci_{{ .Version }}
+menu_name: docs_{{ .Version }}
 section_menu_id: reference
 {{- if .RootCmd }}
 aliases:
-  - products/kubeci/{{ .Version }}/reference/engine/
+  - /docs/{{ .Version }}/reference/engine/
 {{ end }}
 ---
 `))
