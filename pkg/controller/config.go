@@ -3,7 +3,6 @@ package controller
 import (
 	"time"
 
-	reg_util "github.com/appscode/kutil/admissionregistration/v1beta1"
 	cs "github.com/kube-ci/engine/client/clientset/versioned"
 	kubeci_informers "github.com/kube-ci/engine/client/informers/externalversions"
 	"github.com/kube-ci/engine/pkg/eventer"
@@ -13,6 +12,7 @@ import (
 	"k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
+	reg_util "kmodules.xyz/client-go/admissionregistration/v1beta1"
 )
 
 const (

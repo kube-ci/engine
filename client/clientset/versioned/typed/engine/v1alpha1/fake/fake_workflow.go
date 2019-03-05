@@ -1,5 +1,5 @@
 /*
-Copyright 2018 The KubeCI Authors.
+Copyright 2019 The KubeCI Authors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -119,7 +119,7 @@ func (c *FakeWorkflows) DeleteCollection(options *v1.DeleteOptions, listOptions 
 // Patch applies the patch and returns the patched workflow.
 func (c *FakeWorkflows) Patch(name string, pt types.PatchType, data []byte, subresources ...string) (result *v1alpha1.Workflow, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewPatchSubresourceAction(workflowsResource, c.ns, name, data, subresources...), &v1alpha1.Workflow{})
+		Invokes(testing.NewPatchSubresourceAction(workflowsResource, c.ns, name, pt, data, subresources...), &v1alpha1.Workflow{})
 
 	if obj == nil {
 		return nil, err

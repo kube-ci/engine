@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/appscode/go/log"
-	"github.com/appscode/kutil"
 	jsonpatch "github.com/evanphx/json-patch"
 	api "github.com/kube-ci/engine/apis/engine/v1alpha1"
 	cs "github.com/kube-ci/engine/client/clientset/versioned/typed/engine/v1alpha1"
@@ -13,6 +12,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/wait"
+	kutil "kmodules.xyz/client-go"
 )
 
 func CreateOrPatchWorkflow(c cs.EngineV1alpha1Interface, meta metav1.ObjectMeta, transform func(workflow *api.Workflow) *api.Workflow) (*api.Workflow, kutil.VerbType, error) {

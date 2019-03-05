@@ -4,8 +4,8 @@ import (
 	"sync"
 
 	"github.com/appscode/go/encoding/json/types"
-	"github.com/appscode/kutil/meta"
 	api "github.com/kube-ci/engine/apis/engine/v1alpha1"
+	"kmodules.xyz/client-go/meta"
 )
 
 type observedWorkflows struct {

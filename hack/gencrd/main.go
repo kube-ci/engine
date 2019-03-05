@@ -7,8 +7,6 @@ import (
 
 	"github.com/appscode/go/log"
 	gort "github.com/appscode/go/runtime"
-	crdutils "github.com/appscode/kutil/apiextensions/v1beta1"
-	"github.com/appscode/kutil/openapi"
 	"github.com/go-openapi/spec"
 	api_install "github.com/kube-ci/engine/apis/engine/install"
 	v1alpha1 "github.com/kube-ci/engine/apis/engine/v1alpha1"
@@ -16,6 +14,8 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/serializer"
 	"k8s.io/kube-openapi/pkg/common"
+	crdutils "kmodules.xyz/client-go/apiextensions/v1beta1"
+	"kmodules.xyz/client-go/openapi"
 )
 
 func generateCRDDefinitions() {

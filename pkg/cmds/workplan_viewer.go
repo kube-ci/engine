@@ -1,9 +1,9 @@
 package cmds
 
 import (
-	"github.com/appscode/kutil/tools/clientcmd"
 	workplan_viewer "github.com/kube-ci/engine/pkg/workplan-viewer"
 	"github.com/spf13/cobra"
+	"kmodules.xyz/client-go/tools/clientcmd"
 )
 
 func NewCmdWorkplanViewer() *cobra.Command {

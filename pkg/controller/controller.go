@@ -5,11 +5,6 @@ import (
 	"sort"
 
 	"github.com/appscode/go/log"
-	reg_util "github.com/appscode/kutil/admissionregistration/v1beta1"
-	crdutils "github.com/appscode/kutil/apiextensions/v1beta1"
-	dynamicclientset "github.com/appscode/kutil/dynamic/clientset"
-	dynamicinformer "github.com/appscode/kutil/dynamic/informer"
-	"github.com/appscode/kutil/tools/queue"
 	api "github.com/kube-ci/engine/apis/engine/v1alpha1"
 	cs "github.com/kube-ci/engine/client/clientset/versioned"
 	api_informers "github.com/kube-ci/engine/client/informers/externalversions"
@@ -24,6 +19,11 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/tools/record"
+	reg_util "kmodules.xyz/client-go/admissionregistration/v1beta1"
+	crdutils "kmodules.xyz/client-go/apiextensions/v1beta1"
+	dynamicclientset "kmodules.xyz/client-go/dynamic/clientset"
+	dynamicinformer "kmodules.xyz/client-go/dynamic/informer"
+	"kmodules.xyz/client-go/tools/queue"
 )
 
 type Controller struct {
