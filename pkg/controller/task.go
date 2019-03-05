@@ -4,12 +4,12 @@ import (
 	"fmt"
 
 	"github.com/appscode/go/log"
-	core_util "github.com/appscode/kutil/core/v1"
-	"github.com/appscode/kutil/meta"
 	api "github.com/kube-ci/engine/apis/engine/v1alpha1"
 	"github.com/kube-ci/engine/client/clientset/versioned/typed/engine/v1alpha1/util"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	core_util "kmodules.xyz/client-go/core/v1"
+	"kmodules.xyz/client-go/meta"
 )
 
 func (c *Controller) runTasks(wp *api.Workplan) error {

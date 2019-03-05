@@ -5,12 +5,6 @@ import (
 	"testing"
 	"time"
 
-	logs "github.com/appscode/go/log/golog"
-	crdutils "github.com/appscode/kutil/apiextensions/v1beta1"
-	discovery_util "github.com/appscode/kutil/discovery"
-	"github.com/appscode/kutil/meta"
-	"github.com/appscode/kutil/tools/cli"
-	"github.com/appscode/kutil/tools/clientcmd"
 	api "github.com/kube-ci/engine/apis/engine/v1alpha1"
 	"github.com/kube-ci/engine/client/clientset/versioned/scheme"
 	_ "github.com/kube-ci/engine/client/clientset/versioned/scheme"
@@ -24,6 +18,12 @@ import (
 	clientsetscheme "k8s.io/client-go/kubernetes/scheme"
 	ka "k8s.io/kube-aggregator/pkg/client/clientset_generated/clientset"
 	"k8s.io/kubernetes/pkg/api/legacyscheme"
+	crdutils "kmodules.xyz/client-go/apiextensions/v1beta1"
+	discovery_util "kmodules.xyz/client-go/discovery"
+	"kmodules.xyz/client-go/logs"
+	"kmodules.xyz/client-go/meta"
+	"kmodules.xyz/client-go/tools/cli"
+	"kmodules.xyz/client-go/tools/clientcmd"
 )
 
 const (

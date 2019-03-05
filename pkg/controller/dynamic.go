@@ -8,11 +8,6 @@ import (
 
 	"github.com/appscode/go/encoding/json/types"
 	"github.com/appscode/go/log"
-	discovery_util "github.com/appscode/kutil/discovery"
-	dynamicclientset "github.com/appscode/kutil/dynamic/clientset"
-	dynamicdiscovery "github.com/appscode/kutil/dynamic/discovery"
-	dynamicinformer "github.com/appscode/kutil/dynamic/informer"
-	meta_util "github.com/appscode/kutil/meta"
 	api "github.com/kube-ci/engine/apis/engine/v1alpha1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
@@ -22,6 +17,11 @@ import (
 	"k8s.io/client-go/discovery"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/util/jsonpath"
+	discovery_util "kmodules.xyz/client-go/discovery"
+	dynamicclientset "kmodules.xyz/client-go/dynamic/clientset"
+	dynamicdiscovery "kmodules.xyz/client-go/dynamic/discovery"
+	dynamicinformer "kmodules.xyz/client-go/dynamic/informer"
+	meta_util "kmodules.xyz/client-go/meta"
 )
 
 type ResourceIdentifier struct {

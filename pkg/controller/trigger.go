@@ -6,7 +6,6 @@ import (
 
 	"github.com/appscode/go/log"
 	"github.com/appscode/go/types"
-	core_util "github.com/appscode/kutil/core/v1"
 	"github.com/drone/envsubst"
 	api "github.com/kube-ci/engine/apis/engine/v1alpha1"
 	"github.com/kube-ci/engine/apis/extensions/v1alpha1"
@@ -20,6 +19,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apiserver/pkg/registry/rest"
+	core_util "kmodules.xyz/client-go/core/v1"
 )
 
 type TriggerREST struct {

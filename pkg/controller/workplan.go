@@ -4,17 +4,17 @@ import (
 	"fmt"
 
 	"github.com/appscode/go/log"
-	"github.com/appscode/kubernetes-webhook-util/admission"
-	hooks "github.com/appscode/kubernetes-webhook-util/admission/v1beta1"
-	webhook "github.com/appscode/kubernetes-webhook-util/admission/v1beta1/generic"
-	"github.com/appscode/kutil/meta"
-	"github.com/appscode/kutil/tools/queue"
 	"github.com/kube-ci/engine/apis/engine"
 	api "github.com/kube-ci/engine/apis/engine/v1alpha1"
 	"github.com/kube-ci/engine/client/clientset/versioned/typed/engine/v1alpha1/util"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
+	"kmodules.xyz/client-go/meta"
+	"kmodules.xyz/client-go/tools/queue"
+	"kmodules.xyz/webhook-runtime/admission"
+	hooks "kmodules.xyz/webhook-runtime/admission/v1beta1"
+	webhook "kmodules.xyz/webhook-runtime/admission/v1beta1/generic"
 )
 
 func (c *Controller) NewWorkplanMutatingWebhook() hooks.AdmissionHook {

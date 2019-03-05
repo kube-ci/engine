@@ -3,9 +3,9 @@ package dependency
 import (
 	"testing"
 
-	"github.com/appscode/kutil/meta"
 	"github.com/kube-ci/engine/apis/engine/v1alpha1"
 	oneliners "github.com/tamalsaha/go-oneliners"
+	"kmodules.xyz/client-go/meta"
 )
 
 var preSteps = []v1alpha1.Step{
