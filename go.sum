@@ -24,8 +24,6 @@ github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578/go.mod h1:uGdko
 github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf/go.mod h1:ybxpYRFXyAe+OPACYpWeL0wqObRcbAqCMya13uyzqw0=
 github.com/appscode/docker-registry-client v0.0.0-20180426150142-1bb02bb202b0/go.mod h1:W9bsWfSbgJXUXzBZ+tSBV2g+zzT7ANPHQFsSXRHYKsA=
-github.com/appscode/envsubst v1.0.2-0.20180924062550-040bfb31793a h1:9APkHW82kop9bb3dOPTvQ6d9rlCDGwbOh8ECfZoElLk=
-github.com/appscode/envsubst v1.0.2-0.20180924062550-040bfb31793a/go.mod h1:bkZbnc/2vh1M12Ecn7EYScpI4YGYU0etwLJICOWi8Z0=
 github.com/appscode/go v0.0.0-20190424183524-60025f1135c9 h1:uIXQ61ZjsDmN6WhdBJNpd8vMCPBORLNd75MDNU8nUO4=
 github.com/appscode/go v0.0.0-20190424183524-60025f1135c9/go.mod h1:/PrESzUKHRrwhmBMpVXfGK3e/D0tqN+/dc8nSH03llU=
 github.com/appscode/jsonpatch v0.0.0-20190108182946-7c0e3b262f30 h1:Kn3rqvbUFqSepE2OqVu0Pn1CbDw9IuMlONapol0zuwk=
@@ -387,6 +385,8 @@ golang.org/x/tools v0.0.0-20190312170243-e65039ee4138/go.mod h1:LCzVGOaR6xXOjkQ3
 golang.org/x/tools v0.0.0-20190328211700-ab21143f2384/go.mod h1:LCzVGOaR6xXOjkQ3onu1FJEFr0SW1gC7cKk1uF8kGRs=
 gomodules.xyz/cert v1.0.0 h1:ARg6YgYP5VktgmId6t6FlAhi9XXNGWwn2WMYvt35tEM=
 gomodules.xyz/cert v1.0.0/go.mod h1:amhuI40SpnLj/4dWzsfZyVpblMsfKi0tYH83era8078=
+gomodules.xyz/envsubst v0.0.0-20190321051520-c745d52104af h1:dvSifHtcUenMJOxj0sZs1lJ87ALY4jKvpfr3yTUK0OY=
+gomodules.xyz/envsubst v0.0.0-20190321051520-c745d52104af/go.mod h1:2o5f7bd13XIITbE2ZKieE05YkqB2KDoZkqKccGebduA=
 gomodules.xyz/version v0.0.0-20190507203204-7cec7ee542d3 h1:MiBtMikyjuBwD22+QIEsbnMHdRkknM/0N5ig34jSNgQ=
 gomodules.xyz/version v0.0.0-20190507203204-7cec7ee542d3/go.mod h1:Y8xuV02mL/45psyPKG3NCVOwvAOy6T5Kx0l3rCjKSjU=
 google.golang.org/api v0.4.0/go.mod h1:8k5glujaEP+g9n7WNsDg8QP6cUVNI86fCNMcbazEtwE=

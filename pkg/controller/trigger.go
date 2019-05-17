@@ -6,12 +6,12 @@ import (
 
 	"github.com/appscode/go/log"
 	"github.com/appscode/go/types"
-	"github.com/drone/envsubst"
 	api "github.com/kube-ci/engine/apis/engine/v1alpha1"
 	"github.com/kube-ci/engine/apis/extensions/v1alpha1"
 	"github.com/kube-ci/engine/client/clientset/versioned/typed/engine/v1alpha1/util"
 	"github.com/kube-ci/engine/pkg/dependency"
 	"github.com/kube-ci/engine/pkg/eventer"
+	"gomodules.xyz/envsubst"
 	authorizationapi "k8s.io/api/authorization/v1"
 	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -412,10 +412,7 @@ func (c *Controller) resolveTemplate(wf *api.Workflow) ([]api.Step, error) {
 	}
 
 	applyReplacements := func(in string) (string, error) {
-		return envsubst.Eval(in, func(s string) (string, bool) {
-			value, ok := wf.Spec.Template.Arguments[s]
-			return value, ok
-		})
+		return envsubst.EvalMap(in, wf.Spec.Template.Arguments)
 	}
 
 	var steps []api.Step

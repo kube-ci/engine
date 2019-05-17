@@ -65,10 +65,6 @@ github.com/dgrijalva/jwt-go
 # github.com/docker/distribution v2.7.1+incompatible
 github.com/docker/distribution/reference
 github.com/docker/distribution/digestset
-# github.com/drone/envsubst v0.0.0-00010101000000-000000000000 => github.com/appscode/envsubst v1.0.2-0.20180924062550-040bfb31793a
-github.com/drone/envsubst
-github.com/drone/envsubst/parse
-github.com/drone/envsubst/path
 # github.com/emicklei/go-restful v2.9.5+incompatible
 github.com/emicklei/go-restful
 github.com/emicklei/go-restful/log
@@ -324,6 +320,10 @@ golang.org/x/time/rate
 # gomodules.xyz/cert v1.0.0
 gomodules.xyz/cert/certstore
 gomodules.xyz/cert
+# gomodules.xyz/envsubst v0.0.0-20190321051520-c745d52104af
+gomodules.xyz/envsubst
+gomodules.xyz/envsubst/parse
+gomodules.xyz/envsubst/path
 # gomodules.xyz/version v0.0.0-20190507203204-7cec7ee542d3
 gomodules.xyz/version
 # google.golang.org/api v0.5.0

@@ -2,7 +2,7 @@ Go package for expanding variables in a string using ${var} syntax. Includes sup
 
 Documentation:
 
-    http://godoc.org/github.com/drone/envsubst
+    http://godoc.org/gomodules.xyz/envsubst
 
 Supported Functions:
 
