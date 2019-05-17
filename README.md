@@ -5,8 +5,6 @@
 [![Slack](https://slack.appscode.com/badge.svg)](https://slack.appscode.com)
 [![Twitter](https://img.shields.io/twitter/follow/thekubeci.svg?style=social&logo=twitter&label=Follow)](https://twitter.com/intent/follow?screen_name=TheKubeCi)
 
-[![Throughput Graph](https://graphs.waffle.io/kube-ci/project/throughput.svg)](https://waffle.io/kube-ci/project/metrics/throughput)
-
 # KubeCI Engine
 
 KubeCI engine by AppsCode is a Kubernetes native workflow engine.
