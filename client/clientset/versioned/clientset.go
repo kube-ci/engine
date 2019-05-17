@@ -29,11 +29,7 @@ import (
 type Interface interface {
 	Discovery() discovery.DiscoveryInterface
 	EngineV1alpha1() enginev1alpha1.EngineV1alpha1Interface
-	// Deprecated: please explicitly pick a version if possible.
-	Engine() enginev1alpha1.EngineV1alpha1Interface
 	ExtensionsV1alpha1() extensionsv1alpha1.ExtensionsV1alpha1Interface
-	// Deprecated: please explicitly pick a version if possible.
-	Extensions() extensionsv1alpha1.ExtensionsV1alpha1Interface
 }
 
 // Clientset contains the clients for groups. Each group has exactly one
@@ -49,20 +45,8 @@ func (c *Clientset) EngineV1alpha1() enginev1alpha1.EngineV1alpha1Interface {
 	return c.engineV1alpha1
 }
 
-// Deprecated: Engine retrieves the default version of EngineClient.
-// Please explicitly pick a version.
-func (c *Clientset) Engine() enginev1alpha1.EngineV1alpha1Interface {
-	return c.engineV1alpha1
-}
-
 // ExtensionsV1alpha1 retrieves the ExtensionsV1alpha1Client
 func (c *Clientset) ExtensionsV1alpha1() extensionsv1alpha1.ExtensionsV1alpha1Interface {
-	return c.extensionsV1alpha1
-}
-
-// Deprecated: Extensions retrieves the default version of ExtensionsClient.
-// Please explicitly pick a version.
-func (c *Clientset) Extensions() extensionsv1alpha1.ExtensionsV1alpha1Interface {
 	return c.extensionsV1alpha1
 }
 

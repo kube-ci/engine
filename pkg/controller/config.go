@@ -46,9 +46,7 @@ func NewConfig(clientConfig *rest.Config) *Config {
 }
 
 func (c *Config) New() (*Controller, error) {
-	tweakListOptions := func(opt *metav1.ListOptions) {
-		opt.IncludeUninitialized = true
-	}
+	tweakListOptions := func(opt *metav1.ListOptions) {}
 	ctrl := &Controller{
 		config:                c.config,
 		clientConfig:          c.ClientConfig,
