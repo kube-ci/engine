@@ -107,7 +107,7 @@ version:
 	@echo commit_timestamp=$(commit_timestamp)
 
 gen:
-	@true
+	./hack/codegen.sh
 
 fmt: $(BUILD_DIRS)
 	@docker run                                                 \
